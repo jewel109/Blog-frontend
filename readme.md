@@ -1,5 +1,5 @@
 
-# **Features** Of This Blog 
+# *Features* Of This Blog 
 
 1. User can register an account
 2. User can login to his/her account
