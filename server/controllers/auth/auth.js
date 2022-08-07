@@ -1,8 +1,6 @@
-const asyncHandler = require("express-async-handler");
 const User = require("../../model/user");
 const { sendToken } = require("../../helpers/auth/tokenHelper");
 const { comparePassword } = require('../../helpers/inputHelper');
-const { findOne } = require("../../model/user");
 const CustomError = require("../../middlewares/Error/CustomError");
 const sendMailWithSIB = require('../../helpers/libraries/sendMailWithSIB.js');
 
