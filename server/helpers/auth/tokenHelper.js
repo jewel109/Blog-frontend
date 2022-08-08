@@ -1,3 +1,18 @@
+const isTokenIncluded = (req) => {
+
+  return req.headers.authrization && req.headers.authrizatio.startsWith("Bearer")
+
+}
+
+const getAccessTokenFromHeader = (req) =>{
+
+  const authrization = req.headers.authrization;
+  const accessToken = authrization.split(" ")[1];
+
+  return accessToken;
+}
+
+
 const sendToken = (user, statusCode, res) => {
 	const token = user.generateJwtFromUser();
 	// console.log(user)
@@ -7,4 +22,4 @@ const sendToken = (user, statusCode, res) => {
 		token,
 	});
 };
-module.exports = { sendToken };
+module.exports = { sendToken , isTokenIncluded,getAccessTokenFromHeader};
