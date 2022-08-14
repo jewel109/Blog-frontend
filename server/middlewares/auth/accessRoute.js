@@ -1,3 +1,7 @@
-const asyncErrorWrapper  = require("express-async-handler");
+const asyncError  = require("express-async-handler");
 
-const getAccessData = () 
+const getAccessToRoute = asyncError(async(req,res,next) =>{
+
+
+	next();
+})
