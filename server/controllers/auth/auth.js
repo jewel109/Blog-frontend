@@ -95,7 +95,7 @@ const forgetPassword = async (req, res) => {
 
   await user.save()
 
-  const requestPasswordURI = `${URI}/auth/resetpassword?resetPasswordToken=${resetPasswordToken}`
+  const requestPasswordURI = `${URI}/resetpassword?resetPasswordToken=${resetPasswordToken}`
 
   const emailTemplate = `
   <h3 style="color: red" > Reset your password </h3>

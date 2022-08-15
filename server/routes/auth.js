@@ -5,6 +5,6 @@ const {register, login, forgetPassword,resetPassword} = require('../controllers/
 router.post('/register',register)
 router.post('/login',login)
 router.post('/forgetpassword',forgetPassword)
-router.post('/resetpassword', resetPassword)
+router.put('/resetpassword', resetPassword)
 
 module.exports = router
