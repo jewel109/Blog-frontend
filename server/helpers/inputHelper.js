@@ -1,5 +1,10 @@
 const bcrypt = require('bcryptjs')
 
+const validateInput = (email , password) => {
+  return (
+    email && password
+  )
+}
 
 
 const comparePassword = (password, hashedPassword) => {
@@ -8,5 +13,5 @@ const comparePassword = (password, hashedPassword) => {
 }
 
 module.exports = {
-  comparePassword
+  comparePassword,validateInput
 }
