@@ -56,13 +56,13 @@ UserSchema.pre("save", async function(next) {
 });
 
 UserSchema.methods.generateJwtFromUser = function() {
-  const JWT_SECRET = "a;fadlkjoeqdlaksdjfaldsjfaldfhdalsdadlfkaldaalsjfl";
+  const {JWT_SECRET}  = process.env  
   const payload = {
     id: this._id,
     name: this.username,
     email: this.email,
   };
-  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1m'});
+  const token = jwt.sign(payload, JWT_SECRET);
   return token;
 };
 

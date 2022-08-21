@@ -88,4 +88,28 @@ const addStoryToReadList = ErrorWrapper( async (req, res, next) => {
 
 })
 
+const readListPage = ErrorWrapper( async (req,res,next) =>{
 
+  const user = await User.findById(req.user.id)
+  const readList = []
+
+  for(let index=0 ; index < user.readList.length; index++){
+
+    let story = await Story.findById(user.readList[index]).populate("author")
+
+    readList.push(story)
+  }
+
+  return res.status(200).json({
+    success:true,
+    data:readList
+  })
+})
+
+module.exports = {
+  profile,
+  editProfile,
+  changePassword,
+  addStoryToReadList,
+  readListPage
+}
