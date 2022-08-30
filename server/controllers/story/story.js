@@ -1,5 +1,6 @@
 const express = require("express")
 const ErrorWrapper = require("express-async-handler")
+const Story = require("../../model/story")
 
 
 
@@ -41,7 +42,9 @@ const addStory = ErrorWrapper( async (req, res, next) => {
 })
 
 const getAllStories = ErrorWrapper( async (req, res, next) => {
-  
+  let query = Story.find()
+
+
 })
 
 
