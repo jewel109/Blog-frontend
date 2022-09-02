@@ -1,5 +1,5 @@
 const express = require('express')
-const { profile, editProfile, changePassword, addStoryToReadList, readListPage } = require('../controllers/user')
+const { profile, editProfile, changePassword, addStoryToReadList, readListPage } = require('../controllers/user/user')
 const { getAccessToRoute } = require('../middlewares/auth/accessRoute')
 
 const router = express.Router()

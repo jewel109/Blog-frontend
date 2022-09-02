@@ -1,8 +1,8 @@
 const ErrorWrapper = require('express-async-handler')
-const { validateInput, comparePassword } = require('../helpers/inputHelper')
-const CustomError = require('../middlewares/Error/CustomError')
-const Story = require('../model/story')
-const User = require('../model/user')
+const { validateInput, comparePassword } = require('../../helpers/inputHelper.js')
+const CustomError = require('../../middlewares/Error/CustomError')
+const Story = require('../../model/story')
+const User = require('../../model/user')
 
 const profile = ErrorWrapper(async(req,res) => {
 
