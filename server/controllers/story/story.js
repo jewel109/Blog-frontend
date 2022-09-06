@@ -1,6 +1,7 @@
 const express = require("express")
 const ErrorWrapper = require("express-async-handler")
 const Story = require("../../model/story")
+const {searchHelper,paginateHelper} = require("../../helpers/queryhelpers.js")
 
 
 
@@ -43,6 +44,23 @@ const addStory = ErrorWrapper( async (req, res, next) => {
 
 const getAllStories = ErrorWrapper( async (req, res, next) => {
   let query = Story.find()
+  query = searchHelper("title",query,req)
+
+  const paginationResult = await paginateHelper(Story, query, req)
+
+  query = paginationResult.query
+
+  query = query.sort("-likeCount -commentCount -createAt")
+
+  const stories = await query
+
+  return res.status(200).json({
+    success:true,
+    count: stories.length,
+    data: stories,
+    page: paginationResult.page,
+    pages: paginationResult.pages
+  })
 
 
 })
