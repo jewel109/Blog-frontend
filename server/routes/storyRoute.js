@@ -16,6 +16,12 @@ router.post("/:slug", checkStoryExist,detailStory)
 
 router.post("/:slug/like",[getAccessToRoute,checkStoryExist],likeStory)
 
+router.get("/editstory/:slug",[getAccessToRoute,checkStoryExist,checkUserAndStoryExist],editStoryPage)
 
+router.put("/:slug/edit",[getAccessToRoute,checkStoryExist,checkUserAndStoryExist],editStory)
+
+router.delete("/:slug/delete",[getAccessToRoute,checkStoryExist,checkUserAndStoryExist],deleteStory)
+
+router.get("/getallstories",getAllStories)
 
 module.exports = router
