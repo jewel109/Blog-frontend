@@ -1,5 +1,5 @@
 
-import { Route, Routes } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import './App.css';
 import SignUp from './components/siginup/signup';
@@ -11,7 +11,9 @@ import Button from '@mui/material/Button';
 const theme = createTheme()
 function App() {
 
+
   return (
+  <Router>
     <ThemeProvider theme = {theme}>
       <CssBaseline/>
       <Box>hei</Box>
@@ -25,6 +27,7 @@ function App() {
         <Route path='/sign-up' element={<SignUp />} />
       </Routes>
     </ThemeProvider>
+  </Router>
 	);
 }
 

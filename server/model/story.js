@@ -68,7 +68,9 @@ StorySchema.pre('remove',async function(){
 StorySchema.methods.makeSlug = function(){
   return slugify(this.title,{
     replacement:'-',
-    remove:'',
+    remove:/[*+~.()'"!:@/?]/g,
+    lower:true, strict:false,locale:'tr',
+    trim:true
   })
 }
 
