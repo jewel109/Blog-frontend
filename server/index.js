@@ -13,7 +13,7 @@ db()
 app.use(express.json())
 // app.use("/",indexRoute)
 app.use('/', indexRoute)
-
+//main route
 
 
 
