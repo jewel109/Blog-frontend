@@ -15,7 +15,7 @@ const AuthContextProvider = props => {
   useEffect(() => {
     const controlAuth = async () => {
       try {
-        const {data} = await axios.get("/auth/private",config)        
+        const {data} = await axios.get("http://localhost:5000/auth/private",config)        
         setActiveUser(data.user)
       }
       catch(error) {
