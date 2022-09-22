@@ -1,6 +1,5 @@
 import React,{useState,useEffect} from "react"
-import axios from "axios"
-
+import {api} from "../services/api.js"
 export const AuthContext = React.createContext()
 
 const AuthContextProvider = props => {
@@ -15,7 +14,7 @@ const AuthContextProvider = props => {
   useEffect(() => {
     const controlAuth = async () => {
       try {
-        const {data} = await axios.get("http://localhost:5000/auth/private",config)        
+        const {data} = await api.get("/auth/private",config)        
         setActiveUser(data.user)
       }
       catch(error) {
