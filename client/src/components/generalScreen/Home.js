@@ -15,12 +15,12 @@ const Home = () => {
 
       setLoading(true)
       try{
-        const {data} = await api
+        const {data} = await api.get("/story/")
       }
     }
   })
 
-  
+  /getstories/
 
 }
 
