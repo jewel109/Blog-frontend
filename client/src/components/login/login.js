@@ -8,11 +8,13 @@ import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
-import {Link as Rlink} from 'react-router-dom'
+import {Link as Rlink, useNavigate} from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import {useState} from "react"
+import api from "../../services/api.js"
 
 function Copyright(props) {
   return (
@@ -27,22 +29,43 @@ function Copyright(props) {
   );
 }
 
-const theme = createTheme();
 
-export default function SignIn() {
-  const handleSubmit = (event) => {
+export default function Login() {
+
+  const navigate = useNavigate()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const data =  new FormData(event.currentTarget);
+    const email = await data.get('email')
+    const password = await data.get('password')
+      
+    console.log( email, password);
+
+    try{
+
+      const {data} = await api.post("/auth/login",{email,password})
+
+      localStorage.setItem("authToken",data.token)
+
+      setTimeout(() => {
+        navigate('/')
+      },1800)
+
+    }catch(error){
+      setError(error.response.data.error)
+      setTimeout(() => {
+        setError("")
+      },4500)
+    }
+    
   };
 
   return (
-		<ThemeProvider theme={theme}>
 			<Container component='main' maxWidth='xs'>
-				<CssBaseline />
 				<Box
 					sx={{
 						marginTop: 8,
@@ -68,6 +91,8 @@ export default function SignIn() {
 							id='email'
 							label='Email Address'
 							name='email'
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
 							autoComplete='email'
 							autoFocus
 						/>
@@ -75,6 +100,8 @@ export default function SignIn() {
 							margin='normal'
 							required
 							fullWidth
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
 							name='password'
 							label='Password'
 							type='password'
@@ -99,13 +126,12 @@ export default function SignIn() {
 								</Link>
 							</Grid>
 							<Grid item>
-									<Rlink to="/sign-up">Don't have an account? Sign Up</Rlink>
+									<Rlink to="/register">Don't have an account? Register </Rlink>
 							</Grid>
 						</Grid>
 					</Box>
 				</Box>
 				<Copyright sx={{ mt: 8, mb: 4 }} />
 			</Container>
-		</ThemeProvider>
 	);
 }

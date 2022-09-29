@@ -2,6 +2,7 @@ import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 import {Outlet, useNavigate} from "react-router-dom"
 import {AuthContext} from "../../context/authcontext"
+import Home from "../generalScreen/Home.js"
 
 const baseUrl = "http://localhost:5000"
 const PrivateRoute = () => {
@@ -26,7 +27,7 @@ const PrivateRoute = () => {
         setActiveUser(data.user)
         setConfig(config)
 
-      }catch(err){
+      }catch(error){
         localStorage.removeItem("authToken")
 
         setAuth(false)
@@ -40,7 +41,7 @@ const PrivateRoute = () => {
     controlAuth()
   },[bool,navigate])
 
-  return (auth ? <Outlet/> : false)
+  return (auth ? <Outlet/> : <Home/>)
 }
 
 export default PrivateRoute

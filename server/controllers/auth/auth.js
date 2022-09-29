@@ -12,7 +12,6 @@ const register = async (req, res, next) => {
   try {
     // finding the user if not find then user will be null
     const user = await User.findOne({ username }).exec()
-    // console.log(user)
 
     if (user) {
 
@@ -40,8 +39,8 @@ const register = async (req, res, next) => {
         await newUser.save()
 
         sendToken(newUser, 201, res)
+      
       }
-
       res.status(400).json({
         success: false,
         message: `email: ${userEmail?.email} is already used `
