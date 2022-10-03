@@ -16,6 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -58,6 +59,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -215,6 +217,36 @@ export default function Header() {
               <AccountCircle />
             </IconButton>
             <Button variant="outlined" sx={{color:"white"}} >Log out</Button>
+          </Box>
+          }
+          {!user && <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit"> */}
+            {/*   <Badge badgeContent={4} color="error"> */}
+            {/*     <MailIcon /> */}
+            {/*   </Badge> */}
+            {/* </IconButton> */}
+            {/* <IconButton */}
+            {/*   size="large" */}
+            {/*   aria-label="show 17 new notifications" */}
+            {/*   color="inherit" */}
+            {/* > */}
+            {/*   <Badge badgeContent={17} color="error"> */}
+            {/*     <NotificationsIcon /> */}
+            {/*   </Badge> */}
+            {/* </IconButton> */}
+            {/* <IconButton */}
+            {/*   size="large" */}
+            {/*   edge="end" */}
+            {/*   aria-label="account of current user" */}
+            {/*   aria-controls={menuId} */}
+            {/*   aria-haspopup="true" */}
+            {/*   onClick={handleProfileMenuOpen} */}
+            {/*   color="inherit" */}
+            {/* > */}
+            {/*   <AccountCircle /> */}
+            {/* </IconButton> */}
+            <Button variant="outlined" sx={{color:"white"}} onClick={(e) => navigate('/login')}>Log In</Button>
+            <Button variant="outlined" sx={{color:"white"}} onClick={(e) => navigate('/register')} >Register</Button>
           </Box>
           }
           {/* <Box sx={{ display: { xs: 'flex', md: 'none' } }}> */}

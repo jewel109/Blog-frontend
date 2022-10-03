@@ -5,6 +5,22 @@ const CustomError = require("../../middlewares/Error/CustomError");
 const sendMailWithSIB = require('../../helpers/libraries/sendMailWithSIB.js');
 
 
+const getPrivateData = async(req,res,next) =>{
+    try {
+     return await res.status(200).json({
+        success:true ,
+        message : "You got access to the private data in this route ",
+        user : req.user
+
+      }) 
+    } catch (error) {
+     console.log(error) 
+    }
+    
+
+}
+
+
 const register = async (req, res, next) => {
 
   const { username, email, password } = req.body;
@@ -55,29 +71,23 @@ const register = async (req, res, next) => {
   }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   const { email, password } = req.body
 
   const user = await User.findOne({ email }).select("+password")
 
   if (!user) {
-    res.status(401).json({
-      success: false,
-      message: "user is not found"
-    })
+    return next(new CustomError("User is not Found",404))
   }
 
-  if (!comparePassword(password, user.password)) {
-    res.status(401).json({
-      success: false,
-      message: 'password is not correct'
-    })
+   if (!comparePassword(password, user.password)) {
+    return next(new CustomError("password is not matched",404))
   }
   sendToken(user, 201, res)
 
 }
 
-const forgetPassword = async (req, res) => {
+const forgetPassword = async (req, res,next) => {
 
   const { URI, EMAIL_USERNAME } = process.env
 
@@ -87,7 +97,7 @@ const forgetPassword = async (req, res) => {
   const user = await User.findOne({ email: resetEmail }).exec()
 
   if (!user) {
-    return new CustomError("There is no user with this email", 400)
+    return next(new CustomError("There is no user with this email", 400))
   }
 
   const resetPasswordToken = await user.getResetPasswordFromUser()
@@ -155,4 +165,4 @@ const resetPassword = async (req, res) => {
   }
 }
 
-module.exports = { register, login, forgetPassword, resetPassword }
+module.exports = { register, login, forgetPassword, resetPassword , getPrivateData}

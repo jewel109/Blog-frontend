@@ -2,6 +2,7 @@ const express = require("express")
 const dotenv = require('dotenv')
 const db = require("./helpers/db")
 const indexRoute = require('./routes/index')
+const cors = require("cors")
 const app = express()
 
 dotenv.config({
@@ -11,16 +12,20 @@ dotenv.config({
 
 db()
 app.use(express.json())
+app.use(cors({
+  origin:"*"
+}))
 // app.use("/",indexRoute)
-app.use((req,res,next) => {
-
-  res.header("Access-Control-Allow-Origin", "*");
-   res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next()
-})
+// app.use((req,res,next) => {
+//
+//   // res.header("Access-Control-Allow-Origin", "*");
+//   // res.header(
+//   //   "Access-Control-Allow-Headers",
+//   //   "Origin, X-Requested-With, Content-Type, Accept,"
+//   // );
+//   next()
+// })
+//
 app.use('/', indexRoute)
 //main route
 

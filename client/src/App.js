@@ -2,8 +2,10 @@
 import {BrowserRouter as Router, Outlet, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import './App.css';
-import Register from './components/register/register';
-import Login from './components/login/login';
+import Register from './components/auth/register';
+import Login from './components/auth/login';
+import ForgotPassword from './components/auth/forgotpassword'
+import ResetPassword from './components/auth/resetpassword'
 import {  CssBaseline  } from '@mui/material';
 import Header from "../src/components/generalScreen/Header.js"
 import NotFound from "../src/components/generalScreen/NotFound"
@@ -29,8 +31,8 @@ function App() {
         </Route>
         <Route exact path='/login' element={<Login />} />
         <Route exact path='/register' element={<Register />} />
-        <Route exact path='/forgetpassword' element={<Login />} />
-        <Route exact path='/resetpassword' element={<Login />} />
+        <Route exact path='/forgotpassword' element={<ForgotPassword />} />
+        <Route exact path='/resetpassword' element={<ResetPassword />} />
       </Routes>
     </ThemeProvider>
   </Router>
