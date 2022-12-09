@@ -14,11 +14,18 @@ const AuthContextProvider = props => {
   useEffect(() => {
     const controlAuth = async () => {
       try {
-        const {data} = await api.get("/auth/private",config)        
+        const {data} = await api.get("/auth/private",config)
+
+        console.log(`in AuthContextjs ${data.message}`)
+
         setActiveUser(data.user)
       }
       catch(error) {
+
+        console.log(`error in AuthContext`)
+
         localStorage.removeItem("authToken")
+        
         setActiveUser({})
       }
     }

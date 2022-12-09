@@ -40,8 +40,8 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data =  new FormData(event.currentTarget);
-    const email = await data.get('email')
-    const password = await data.get('password')
+    const email =  data.get('email')
+    const password =  data.get('password')
       
     console.log( email, password);
 
@@ -49,14 +49,17 @@ export default function Login() {
 
       const {data} = await api.post("/auth/login",{email,password})
 
+      console.log(`success=${data.success} ,message=${data.message} and token=${data.token} in loginjs`)
       localStorage.setItem("authToken",data.token)
 
       setTimeout(() => {
+        console.log("setTimeout")
         navigate('/')
       },1800)
 
     }catch(error){
       setError(error.response.data.error)
+      console.error(`in login js ${error}`)
       setTimeout(() => {
         setError("")
       },4500)
@@ -122,7 +125,7 @@ export default function Login() {
 						</Button>
 						<Grid container>
 							<Grid item xs>
-								<Link href='#' variant='body2'>
+								<Link onClick={e => navigate('/forgotpassword')} sx={{cursor:"pointer"}} variant='body2'>
 									Forgot password?
 								</Link>
 							</Grid>
@@ -133,14 +136,15 @@ export default function Login() {
 					</Box>
 				</Box>
         <Box>
-          <Button 
-            fullWidth
-            variant='text'
+          < Typography
+            component="h3"
+          variant="h6"
+            marginTop={3}
             onClick={(e) => navigate('/')}
-            sx={{marginTop:8,color:"purple"}}
+            sx={{marginTop:8,color:"purple",cursor:"pointer"}}
           >
            go home 
-          </Button>
+          </Typography>
         </Box>
 				<Copyright sx={{ mt: 8, mb: 4 }} />
 			</Container>

@@ -4,6 +4,9 @@ const db = require("./helpers/db")
 const indexRoute = require('./routes/index')
 const cors = require("cors")
 const app = express()
+const logger = require('./helpers/logger/logger')
+
+//logger('we are in ', 'index.js')
 
 dotenv.config({
   path:".config/config.env"
@@ -26,8 +29,16 @@ app.use(cors({
 //   next()
 // })
 //
+
 app.use('/', indexRoute)
 //main route
+
+app.use((err,req,res,next) => {
+ console.error(`in index.js ${err.stack}`)
+  // res.status(500).json({
+  //   error:"error"
+  // })
+})
 
 
 

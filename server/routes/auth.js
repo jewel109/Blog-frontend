@@ -5,7 +5,8 @@ const { getAccessToRoute } = require("../middlewares/auth/accessRoute")
 
 router.post('/register',register)
 router.post('/login',login)
-router.post('/forgotpassword',forgetPassword)
+router.post('/forgotpassword',forgetPassword,)
+// router.get('/resetpassword/:resetPasswordToken')
 router.put('/resetpassword', resetPassword)
 router.get('/private',getAccessToRoute,getPrivateData)
 
