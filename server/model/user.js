@@ -62,7 +62,7 @@ UserSchema.methods.generateJwtFromUser = function() {
     name: this.username,
     email: this.email,
   };
-  const token = jwt.sign(payload, JWT_SECRET);
+  const token = jwt.sign(payload, JWT_SECRET,{expiresIn:'30d'});
   return token;
 };
 
