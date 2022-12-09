@@ -1,4 +1,5 @@
 import * as React from 'react';
+import{useContext} from 'react'
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -17,7 +18,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
+import {AuthContext} from "../../context/authcontext.js";
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -63,8 +64,8 @@ export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  const [user, setUser] = React.useState(false)
-
+  const {activeUser,setActiveUser} = useContext(AuthContext)
+  console.log(`in Header user=${activeUser.username}`)
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -190,7 +191,7 @@ export default function Header() {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          {user && <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+          {activeUser && <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
             {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit"> */}
             {/*   <Badge badgeContent={4} color="error"> */}
             {/*     <MailIcon /> */}
@@ -219,7 +220,7 @@ export default function Header() {
             <Button variant="outlined" sx={{color:"white"}} >Log out</Button>
           </Box>
           }
-          {!user && <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+          {!activeUser && <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
             {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit"> */}
             {/*   <Badge badgeContent={4} color="error"> */}
             {/*     <MailIcon /> */}
