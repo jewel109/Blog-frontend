@@ -1,4 +1,4 @@
-## [Todo](#Todo)
+## [Todo](#TODO)
 # *Features* Of This Blog 
 
 1. User can register an account
@@ -10,10 +10,21 @@
 # Technology used
 >reactjs, nodejs, mongoose, msterial ui
 
-### Todo
-* [ ] user profile creation
-  * [ ] name, email  showing 
-  * [ ] picture showing 
-  * [ ] posts showing
-  * [ ] readList showing 
-  * [ ] editing  profile 
+
+
+
+
+
+
+
+
+
+### TODO
+* ### UI 
+  * [ ] user profile creation
+    * [ ] name, email  showing 
+    * [ ] picture showing 
+    * [ ] posts showing
+    * [ ] readList showing 
+    * [ ] editing  profile 
+* ### DATABASE
