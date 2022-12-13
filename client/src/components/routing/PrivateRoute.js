@@ -23,6 +23,7 @@ const PrivateRoute = () => {
       try{
 
         const {data} = await api.get(`/auth/private`,config)
+        console.log(`in PrivateRoute data=${data} user=${data.user.username}`)
         setAuth(true)
         setActiveUser(data.user)
         setConfig(config)
@@ -41,7 +42,9 @@ const PrivateRoute = () => {
     controlAuth()
   },[bool,navigate])
 
-  return (auth ? <Outlet/> : <Home/>)
+  return (auth ? <Outlet/> : (<><Home/> 
+    <Outlet/>
+    </>))
 }
 
 export default PrivateRoute

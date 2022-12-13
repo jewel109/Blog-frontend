@@ -64,13 +64,26 @@ export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  const {activeUser,setActiveUser} = useContext(AuthContext)
+  const {activeUser} = useContext(AuthContext)
+  activeUser?  console.log(`activeUser=${activeUser.username}`): console.log('activeUser is none')
+  let user = false;
+  let nouser = false;
+  if(activeUser){
+
   console.log(`in Header user=${activeUser.username}`)
+  user = true
+  nouser = false
+  }else{
+    user = false
+    nouser = true
+  }
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+    console.log(`in handleProfileMenuOpen`)
+    event.preventDefault()
+    navigate('/profile')
   };
 
   const handleMobileMenuClose = () => {
@@ -191,21 +204,8 @@ export default function Header() {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          {activeUser && <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
-            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit"> */}
-            {/*   <Badge badgeContent={4} color="error"> */}
-            {/*     <MailIcon /> */}
-            {/*   </Badge> */}
-            {/* </IconButton> */}
-            {/* <IconButton */}
-            {/*   size="large" */}
-            {/*   aria-label="show 17 new notifications" */}
-            {/*   color="inherit" */}
-            {/* > */}
-            {/*   <Badge badgeContent={17} color="error"> */}
-            {/*     <NotificationsIcon /> */}
-            {/*   </Badge> */}
-            {/* </IconButton> */}
+          {user && <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+            
             <IconButton
               size="large"
               edge="end"
@@ -220,48 +220,12 @@ export default function Header() {
             <Button variant="outlined" sx={{color:"white"}} >Log out</Button>
           </Box>
           }
-          {!activeUser && <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
-            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit"> */}
-            {/*   <Badge badgeContent={4} color="error"> */}
-            {/*     <MailIcon /> */}
-            {/*   </Badge> */}
-            {/* </IconButton> */}
-            {/* <IconButton */}
-            {/*   size="large" */}
-            {/*   aria-label="show 17 new notifications" */}
-            {/*   color="inherit" */}
-            {/* > */}
-            {/*   <Badge badgeContent={17} color="error"> */}
-            {/*     <NotificationsIcon /> */}
-            {/*   </Badge> */}
-            {/* </IconButton> */}
-            {/* <IconButton */}
-            {/*   size="large" */}
-            {/*   edge="end" */}
-            {/*   aria-label="account of current user" */}
-            {/*   aria-controls={menuId} */}
-            {/*   aria-haspopup="true" */}
-            {/*   onClick={handleProfileMenuOpen} */}
-            {/*   color="inherit" */}
-            {/* > */}
-            {/*   <AccountCircle /> */}
-            {/* </IconButton> */}
+          {nouser && <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
             <Button variant="outlined" sx={{color:"white"}} onClick={(e) => navigate('/login')}>Log In</Button>
             <Button variant="outlined" sx={{color:"white"}} onClick={(e) => navigate('/register')} >Register</Button>
           </Box>
           }
-          {/* <Box sx={{ display: { xs: 'flex', md: 'none' } }}> */}
-          {/*   <IconButton */}
-          {/*     size="large" */}
-          {/*     aria-label="show more" */}
-          {/*     aria-controls={mobileMenuId} */}
-          {/*     aria-haspopup="true" */}
-          {/*     onClick={handleMobileMenuOpen} */}
-          {/*     color="inherit" */}
-          {/*   > */}
-          {/*     <MoreIcon /> */}
-          {/*   </IconButton> */}
-          {/* </Box> */}
+         
         </Toolbar>
       </AppBar>
      {/* {renderMobileMenu} */}

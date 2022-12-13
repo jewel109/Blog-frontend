@@ -11,27 +11,29 @@ const getAccessToRoute = asyncError(async (req, res, next) => {
   const { JWT_SECRET } = process.env
 
   if (!isTokenIncluded(req)) {
-    return res.status(401).json({
+    return res.status(201).json({
+      success:false,
       message: 'No token found',
     })
   }
 
   const accessToken = getAccessTokenFromHeader(req)
 
-  if (accessToken == "null" ) {
+  if (accessToken == 'null') {
     return res
       .status(200)
       .json({ success: false, message: 'not valid jsonwebtoken ' })
-  } else if (accessToken != "null") {
-    const decoded = await jwt.verify(accessToken, JWT_SECRET)
+  } else if (accessToken != 'null') {
+    const decoded = jwt.verify(accessToken, JWT_SECRET)
 
-    console.log(`decoded ${decoded}`)
+    console.log(`decoded jsonwebtoken ${decoded}`)
 
     const user = await User.findById(decoded.id)
     console.log(`in accessroute ${user}`)
     if (!user) {
       console.log('no user')
-      return res.status(401).json({
+      return res.status(201).json({
+        success:false,
         message: 'No user found',
       })
     }
@@ -40,6 +42,5 @@ const getAccessToRoute = asyncError(async (req, res, next) => {
     next()
   }
 })
-
 
 module.exports = { getAccessToRoute }
