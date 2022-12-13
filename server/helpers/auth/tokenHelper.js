@@ -1,6 +1,6 @@
 const isTokenIncluded = (req) => {
   
-  console.log(`in isToken included ${req}`)
+  console.log(`in isTokenIncluded ${req}`)
   return (req.headers.authorization && req.headers.authorization.startsWith("Bearer"))
 
 
@@ -9,6 +9,7 @@ const isTokenIncluded = (req) => {
 const getAccessTokenFromHeader = (req) =>{
 
   const authrization = req.headers.authorization;
+  console.log(`authrization=${authrization}`)
   const accessToken = authrization.split(" ")[1];
   console.log(`access token ${accessToken}`)
   return accessToken;
