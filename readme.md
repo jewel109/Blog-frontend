@@ -1,4 +1,5 @@
-## [Todo](#TODO)
+## [ Todo ](#todo)
+* [DATABASE](#database)
 # *Features* Of This Blog 
 
 1. User can register an account
@@ -9,9 +10,6 @@
 6. User can like, comment and reply on post
 # Technology used
 >reactjs, nodejs, mongoose, msterial ui
-
-
-
 
 
 
