@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "json:start": "npx json-server -p 3001 -w db.json"
   },
   "dependencies": {
     "@faker-js/faker": "^8.3.1",
@@ -21,6 +22,7 @@
     "@reduxjs/toolkit": "^2.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "json-server": "^1.0.0-alpha.11",
     "lucide-react": "^0.303.0",
     "next": "14.0.4",
     "react": "^18",
@@ -44,6 +46,7 @@
     "eslint-config-next": "14.0.4",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "miragejs": "^0.1.48",
     "nodemon": "^3.0.2",
     "postcss": "^8",
     "supertest": "^6.3.3",

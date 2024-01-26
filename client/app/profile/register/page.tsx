@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
+import { Provider, useDispatch, useSelector } from "react-redux"
+import { store } from "@/app/store/store"
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -24,6 +26,9 @@ const formSchema = z.object({
 })
 
 export default function ProfileForm() {
+  const dispatch = useDispatch();
+  const { loading, error, success } = useSelector((state) => state.users);
+  console.log(loading)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,6 +67,7 @@ export default function ProfileForm() {
     </Form>
     <div>
       <Button className="my-2"><Link href={'/'}>Home</Link></Button>
+
     </div>
   </>
   )
