@@ -23,5 +23,15 @@
   ],
   "profile": {
     "name": "typicode"
-  }
+  },
+  "users": [
+    {
+      "id": "1",
+      "name": "jewel"
+    },
+    {
+      "id": "2",
+      "name": "rana"
+    }
+  ]
 }
