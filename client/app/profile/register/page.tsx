@@ -18,6 +18,9 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { Provider, useDispatch, useSelector } from "react-redux"
 import { store } from "@/app/store/store"
+import { registerUser } from "@/app/features/userSlice"
+import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -27,6 +30,7 @@ const formSchema = z.object({
 
 export default function ProfileForm() {
   const dispatch = useDispatch();
+  const { push } = useRouter()
   const { loading, error, success } = useSelector((state) => state.users);
   console.log(loading)
   const form = useForm<z.infer<typeof formSchema>>({
@@ -35,12 +39,14 @@ export default function ProfileForm() {
       username: "",
     },
   })
-
+  // todo reirect to home
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    dispatch(registerUser(values))
     console.log(values)
+    push("/")
   }
 
   return (<>
