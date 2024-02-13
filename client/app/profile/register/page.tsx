@@ -17,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input"
 import axiosInstance from "@/lib/axios"
 import axiosError from "@/lib/axiosError"
+import { useRouter } from "next/navigation"
+
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -40,6 +42,7 @@ async function forRegister({ username, email, password }) {
 }
 
 export default function ProfileForm() {
+  const router = useRouter()
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,6 +59,7 @@ export default function ProfileForm() {
     // ✅ This will be type-safe and validated.
     console.log(values)
     forRegister(values)
+    router.push('/')
   }
 
   return (
