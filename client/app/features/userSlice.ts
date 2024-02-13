@@ -21,11 +21,11 @@ const initialState: UsersState = {
   success: null// No errors initially
 };
 export const registerUser = createAsyncThunk('users/userRegister',
-  async (user: UsersState) => {
+  async (users: UsersState) => {
     const response = await fetch(`${fakeapi}/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(user),
+      body: JSON.stringify(users),
     });
     if (response.ok) {
       return response.json();
@@ -33,6 +33,19 @@ export const registerUser = createAsyncThunk('users/userRegister',
       throw new Error('Registration failed');
     }
   })
+const userState = {
+  id: String,
+  name: "string"
+}
+export const loginUser = createAsyncThunk('users/loginUser', async (user: typeof userState) => {
+  const response = await fetch(`${fakeapi}/users?username=${user.name}`, { method: 'GET', body: JSON.stringify(user) })
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw new Error('Registration failed');
+  }
+
+})
 export const userSlice = createSlice({
   name: "users",
   initialState,

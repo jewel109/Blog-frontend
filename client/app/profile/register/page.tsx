@@ -39,7 +39,7 @@ export default function ProfileForm() {
       username: "",
     },
   })
-  // todo reirect to home
+  // todo reirect to home [[done]]
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
@@ -73,6 +73,7 @@ export default function ProfileForm() {
     </Form>
     <div>
       <Button className="my-2"><Link href={'/'}>Home</Link></Button>
+      <Button className="my-2"><Link href={'/profile/login'}>Login</Link></Button>
 
     </div>
   </>
