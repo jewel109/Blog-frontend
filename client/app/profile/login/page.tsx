@@ -1,0 +1,82 @@
+"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import Link from "next/link"
+import { Provider, useDispatch, useSelector } from "react-redux"
+import { store } from "@/app/store/store"
+import { loginUser, registerUser } from "@/app/features/userSlice"
+import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
+const formSchema = z.object({
+  name: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+})
+
+
+
+export default function ProfileForm() {
+  const dispatch = useDispatch();
+  const { push } = useRouter()
+  const { loading, error, success } = useSelector((state) => state.users);
+  console.log(loading)
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+    },
+  })
+  // todo reirect to home [[done]]
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    dispatch(loginUser(values))
+    console.log(values)
+    push("/")
+  }
+
+  return (<>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>name</FormLabel>
+              <FormControl>
+                <Input placeholder="" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+    <div>
+      <Button className="my-2"><Link href={'/'}>Home</Link></Button>
+      <Button className="my-2"><Link href={'/register'}>Register</Link></Button>
+
+    </div>
+  </>
+  )
+}
