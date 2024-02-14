@@ -33,7 +33,12 @@ async function forRegister({ username, email, password }) {
     const { data } = await axiosInstance.post("/auth/register", { username, email, password })
     const { token } = data ? data : null
     console.log(token)
-    localStorage.setItem("token", token)
+    const savedToken = localStorage.getItem("token") ?? null
+
+    localStorage.setItem("token", "")
+    if (!savedToken) {
+      localStorage.setItem("token", token)
+    }
     const tok = localStorage.getItem("token")
     console.log(tok)
   } catch (error) {
