@@ -1,9 +1,9 @@
+
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
-
+import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -15,68 +15,90 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import Link from "next/link"
-import { Provider, useDispatch, useSelector } from "react-redux"
-import { store } from "@/app/store/store"
-import { loginUser, registerUser } from "@/app/features/userSlice"
-import { redirect } from "next/navigation"
-import { useRouter } from "next/navigation"
+import axiosInstance from "@/lib/axios"
+import axiosError from "@/lib/axiosError"
+import { redirect, useRouter } from "next/navigation"
+
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  email: z.string().min(4, { message: "email must be 4 characters" }),
+  password: z.string().min(4, { message: "must 4 characters" })
 })
 
+async function forLogin({ email, password }) {
+  try {
 
+    const { data } = await axiosInstance.post("/auth/login", { email, password })
+    const { token } = data ? data : null
+    console.log(token)
+    const savedToken = localStorage.getItem("token") ?? null
+    localStorage.setItem("token", "")
+    if (!savedToken) {
+      localStorage.setItem("token", token)
+    }
+    const tok = localStorage.getItem("token")
+    console.log(tok)
+  } catch (error) {
+    axiosError(error)
+  }
+}
 
 export default function ProfileForm() {
-  const dispatch = useDispatch();
-  const { push } = useRouter()
-  const { loading, error, success } = useSelector((state) => state.users);
-  console.log(loading)
+  const router = useRouter()
+  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      email: "",
+      password: ""
     },
   })
-  // todo reirect to home [[done]]
+
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    dispatch(loginUser(values))
     console.log(values)
-    push("/")
+    forLogin(values)
+    // redirect('/home')
+    router.push('/', { scroll: true })
   }
 
-  return (<>
+  return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="name"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>name</FormLabel>
+
+              <FormLabel>email</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} />
+                <Input placeholder="shadcn" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
+
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+
+              <FormLabel>password</FormLabel>
+              <FormControl >
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+
           )}
         />
         <Button type="submit">Submit</Button>
       </form>
     </Form>
-    <div>
-      <Button className="my-2"><Link href={'/'}>Home</Link></Button>
-      <Button className="my-2"><Link href={'/register'}>Register</Link></Button>
-
-    </div>
-  </>
   )
 }
