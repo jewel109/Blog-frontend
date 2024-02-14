@@ -58,7 +58,7 @@ export default function Home() {
               <Link href={`/profile/register`}>register</Link>
             </Button>
             <Button className='mx-2'>
-              <Link href={`/chat`}>chat</Link>
+              <Link href={`/profile/login`}>login</Link>
             </Button>
 
           </div>
