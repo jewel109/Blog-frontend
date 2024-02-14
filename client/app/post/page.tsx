@@ -24,6 +24,7 @@ const formSchema = z.object({
   content: z.string().min(20, { message: "content must 20 characters" })
 })
 
+let postData;
 async function forCreatePost({ title, content }) {
   try {
     const token = localStorage.getItem("token") ?? null
@@ -33,7 +34,7 @@ async function forCreatePost({ title, content }) {
     const { data } = await axiosInstance.post("/story/addStory", { title, content }, { headers: headers })
 
     console.log(data)
-
+    postData = data.data.content ?? "no data"
   } catch (error) {
     axiosError(error)
   }
@@ -98,7 +99,9 @@ export default function ProfileForm() {
       </form>
 
     </Form>
-    <div></div>
+    <div>
+      {postData}
+    </div>
   </>
   )
 }
