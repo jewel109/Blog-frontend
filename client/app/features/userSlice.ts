@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fakeapi } from "../page";
+import { fakeapi } from "../page";
 
 interface UsersState {
   users: Array<{
@@ -26,79 +27,41 @@ export const registerUser = createAsyncThunk('users/userRegister',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(users),
-    });
-    if (response.ok) {
-      return response.json();
-    } else {
-      throw new Error('Registration failed');
-    }
-  })
+      const registerUser = createAsyncThunk('users/userRegister',
+        async (user: UsersState) => {
+          const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user),
+            export const registerUser = createAsyncThunk('users/userRegister',
+              async (users: UsersState) => {
+                const response = await fetch(`${fakeapi}/users`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(users),
+                });
+                if (response.ok) {
+                  return response.json();
+                } else {
+                  throw new Error('Registration failed');
+                }
+              })
 const userState = {
-  id: String,
-  name: "string"
-}
+              id: String,
+              name: "string"
+            }
 export const loginUser = createAsyncThunk('users/loginUser', async (user: typeof userState) => {
-  const response = await fetch(`${fakeapi}/users?username=${user.name}`, { method: 'GET', body: JSON.stringify(user) })
-  if (response.ok) {
-    return response.json();
-  } else {
-    throw new Error('Registration failed');
-  }
+              const response = await fetch(`${fakeapi}/users?username=${user.name}`, { method: 'GET', body: JSON.stringify(user) })
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error('Registration failed');
+              }
 
-})
+            })
 export const userSlice = createSlice({
-  name: "users",
-  initialState,
-  reducers: {
-    // Fetch users
-    fetchUsersStart(state) {
-      state.loading = true;
-      state.error = null;
-    },
-    fetchUsersSuccess(state, action) {
-      state.loading = false;
-      state.users = action.payload;
-    },
-    fetchUsersFailure(state, action) {
-      state.loading = false;
-      state.error = action.payload;
-    },
-
-    // Add new user
-    addUser(state, action) {
-      state.users.push(action.payload);
-    },
-
-    // Update existing user
-    updateUser(state, action) {
-      const index = state.users.findIndex((user) => user.id === action.payload.id);
-      if (index !== -1) {
-        state.users[index] = action.payload;
-      }
-    },
-
-    // Delete user
-    deleteUser(state, action) {
-      state.users = state.users.filter((user) => user.id !== action.payload);
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(registerUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.success = null;
-      })
-      .addCase(registerUser.fulfilled, (state) => {
-        state.loading = false;
-        state.success = true;
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
-  },
-})
-
-export const { fetchUsersStart, fetchUsersSuccess, fetchUsersFailure, } = userSlice.actions
-export default userSlice.reducer 
+              name: "users",
+              initialState,
+              reducers: {
+                // Fetch users
+                fetchUsersStart(state) {
