@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fakeapi } from "../page";
+import { fakeapi } from "../page";
 
 interface UsersState {
   users: Array<{
@@ -20,12 +21,30 @@ const initialState: UsersState = {
   error: null,
   success: null// No errors initially
 };
+<<<<<<< HEAD
+<<<<<<< HEAD
+const registerUser = createAsyncThunk('users/userRegister',
+  async (user: UsersState) => {
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user),
+=======
 export const registerUser = createAsyncThunk('users/userRegister',
   async (users: UsersState) => {
     const response = await fetch(`${fakeapi}/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(users),
+>>>>>>> parent of 51e4815 (axios is added and refactored)
+=======
+export const registerUser = createAsyncThunk('users/userRegister',
+  async (users: UsersState) => {
+    const response = await fetch(`${fakeapi}/users`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(users),
+>>>>>>> 4a9fb9cf5847ab829e1c7c88dec4860dd55bd40b
     });
     if (response.ok) {
       return response.json();
