@@ -10,12 +10,11 @@ import { store } from './store/store'
 import axiosInstance from '@/lib/axios'
 import axiosError from '@/lib/axiosError'
 import { within } from '@testing-library/react'
-
 async function forPrivateData() {
   try {
 
-    const tok = localStorage.getItem("token")
-    const token = tok ? tok : null
+    const token = localStorage.getItem("token")
+
     console.log(token)
     const { data } = await axiosInstance.get("/auth/private", { headers: { "Authorization": `Bearer ${token}` } })
     console.log(data?.user?.username)
@@ -25,19 +24,39 @@ async function forPrivateData() {
 }
 
 
+
 export default function Home() {
+  const [postData, setPostData] = useState([])
 
+  async function forAllStories() {
+    try {
+      const { data } = await axiosInstance.get("/story/getAllStories")
+      console.log(data.query)
+      setPostData(data.query)
+    } catch (error) {
+      axiosError(error)
+    }
+  }
 
-  let [users, setUsers] = useState([])
 
   useEffect(() => {
     try {
       forPrivateData()
+
     }
     catch (e) {
       console.error(e)
     }
+  }, [forPrivateData])
+  useEffect(() => {
+    try {
+      forAllStories()
+
+    } catch (error) {
+      console.log(error)
+    }
   }, [])
+  console.log('postdata ' + postData)
   return (
     <>
       <Provider store={store}>
@@ -46,7 +65,7 @@ export default function Home() {
             <Button><Link href="/profile">profile</Link>
             </Button>
             <Button className='mx-2'>
-              <Link href={`/blog/create-blog`}>Create Blog</Link>
+              <Link href={`/post`}>Create Post</Link>
             </Button>
             <Button className='mx-2'>
               <Link href={`/users`}>total users</Link>
@@ -63,9 +82,10 @@ export default function Home() {
 
           </div>
           <ul>
-            {users.map((user) => (
-              <li key={user.id}>{user.name}</li>
+            {postData.map((post) => (
+              <li key={post._id}>{post.title} hei</li>
             ))}
+            <span>hei</span>
           </ul>
 
         </main >
