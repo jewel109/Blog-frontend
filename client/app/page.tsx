@@ -7,40 +7,23 @@ import { Button } from '@/components/ui/button'
 import { Provider } from 'react-redux'
 import { Model, createServer } from "miragejs"
 import { store } from './store/store'
+import axiosInstance from '@/lib/axios'
+import axiosError from '@/lib/axiosError'
+import { within } from '@testing-library/react'
 
-createServer({
+async function forPrivateData() {
+  try {
 
-  models: {
-    users: Model
-  },
-  routes() {
-    this.get("/api/users", () => [
-      { id: "1", name: "Luke" },
-      { id: "2", name: "Leia" },
-      { id: "3", name: "Anakin" },
-    ]),
-      this.post("api/register", () => {
+    const tok = localStorage.getItem("token")
+    const token = tok ? tok : null
+    console.log(token)
+    const { data } = await axiosInstance.get("/auth/private", { headers: { "Authorization": `Bearer ${token}` } })
+    console.log(data?.user?.username)
+  } catch (error) {
+    axiosError(error)
+  }
+}
 
-        const newUserData = this.request.requestBody;
-
-        // Validate and process user data
-        try {
-          // ... perform validation and other actions
-
-          // Create a new user record (adapt according to your data model)
-          const newUser = { id: 4, ...newUserData };
-
-          // Return a successful response with the new user
-          this.response.created('/api/users/4', newUser);
-        } catch (error) {
-          // Handle errors and return appropriate responses
-          this.response.badRequest(error.message);
-        }
-
-      })
-
-  },
-})
 
 export default function Home() {
 
@@ -48,9 +31,12 @@ export default function Home() {
   let [users, setUsers] = useState([])
 
   useEffect(() => {
-    fetch("/api/users")
-      .then((response) => response.json())
-      .then((json) => setUsers(json))
+    try {
+      forPrivateData()
+    }
+    catch (e) {
+      console.error(e)
+    }
   }, [])
   return (
     <>
@@ -72,7 +58,7 @@ export default function Home() {
               <Link href={`/profile/register`}>register</Link>
             </Button>
             <Button className='mx-2'>
-              <Link href={`/chat`}>chat</Link>
+              <Link href={`/profile/login`}>login</Link>
             </Button>
 
           </div>

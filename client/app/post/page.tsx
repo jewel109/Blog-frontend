@@ -17,30 +17,24 @@ import {
 import { Input } from "@/components/ui/input"
 import axiosInstance from "@/lib/axios"
 import axiosError from "@/lib/axiosError"
-import { useRouter } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  email: z.string().min(4, { message: "email must be 4 characters" }),
-  password: z.string().min(4, { message: "must 4 characters" })
+  title: z.string().min(5, { message: "title must be 4 characters" }),
+  content: z.string().min(20, { message: "content must 20 characters" })
 })
 
-async function forRegister({ username, email, password }) {
+let postData;
+async function forCreatePost({ title, content }) {
   try {
+    const token = localStorage.getItem("token") ?? null
 
-    const { data } = await axiosInstance.post("/auth/register", { username, email, password })
-    const { token } = data ? data : null
-    console.log(token)
-    const savedToken = localStorage.getItem("token") ?? null
+    const headers = { "Authorization": `Bearer ${token}` }
 
-    localStorage.setItem("token", "")
-    if (!savedToken) {
-      localStorage.setItem("token", token)
-    }
-    const tok = localStorage.getItem("token")
-    console.log(tok)
+    const { data } = await axiosInstance.post("/story/addStory", { title, content }, { headers: headers })
+
+    console.log(data)
+    postData = data.data.content ?? "no data"
   } catch (error) {
     axiosError(error)
   }
@@ -52,9 +46,8 @@ export default function ProfileForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
-      email: "",
-      password: ""
+      title: "",
+      content: ""
     },
   })
 
@@ -63,37 +56,23 @@ export default function ProfileForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
-    forRegister(values)
-    router.push('/')
+    forCreatePost(values)
+    // redirect('/home')
+    //   router.push('/', { scroll: true })
   }
 
-  return (
+  return (<>
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
+          name="title"
           render={({ field }) => (
             <FormItem>
 
-              <FormLabel>email</FormLabel>
+              <FormLabel>title</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input  {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -103,11 +82,11 @@ export default function ProfileForm() {
 
         <FormField
           control={form.control}
-          name="password"
+          name="content"
           render={({ field }) => (
             <FormItem>
 
-              <FormLabel>password</FormLabel>
+              <FormLabel>content</FormLabel>
               <FormControl >
                 <Input {...field} />
               </FormControl>
@@ -118,6 +97,11 @@ export default function ProfileForm() {
         />
         <Button type="submit">Submit</Button>
       </form>
+
     </Form>
+    <div>
+      {postData}
+    </div>
+  </>
   )
 }

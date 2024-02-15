@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-<<<<<<< HEAD
-=======
 import { fakeapi } from "../page";
->>>>>>> parent of 51e4815 (axios is added and refactored)
+import { fakeapi } from "../page";
 
 interface UsersState {
   users: Array<{
@@ -24,6 +22,7 @@ const initialState: UsersState = {
   success: null// No errors initially
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 const registerUser = createAsyncThunk('users/userRegister',
   async (user: UsersState) => {
     const response = await fetch('/api/register', {
@@ -38,6 +37,14 @@ export const registerUser = createAsyncThunk('users/userRegister',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(users),
 >>>>>>> parent of 51e4815 (axios is added and refactored)
+=======
+export const registerUser = createAsyncThunk('users/userRegister',
+  async (users: UsersState) => {
+    const response = await fetch(`${fakeapi}/users`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(users),
+>>>>>>> 4a9fb9cf5847ab829e1c7c88dec4860dd55bd40b
     });
     if (response.ok) {
       return response.json();
@@ -45,6 +52,19 @@ export const registerUser = createAsyncThunk('users/userRegister',
       throw new Error('Registration failed');
     }
   })
+const userState = {
+  id: String,
+  name: "string"
+}
+export const loginUser = createAsyncThunk('users/loginUser', async (user: typeof userState) => {
+  const response = await fetch(`${fakeapi}/users?username=${user.name}`, { method: 'GET', body: JSON.stringify(user) })
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw new Error('Registration failed');
+  }
+
+})
 export const userSlice = createSlice({
   name: "users",
   initialState,

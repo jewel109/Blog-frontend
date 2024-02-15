@@ -9,22 +9,22 @@ const logger = require('./helpers/logger/logger')
 //logger('we are in ', 'index.js')
 
 dotenv.config({
-  path:".config/dev.env"
+  path: ".config/dev.env"
 })
 
-
+app.use(cors({
+  "Access-Control-Allow-Origin": "*"
+}))
 db()
 app.use(express.json())
-app.use(cors({
-  origin:"*"
-}))
+
+
 
 
 app.use('/', indexRoute)
 
-
-app.use((err,req,res,next) => {
- console.error(`in index.js ${err.stack}`)
+app.use((err, req, res, next) => {
+  console.error(`in index.js ${err.stack}`)
   next(err)
 })
 
