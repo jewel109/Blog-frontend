@@ -75,10 +75,13 @@ const likeStory = ErrorWrapper(async (req, res, next) => {
   const { slug } = req.params;
 
   const story = await Story.find({
+  const story = await Story.findOne({
     slug
   }).populate("author likes")
 
+  console.log(chalk.red(story))
   const storyLikesUserIds = story.likes.map(json => json._id.toString())
+  console.log(storyLikesUserIds)
 
   if (!storyLikesUserIds.includes(activeUser._id)) {
     story.likes.push(activeUser)
@@ -93,6 +96,7 @@ const likeStory = ErrorWrapper(async (req, res, next) => {
     await story.save()
   }
 
+  console.log(chalk.whiteBright(story))
   return res.status(200).json({
     success: true,
     data: story
