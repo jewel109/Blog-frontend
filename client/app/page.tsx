@@ -104,24 +104,17 @@ export default function Home() {
                 </CardContent>
                 <CardFooter>
                   <div className='grid  grid-cols-3  w-full'>
-          <ul>
-            {postData.map((post) => (
-              <li key={post._id}>{post.title} hei</li>
+                    <p>{post.likeCount} likes</p>
+                    <p>createdAt: {post.createdAt}</p>
+                    <p className='place-self-end'>comment</p>
+
+
+                  </div>
+                </CardFooter>
+              </Card>
+
+
             ))}
-            <span>hei</span>
-          </ul>
-
-                  <p>{post.likeCount} likes</p>
-                  <p>createdAt: {post.createdAt}</p>
-                  <p className='place-self-end'>comment</p>
-
-
-                </div>
-              </CardFooter>
-            </Card>
-
-
-          ))}
           </div>
 
         </main >
