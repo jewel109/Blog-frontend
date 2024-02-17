@@ -104,7 +104,6 @@ export default function Home() {
                 </CardContent>
                 <CardFooter>
                   <div className='grid  grid-cols-3  w-full'>
-=======
           <ul>
             {postData.map((post) => (
               <li key={post._id}>{post.title} hei</li>
