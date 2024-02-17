@@ -74,36 +74,43 @@ export default function Home() {
             <div className=''>
               <Button>Blog</Button>
             </div>
- <div className='place-self-end '>
-            <Button><Link href="/profile">profile</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/post`}>Create Post</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/users`}>total users</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/profile/register`}>register</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/profile/login`}>login</Link>
-            </Button>
+            <div className='place-self-end '>
+              <Button><Link href="/profile">profile</Link>
+              </Button>
+              <Button className='mx-2'>
+                <Link href={`/post`}>Create Post</Link>
+              </Button>
+              <Button className='mx-2'>
+                <Link href={`/users`}>total users</Link>
+              </Button>
+              <Button className='mx-2'>
+                <Link href={`/profile/register`}>register</Link>
+              </Button>
+              <Button className='mx-2'>
+                <Link href={`/profile/login`}>login</Link>
+              </Button>
 
-          </div>
+            </div>
           </div>
           <div className='mt-4'>
-     {postData.map((post) => (
-            <Card key={post._id}>
-              <CardHeader>
-                <CardTitle>{post.title} </CardTitle>
-                <CardDescription></CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>{post.content}</p>
-              </CardContent>
-              <CardFooter>
-                <div className='grid  grid-cols-3  w-full'>
+            {postData.map((post) => (
+              <Card key={post._id}>
+                <CardHeader>
+                  <CardTitle>{post.title} </CardTitle>
+                  <CardDescription></CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p>{post.content}</p>
+                </CardContent>
+                <CardFooter>
+                  <div className='grid  grid-cols-3  w-full'>
+=======
+          <ul>
+            {postData.map((post) => (
+              <li key={post._id}>{post.title} hei</li>
+            ))}
+            <span>hei</span>
+          </ul>
 
                   <p>{post.likeCount} likes</p>
                   <p>createdAt: {post.createdAt}</p>
@@ -117,7 +124,7 @@ export default function Home() {
 
           ))}
           </div>
-         
+
         </main >
       </Provider>
     </>

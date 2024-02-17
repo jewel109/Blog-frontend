@@ -75,32 +75,32 @@ const likeStory = ErrorWrapper(async (req, res, next) => {
   const { slug } = req.params;
 
   const story = await Story.find({
-  const story = await Story.findOne({
-    slug
-  }).populate("author likes")
+    const story = await Story.findOne({
+      slug
+    }).populate("author likes")
 
   console.log(chalk.red(story))
   const storyLikesUserIds = story.likes.map(json => json._id.toString())
   console.log(storyLikesUserIds)
 
-  if (!storyLikesUserIds.includes(activeUser._id)) {
-    story.likes.push(activeUser)
-    story.likeCount = story.likes.length
+  if(!storyLikesUserIds.includes(activeUser._id)) {
+      story.likes.push(activeUser)
+  story.likeCount = story.likes.length
 
-    await story.save()
-  } else {
-    const index = storyLikesUserIds.indexOf(activeUser._id)
+  await story.save()
+} else {
+  const index = storyLikesUserIds.indexOf(activeUser._id)
     story.likes.splice(index, 1)
     story.likeCount = story.likes.length
 
     await story.save()
-  }
+}
 
   console.log(chalk.whiteBright(story))
   return res.status(200).json({
-    success: true,
-    data: story
-  })
+  success: true,
+  data: story
+})
 
 
 })
