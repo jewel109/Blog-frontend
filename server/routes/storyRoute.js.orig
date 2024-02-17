@@ -1,0 +1,31 @@
+const express = require("express")
+
+const router = express.Router()
+
+const { getAccessToRoute } = require("../middlewares/auth/accessRoute")
+
+
+const { addStory, editStory, deleteStory, editStoryPage, likeStory, detailStory, getAllStories } = require("../controllers/story/story")
+
+const { checkStoryExist, checkUserAndStoryExist } = require("../middlewares/database/databaseErrorHandler")
+
+
+router.post("/addstory", [getAccessToRoute, addStory])
+
+router.post("/:slug", checkStoryExist, detailStory)
+
+<<<<<<< HEAD
+router.post("/:slug/like", getAccessToRoute, likeStory)
+=======
+router.post("/:slug/like", [getAccessToRoute, checkStoryExist], likeStory)
+>>>>>>> be75fc861ef3b386e788919d06d47fd3008ab293
+
+router.get("/editstory/:slug", [getAccessToRoute, checkStoryExist, checkUserAndStoryExist], editStoryPage)
+
+router.put("/:slug/edit", [getAccessToRoute, checkStoryExist, checkUserAndStoryExist], editStory)
+
+router.delete("/:slug/delete", [getAccessToRoute, checkStoryExist, checkUserAndStoryExist], deleteStory)
+
+router.get("/getallstories", getAllStories)
+
+module.exports = router
