@@ -11,11 +11,19 @@ import axiosInstance from '@/lib/axios'
 import axiosError from '@/lib/axiosError'
 import { within } from '@testing-library/react'
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 async function forPrivateData() {
   try {
 
-    const tok = localStorage.getItem("token")
-    const token = tok ? tok : null
+    const token = localStorage.getItem("token")
+
     console.log(token)
     const { data } = await axiosInstance.get("/auth/private", { headers: { "Authorization": `Bearer ${token}` } })
     console.log(data?.user?.username)
@@ -25,34 +33,59 @@ async function forPrivateData() {
 }
 
 
+
 export default function Home() {
+  const [postData, setPostData] = useState([])
 
+  async function forAllStories() {
+    try {
+      const { data } = await axiosInstance.get("/story/getAllStories")
+      console.log(data.query)
+      setPostData(data.query)
+    } catch (error) {
+      axiosError(error)
+    }
+  }
 
-  let [users, setUsers] = useState([])
+  async function likeHandler(e){
+    //e.preventDefault()
+    console.log("liked")
+  }
 
   useEffect(() => {
     try {
       forPrivateData()
+
     }
     catch (e) {
       console.error(e)
     }
+  }, [forPrivateData])
+  useEffect(() => {
+    try {
+      forAllStories()
+
+    } catch (error) {
+      console.log(error)
+    }
   }, [])
+  console.log('postdata ' + postData)
   return (
     <>
       <Provider store={store}>
         <main >
-          <div>
+          <div className='grid grid-cols-2  w-full place-content-between'>
+            <div className=''>
+              <Button>Blog</Button>
+            </div>
+        <div className='place-self-end '>
             <Button><Link href="/profile">profile</Link>
             </Button>
             <Button className='mx-2'>
-              <Link href={`/blog/create-blog`}>Create Blog</Link>
+              <Link href={`/post`}>Create Post</Link>
             </Button>
             <Button className='mx-2'>
               <Link href={`/users`}>total users</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/users/connected-users`}>connected users</Link>
             </Button>
             <Button className='mx-2'>
               <Link href={`/profile/register`}>register</Link>
@@ -62,12 +95,33 @@ export default function Home() {
             </Button>
 
           </div>
-          <ul>
-            {users.map((user) => (
-              <li key={user.id}>{user.name}</li>
-            ))}
-          </ul>
+          </div>
+          <div className='mt-4'>
+     {postData.map((post) => (
+            <Card key={post._id}>
+              <CardHeader>
+                <CardTitle>{post.title} </CardTitle>
+                <CardDescription></CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>{post.content}</p>
+              </CardContent>
+              <CardFooter>
+                <div className='grid  grid-cols-3  w-full'>
 
+                  <Button variant={'outline'} size={'sm'} onClick={() => likeHandler(post.slug)}>{post.likeCount} likes</Button>
+                  <p>createdAt: {post.createdAt}</p>
+                  <p className='place-self-end'>comment</p>
+
+
+                </div>
+              </CardFooter>
+            </Card>
+
+
+          ))}
+          </div>
+         
         </main >
       </Provider>
     </>
