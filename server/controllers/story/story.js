@@ -75,6 +75,12 @@ const likeStory = ErrorWrapper(async (req, res, next) => {
   const story = await Story.findOne({
     slug
   }).populate("author likes")
+=======
+  const story = await Story.find({
+  const story = await Story.findOne({
+    slug
+  }).populate("author likes")
+
   console.log(chalk.red(story))
   const storyLikesUserIds = story.likes.map(json => json._id.toString())
   console.log(storyLikesUserIds)

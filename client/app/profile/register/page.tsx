@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input"
 import axiosInstance from "@/lib/axios"
 import axiosError from "@/lib/axiosError"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -67,7 +68,35 @@ export default function ProfileForm() {
     router.push('/')
   }
 
-  return (
+  return ( <>
+    <div className="container mx-auto p-4 mb-4  w-11/12 ">
+          {/* Your content here */}
+          <div className='grid grid-cols-2  w-full place-content-between'>
+            <div className=''>
+              <Button>Blog</Button>
+            </div>
+            <div className='place-self-end '>
+            <Button><Link href="/profile">profile</Link>
+            </Button>
+            <Button className='mx-2'>
+              <Link href={`/post`}>Create Post</Link>
+            </Button>
+            <Button className='mx-2'>
+              <Link href={`/users`}>total users</Link>
+            </Button>
+            <Button className='mx-2'>
+              <Link href={`/profile/register`}>register</Link>
+            </Button>
+            <Button className='mx-2'>
+              <Link href={`/profile/login`}>login</Link>
+            </Button>
+
+          </div>
+          </div>
+
+        </div>
+<div className=" my-6 grid grid-cols-1  place-items-center">
+
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
@@ -116,8 +145,17 @@ export default function ProfileForm() {
 
           )}
         />
-        <Button type="submit">Submit</Button>
+<div className="grid grid-cols-2 gap-4 content-between">
+
+        <Button type="submit">Register</Button>
+        <Button>
+<Link href={'/'}>Home</Link>
+          </Button>
+        </div>
       </form>
     </Form>
+    </div>
+    </>
+
   )
 }
