@@ -14,7 +14,7 @@ router.post("/addstory", [getAccessToRoute, addStory])
 
 router.post("/:slug", checkStoryExist, detailStory)
 
-router.post("/:slug/like", [getAccessToRoute, checkStoryExist], likeStory)
+router.post("/:slug/like", getAccessToRoute, likeStory)
 
 router.get("/editstory/:slug", [getAccessToRoute, checkStoryExist, checkUserAndStoryExist], editStoryPage)
 
