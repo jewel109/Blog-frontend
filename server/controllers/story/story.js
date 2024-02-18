@@ -2,6 +2,8 @@ const express = require("express")
 const ErrorWrapper = require("express-async-handler")
 const Story = require("../../model/story")
 const { searchHelper, paginateHelper } = require("../../helpers/queryhelpers.js")
+const chalk = require("chalk")
+const { objectId, default: mongoose } = require("mongoose")
 
 
 
@@ -71,31 +73,41 @@ const detailStory = ErrorWrapper(async (req, res, next) => {
 })
 
 const likeStory = ErrorWrapper(async (req, res, next) => {
-  const { activeUser } = req.body;
+  const user = req.user;
   const { slug } = req.params;
 
   const story = await Story.findOne({
     slug
   }).populate("author likes")
 
-  console.log(chalk.red(story))
-  const storyLikesUserIds = story.likes.map(json => json._id.toString())
-  console.log(storyLikesUserIds)
+  // console.log(user, slug)
+  // console.log(chalk.red(story))
+  const storyLikesUserIds = story.likes.map(json => {
 
-  if (!storyLikesUserIds.includes(activeUser._id)) {
-    story.likes.push(activeUser)
-    story.likeCount = story.likes.length
+    return json._id.toString()
+  })
+  console.log(storyLikesUserIds.includes(user._id.toString()))
+
+  // console.log(chalk.blueBright(storyLikesUserIds))
+
+  const id = user._id.toString()
+
+  if (!storyLikesUserIds.includes(id)) {
+    story.likes.push(user)
+    story.likeCount = story?.likes?.length
+    console.log(chalk.green(story.likeCount))
 
     await story.save()
   } else {
-    const index = storyLikesUserIds.indexOf(activeUser._id)
-    story.likes.splice(index, 1)
+    story.likes.splice(id, 1)
     story.likeCount = story.likes.length
+
+    // console.log(chalk.red(story.likeCount))
 
     await story.save()
   }
 
-  console.log(chalk.whiteBright(story))
+  // console.log(chalk.whiteBright(story))
   return res.status(200).json({
     success: true,
     data: story
