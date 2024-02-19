@@ -4,51 +4,51 @@ const Comment = require('./comment')
 
 
 const StorySchema = new mongoose.Schema({
-  author:{
-    type:mongoose.Schema.ObjectId,
-    ref:"User",
-    required:true
+  author: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true
   },
-  slug:String,
-  title:{
-    type:String,
-    required:[true,"please provide a title"],
-    minlength:[4,"Please provide a title at least 4 character"],
-    unique:true
+  slug: String,
+  title: {
+    type: String,
+    required: [true, "please provide a title"],
+    minlength: [4, "Please provide a title at least 4 character"],
+    unique: true
   },
-  content:{
-    required:true,
-    type:String,
-    minlength:[10,"At least 10 character"]
+  content: {
+    required: true,
+    type: String,
+    minlength: [10, "At least 10 character"]
   },
-  image:{
-    type:String,
-    default:"post.png"
+  image: {
+    type: String,
+    default: "post.png"
   },
-  readTime:{
-    type:Number,
-    default:3
+  readTime: {
+    type: Number,
+    default: 3
   },
-  likes:[{
-    type:mongoose.Schema.ObjectId,
-    ref:"User"
+  likes: [{
+    type: mongoose.Schema.ObjectId,
+    ref: "User"
   }],
-  likeCount:{
-    type:Number,
-    default:0
+  likeCount: {
+    type: Number,
+    default: 0
   },
-  comments:{ 
-    type:mongoose.Schema.ObjectId,
-    ref:"Comment"  
-  },
-  commentCount:{
-    type:Number,
-    default:0
+  comments: [{
+    type: mongoose.Schema.ObjectId,
+    ref: "Comment"
+  }],
+  commentCount: {
+    type: Number,
+    default: 0
   }
-},{timestamps:true})
+}, { timestamps: true })
 
-StorySchema.pre("save", function(next){
-  if(!this.isModified("title")){
+StorySchema.pre("save", function(next) {
+  if (!this.isModified("title")) {
     next()
   }
 
@@ -56,27 +56,27 @@ StorySchema.pre("save", function(next){
   next()
 })
 
-StorySchema.pre('remove',async function(){
-  
+StorySchema.pre('remove', async function() {
+
   const story = await Story.findById(this._id)
 
   await Comment.deleteMany({
-    story:story
+    story: story
   })
 })
 
-StorySchema.methods.makeSlug = function(){
-  return slugify(this.title,{
-    replacement:'-',
-    remove:/[*+~.()'"!:@/?]/g,
-    lower:true, strict:false,locale:'tr',
-    trim:true
+StorySchema.methods.makeSlug = function() {
+  return slugify(this.title, {
+    replacement: '-',
+    remove: /[*+~.()'"!:@/?]/g,
+    lower: true, strict: false, locale: 'tr',
+    trim: true
   })
 }
 
 
 
-const Story = mongoose.model("Story",StorySchema)
+const Story = mongoose.model("Story", StorySchema)
 
 module.exports = Story
 
