@@ -19,6 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useRouter } from 'next/navigation'
 
 
 
@@ -26,6 +27,10 @@ import {
 export default function Home() {
   const [postData, setPostData] = useState([])
   const [user, setUser] = useState(null)
+  const router = useRouter()
+  function commentHandler() {
+    router.push("/comment/addComment")
+  }
   async function forPrivateData() {
     try {
 
@@ -127,7 +132,7 @@ export default function Home() {
                       <Button onClick={() => { likeHandler(post.slug) }}>{post.likeCount} likes</Button>
                     </div>
                     <p>createdAt: {post.createdAt}</p>
-                    <p className='place-self-end'>comment</p>
+                    <p className='place-self-end cursor-pointer' onClick={commentHandler}>comment</p>
 
 
                   </div>

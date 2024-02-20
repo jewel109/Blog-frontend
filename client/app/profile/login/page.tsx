@@ -32,8 +32,10 @@ async function forLogin({ email, password }) {
     const { token } = data ? data : null
     console.log(token)
     const savedToken = localStorage.getItem("token") ?? null
-    localStorage.setItem("token", "")
+    // localStorage.setItem("token", "")
     if (!savedToken) {
+      localStorage.setItem("token", token)
+    } else {
       localStorage.setItem("token", token)
     }
     const tok = localStorage.getItem("token")
@@ -66,76 +68,76 @@ export default function ProfileForm() {
 
   return (<>
     <div className="container mx-auto p-4 mb-4  w-11/12 ">
-          {/* Your content here */}
-          <div className='grid grid-cols-2  w-full place-content-between'>
-            <div className=''>
-              <Button>Blog</Button>
-            </div>
-            <div className='place-self-end '>
-            <Button><Link href="/profile">profile</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/post`}>Create Post</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/users`}>total users</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/profile/register`}>register</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/profile/login`}>login</Link>
-            </Button>
-
-          </div>
-          </div>
-
+      {/* Your content here */}
+      <div className='grid grid-cols-2  w-full place-content-between'>
+        <div className=''>
+          <Button>Blog</Button>
         </div>
-<div className=" my-6 grid grid-cols-1  place-items-center">
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-
-              <FormLabel>email</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-
-              <FormLabel>password</FormLabel>
-              <FormControl >
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-
-          )}
-        />
-        <div className="grid grid-cols-2 gap-4 content-between">
-
-        <Button type="submit">Login</Button>
-        <Button>
-<Link href={'/'}>Home</Link>
+        <div className='place-self-end '>
+          <Button><Link href="/profile">profile</Link>
           </Button>
+          <Button className='mx-2'>
+            <Link href={`/post`}>Create Post</Link>
+          </Button>
+          <Button className='mx-2'>
+            <Link href={`/users`}>total users</Link>
+          </Button>
+          <Button className='mx-2'>
+            <Link href={`/profile/register`}>register</Link>
+          </Button>
+          <Button className='mx-2'>
+            <Link href={`/profile/login`}>login</Link>
+          </Button>
+
         </div>
-      </form>
- 
- </Form>
- </div>
- </>
+      </div>
+
+    </div>
+    <div className=" my-6 grid grid-cols-1  place-items-center">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+
+                <FormLabel>email</FormLabel>
+                <FormControl>
+                  <Input placeholder="shadcn" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+
+                <FormLabel>password</FormLabel>
+                <FormControl >
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+
+            )}
+          />
+          <div className="grid grid-cols-2 gap-4 content-between">
+
+            <Button type="submit">Login</Button>
+            <Button>
+              <Link href={'/'}>Home</Link>
+            </Button>
+          </div>
+        </form>
+
+      </Form>
+    </div>
+  </>
   )
 }
