@@ -6,11 +6,13 @@ const { log, chalk } = require("../../controllers/comment/comment")
 const checkStoryExist = ErrorWrapper(async (req, res, next) => {
   const { slug } = req.params
   if (!slug) {
+
     return next(new CustomError("slug is not given"))
   }
-
+  console.log(slug)
   const story = await Story.findOne({ slug })
   if (!story) {
+    log(chalk.red("not found the story"))
     return next(new CustomError("There is no such story with this slug", 400))
   }
 
