@@ -6,13 +6,15 @@ const {
 } = require('../../helpers/auth/tokenHelper')
 const User = require('../../model/user')
 const CustomError = require('../Error/CustomError')
+const { log, chalk } = require('../../controllers/comment/comment')
 
 const getAccessToRoute = asyncError(async (req, res, next) => {
   const { JWT_SECRET } = process.env
 
   if (!isTokenIncluded(req)) {
-    return res.status(201).json({
-      success:false,
+    log(chalk("no token found"))
+    return res.status(500).json({
+      success: false,
       message: 'No token found',
     })
   }
@@ -33,7 +35,7 @@ const getAccessToRoute = asyncError(async (req, res, next) => {
     if (!user) {
       console.log('no user')
       return res.status(201).json({
-        success:false,
+        success: false,
         message: 'No user found',
       })
     }
