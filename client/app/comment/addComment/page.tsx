@@ -1,3 +1,34 @@
+
+"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import axiosInstance from "@/lib/axios"
+import axiosError from "@/lib/axiosError"
+
+const formSchema = z.object({
+  comment: z.string()
+})
+
+export default function Page() {
+  // ...
+  //
+  //
+
+
   async function forComment(slug, content, star) {
     try {
       const token = window?.localStorage.getItem("token")
@@ -17,6 +48,7 @@
 
 
   }
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
