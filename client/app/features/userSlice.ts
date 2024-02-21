@@ -13,6 +13,19 @@ interface userState {
   error: string | null; // stores any error messages
   success: boolean | null;
 }
+export const accessUser = createAsyncThunk("user/getAccessToServer", async () => {
+  try {
+
+    const token = localStorage.getItem("token")
+
+    console.log(token)
+    const { data } = await axiosInstance.get("/auth/private", { headers: { "Authorization": `Bearer ${token}` } })
+    console.log(data?.user?.username)
+    return data
+  } catch (error) {
+    return axiosError(error)
+  }
+})
 export const registerUser = createAsyncThunk("user/register", async (user: userState) => {
   try {
 
@@ -65,6 +78,26 @@ export const userSlice = createSlice({
         console.log(state)
       });
   },
+  extraReducer: (builder) => {
+    builder
+      .addCase(accessUser.pending, (state: userState) => {
+        state.loading = true;
+        state.error = null;
+        state.success = null;
+        console.log(state)
+      })
+      .addCase(accessUser.fulfilled, (state: userState, action) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(accessUser.rejected, (state: userState, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+        console.log(state)
+      });
+  },
+
+
 
 })
 
