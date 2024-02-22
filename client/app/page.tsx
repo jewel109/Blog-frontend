@@ -4,14 +4,11 @@ import Link from 'next/link'
 import { useState, useEffect } from "react"
 import Profile from './profile/page'
 import { Button } from '@/components/ui/button'
-import { Provider } from 'react-redux'
 import { Provider, useSelector } from 'react-redux'
 import { Model, createServer } from "miragejs"
-import { store } from './store/store'
 import { store, useAppDispatch } from './store/store'
 import axiosInstance from '@/lib/axios'
 import axiosError from '@/lib/axiosError'
-import { within } from '@testing-library/react'
 import type { RootState } from "./store/store"
 
 import {
@@ -48,6 +45,8 @@ export default function Home() {
       setUser(data?.user?.username)
     } catch (error) {
       axiosError(error)
+    }
+  }
   async function getAccessServer() {
     const data = await dispatch(accessUser())
     console.log(data)
@@ -89,7 +88,6 @@ export default function Home() {
       console.error(e)
     }
   }, [forPrivateData])
-  }, [getAccessServer])
   useEffect(() => {
     try {
       forAllStories()
@@ -162,3 +160,4 @@ export default function Home() {
     </>
   )
 }
+
