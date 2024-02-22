@@ -19,6 +19,10 @@ import axiosInstance from "@/lib/axios"
 import axiosError from "@/lib/axiosError"
 import { redirect, useRouter } from "next/navigation"
 import Link from "next/link"
+import { useAppDispatch } from "@/app/store/store"
+import type { RootState } from "@/app/store/store"
+import { useSelector } from "react-redux"
+import { loginUser } from "@/app/features/userSlice"
 
 const formSchema = z.object({
   email: z.string().min(4, { message: "email must be 4 characters" }),
@@ -47,6 +51,8 @@ async function forLogin({ email, password }) {
 
 export default function ProfileForm() {
   const router = useRouter()
+  const data = useSelector((state: RootState) => state.userReducer)
+  const dispatch = useAppDispatch()
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,14 +62,19 @@ export default function ProfileForm() {
     },
   })
 
+  async function handleLogin(values) {
+    const response = await dispatch(loginUser(values))
+    console.log(response)
+  }
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
-    forLogin(values)
+    // forLogin(values)
+    handleLogin(values)
     // redirect('/home')
-    router.push('/', { scroll: true })
+    // router.push('/', { scroll: true })
   }
 
   return (<>
