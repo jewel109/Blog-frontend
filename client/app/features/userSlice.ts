@@ -53,6 +53,43 @@ export const registerUser = createAsyncThunk("user/register", async (user: userS
   }
 
 })
+export const loginUser = createAsyncThunk("user/login", async ({ email, password }) => {
+  //al type must be refactored
+  try {
+
+    const { data } = await axiosInstance.post("/auth/login", { email, password })
+    if (!data.token) {
+      return new Error("no token found in response") // must be fixed the trouble lsp felling
+    }
+    console.log(data)
+    // localStorage.setItem("token", "")
+    if (!data) {
+      return new Error("token is not valid")
+    } else {
+      localStorage.setItem("token", data.token)
+    }
+    const tok = localStorage.getItem("token")
+    console.log(tok)
+    if (!data.success) {
+      return new Error("no success value in token")
+    } else {
+      return data.success
+    }
+
+  } catch (error) {
+    return axiosError(error)
+  }
+
+})
+
+const initialState: userState = {
+  username: "",
+  email: "",
+  password: "",
+  loading: false,
+  error: null,
+  success: false
+}
 
 export const userSlice = createSlice({
   name: "userReducer",
@@ -78,6 +115,25 @@ export const userSlice = createSlice({
         console.log(state)
       });
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(loginUser.pending, (state: userState) => {
+        state.loading = true;
+        state.error = null;
+        state.success = null;
+      })
+      .addCase(loginUser.fulfilled, (state: userState, action) => {
+        state.loading = false;
+        state.success = true;
+
+      })
+      .addCase(loginUser.rejected, (state: userState, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+
+  },
+
   extraReducer: (builder) => {
     builder
       .addCase(accessUser.pending, (state: userState) => {
@@ -89,6 +145,8 @@ export const userSlice = createSlice({
       .addCase(accessUser.fulfilled, (state: userState, action) => {
         state.loading = false;
         state.success = true;
+        state.username = action.payload.user.username
+        console.log(current(state.username))
       })
       .addCase(accessUser.rejected, (state: userState, action) => {
         state.loading = false;
