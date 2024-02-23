@@ -19,6 +19,11 @@ import axiosInstance from "@/lib/axios"
 import axiosError from "@/lib/axiosError"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { useDispatch, useSelector } from "react-redux"
+import { store, useAppDispatch } from "@/app/store/store"
+import type { RootState } from "@/app/store/store"
+import { registerUser, userState } from "@/app/features/userSlice"
+
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -28,27 +33,17 @@ const formSchema = z.object({
   password: z.string().min(4, { message: "must 4 characters" })
 })
 
-async function forRegister({ username, email, password }) {
-  try {
-
-    const { data } = await axiosInstance.post("/auth/register", { username, email, password })
-    const { token } = data ? data : null
-    console.log(token)
-    const savedToken = localStorage.getItem("token") ?? null
-
-    localStorage.setItem("token", "")
-    if (!savedToken) {
-      localStorage.setItem("token", token)
-    }
-    const tok = localStorage.getItem("token")
-    console.log(tok)
-  } catch (error) {
-    axiosError(error)
-  }
-}
+// async function forRegister({ username, email, password }) {
+// }
 
 export default function ProfileForm() {
   const router = useRouter()
+  const dispatch = useAppDispatch()
+  const data = useSelector((state: RootState) => state.userReducer)
+  if (!data) {
+    return new Error("state data is not found")
+  }
+  // console.log(data)
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -60,102 +55,109 @@ export default function ProfileForm() {
   })
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values)
-    forRegister(values)
-    router.push('/')
+    // console.log(values)
+
+    try {
+
+      const data = await dispatch(registerUser(values))
+      // console.log(data)
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  return ( <>
+  return (<>
     <div className="container mx-auto p-4 mb-4  w-11/12 ">
-          {/* Your content here */}
-          <div className='grid grid-cols-2  w-full place-content-between'>
-            <div className=''>
-              <Button>Blog</Button>
-            </div>
-            <div className='place-self-end '>
-            <Button><Link href="/profile">profile</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/post`}>Create Post</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/users`}>total users</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/profile/register`}>register</Link>
-            </Button>
-            <Button className='mx-2'>
-              <Link href={`/profile/login`}>login</Link>
-            </Button>
-
-          </div>
-          </div>
-
+      {/* your content here */}
+      <div className='grid grid-cols-2  w-full place-content-between'>
+        <div className=''>
+          <Button>Blog</Button>
         </div>
-<div className=" my-6 grid grid-cols-1  place-items-center">
-
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-
-              <FormLabel>email</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-
-              <FormLabel>password</FormLabel>
-              <FormControl >
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-
-          )}
-        />
-<div className="grid grid-cols-2 gap-4 content-between">
-
-        <Button type="submit">Register</Button>
-        <Button>
-<Link href={'/'}>Home</Link>
+        <div className='place-self-end '>
+          <Button><Link href="/profile">profile</Link>
           </Button>
+          <Button className='mx-2'>
+            <Link href={`/post`}>Create Post</Link>
+          </Button>
+          <Button className='mx-2'>
+            <Link href={`/users`}>total users</Link>
+          </Button>
+          <Button className='mx-2'>
+            <Link href={`/profile/register`}>register</Link>
+          </Button>
+          <Button className='mx-2'>
+            <Link href={`/profile/login`}>login</Link>
+          </Button>
+
         </div>
-      </form>
-    </Form>
+      </div>
+
     </div>
-    </>
+    <div className=" my-6 grid grid-cols-1  place-items-center">
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="shadcn" {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+
+                <FormLabel>email</FormLabel>
+                <FormControl>
+                  <Input placeholder="shadcn" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+
+                <FormLabel>password</FormLabel>
+                <FormControl >
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+
+            )}
+          />
+          <div className="grid grid-cols-2 gap-4 content-between">
+
+            <Button type="submit">Register</Button>
+            <Button>
+              <Link href={'/'}>Home</Link>
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
+  </>
 
   )
 }
