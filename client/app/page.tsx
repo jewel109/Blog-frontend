@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/card"
 import { useRouter } from 'next/navigation'
 import { accessUser } from './features/userSlice'
+import { fetchAllStories } from './features/storySlice'
 
 
 
@@ -29,6 +30,7 @@ export default function Home() {
   const [postData, setPostData] = useState([])
   const [user, setUser] = useState(null)
   const data = useSelector((state: RootState) => state.userReducer)
+  const storyData = useSelector((state: RootState) => state.storyReducer)
   const dispatch = useAppDispatch()
   const router = useRouter()
   function commentHandler() {
@@ -56,13 +58,8 @@ export default function Home() {
     return data
   }
   async function forAllStories() {
-    try {
-      const { data } = await axiosInstance.get("/story/getAllStories")
-      console.log(data.query)
-      setPostData(data.query)
-    } catch (error) {
-      axiosError(error)
-    }
+    const response = await dispatch(fetchAllStories())
+    console.log(response)
   }
   async function likeHandler(slug) {
     try {
@@ -88,6 +85,8 @@ export default function Home() {
       console.error(e)
     }
   }, [forPrivateData])
+
+
   useEffect(() => {
     try {
       forAllStories()
