@@ -8,34 +8,50 @@ const log = console.log
 
 const addNewCommentToStory = ErrorWrapper(async (req, res, next) => {
   const { slug } = req.params
-  const { star, content } = req.body
+  const { content, star } = req.body
+  console.log(req)
+  console.log(req.body)
+  console.log("star " + star)
+  console.log("star " + star, "content " + content, "slug " + slug)
 
   if (!slug || !star || !content) {
     return next(new CustomError("client didn't provide valid data")
     )
   }
-  const story = await Story.findOne({ slug })
-  if (!story) {
-    return next(new CustomError("no story found"))
+  try {
+    const story = await Story.findOne({ slug })
+    if (!story) {
+      return next(new CustomError("no story found"))
+    }
+    log(chalk.yellow(story))
+    const comment = await Comment.create({
+      story: story._id,
+      content,
+      author: req.user._id,
+      star: star,
+    })
+
+
+    story.comments.push(comment._id)
+
+    story.commentCount = story.comments.length
+
+    await story.save()
+
+    return res.status(200).json({
+      success: true,
+      data: comment,
+    })
   }
-  log(chalk.yellow(story))
-  const comment = await Comment.create({
-    story: story._id,
-    content,
-    author: req.user._id,
-    star
-  })
 
-  story.comments.push(comment._id)
+  catch (error) {
+    console.log(error)
+    res.status(500).json({
+      success: false,
+      error: `${error}`
+    })
+  }
 
-  story.commentCount = story.comments.length
-
-  await story.save()
-
-  return res.status(200).json({
-    success: true,
-    data: comment,
-  })
 })
 
 
@@ -45,7 +61,7 @@ const getAllCommentByStory = ErrorWrapper(async (req, res, next) => {
   const story = await Story.findOne({ slug })
 
   const commentList = Comment.find({
-    story: story._id,
+    story: story.id,
   }).populate({
     path: "author",
     select: "username"
