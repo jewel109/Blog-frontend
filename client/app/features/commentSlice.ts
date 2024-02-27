@@ -19,7 +19,7 @@ const initialState: Comment = {
 }
 
 
-export const addComment = createAsyncThunk("addComment", async (slug, content, star) => {
+export const addComment = createAsyncThunk("comment/addComment", async ({ slug, content, star }) => {
   try {
     const token = window?.localStorage.getItem("token")
     if (!token) {
@@ -28,20 +28,16 @@ export const addComment = createAsyncThunk("addComment", async (slug, content, s
     }
 
     const headers = { "Authorization": `Bearer ${token}` }
-    const response = await axiosInstance.post(`/comment/${slug}/addcomment`, { content: content, star: star, }, { headers: headers })
+    const response = await axiosInstance.post(`/comment/${slug}/addcomment`, { content: content, star: star }, { headers: headers })
 
     console.log(response)
-    if (!response) {
-      console.log("response is not found")
-      throw new Error("response for sending comment is not valid")
-    }
     return response
 
   } catch (error) {
     console.log("got the error")
     return axiosError(error)
-  }
 
+  }
 
 })
 
@@ -57,7 +53,7 @@ const commentSlice = createSlice({
 
       })
       .addCase(addComment.fulfilled, (state) => {
-
+        state.author = "jewel"
       })
       .addCase(addComment.rejected, (state) => {
 
