@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from "../features/userSlice"
 import storyReducer from "../features/storySlice"
+import commentReducer from "../features/commentSlice"
 import { useDispatch } from 'react-redux'
 export const store = configureStore({
   reducer: {
     userReducer: userReducer,
-    storyReducer: storyReducer
+    storyReducer: storyReducer,
+    commentReducer: commentReducer
   }
 })
 
