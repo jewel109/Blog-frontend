@@ -18,36 +18,23 @@ import {
 import { Input } from "@/components/ui/input"
 import axiosInstance from "@/lib/axios"
 import axiosError from "@/lib/axiosError"
+import { useSelector } from "react-redux"
+import { useAppDispatch } from "@/app/store/store"
 
+import type { RootState } from "@/app/store/store"
+import { addComment } from "@/app/features/commentSlice"
 const formSchema = z.object({
   comment: z.string()
 })
+
 
 export default function Page() {
   // ...
   //
   //
 
-
-  async function forComment(slug, content, star) {
-    try {
-      const token = window?.localStorage.getItem("token")
-      if (!token) {
-        console.log('token is not found')
-        return new Error("no token found")
-      }
-
-      const headers = { "Authorization": `Bearer ${token}` }
-      const response = await axiosInstance.post(`/comment/${slug}/addcomment`, { content: content, star: star }, { headers: headers },)
-
-      console.log(response)
-
-    } catch (error) {
-      axiosError(error)
-    }
-
-
-  }
+  const data = useSelector((state: RootState) => state.commentReducer)
+  const dispatch = useAppDispatch()
 
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -60,7 +47,8 @@ export default function Page() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
-    forComment("my-post", values.comment, 1)
+
+    dispatch(addComment({ slug: "my-post", content: values.comment, star: 1 }))
   }
   return (
     <Form {...form}>
