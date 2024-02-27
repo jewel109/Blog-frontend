@@ -24,7 +24,7 @@ const CommentSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  stars: {
+  star: {
     type: Number,
     default: 0
   }
