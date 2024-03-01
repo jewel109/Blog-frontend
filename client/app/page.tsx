@@ -101,10 +101,6 @@ export default function Home() {
   return (
     <>
       <Provider store={store}>
-        <main >
-          <div className='grid grid-cols-2  w-full place-content-between'>
-            <div className=''>
-              <Button>Blog</Button>
         <div className='' >
           <nav className='mt-4 mb-2 w-8/12 mx-auto grid grid-cols-2'>
             <div className='grid grid-cols-6 '>
@@ -113,51 +109,12 @@ export default function Home() {
               </div>
               <Input className=' -ml-4 w-5/6 col-start-2 col-end-6  '></Input>
             </div>
-            <div className='place-self-end '>
-              <Button><Link href="/profile">profile</Link>
-              </Button>
-              <Button className='mx-2'>
-                <Link href={`/post`}>Create Post</Link>
-              </Button>
-              <Button className='mx-2'>
-                <Link href={`/users`}>total users</Link>
-              </Button>
-              <Button className='mx-2'>
-                <Link href={`/profile/register`}>register</Link>
-              </Button>
-              <Button className='mx-2'>
-                <Link href={`/profile/login`}>login</Link>
-              </Button>
-
-            </div>
-          </div>
-          <div className='grid grid-cols-3 gap-4'>
-            <div className='col-start-2 align-middle'>
-              {user && <div>{user}</div>}
             <div className='grid grid-flow-col justify-self-end '>
               <div className='grid grid-flow-col gap-x-1'>
                 <Button>Create Post</Button>
                 <Bell className='mt-1' size="38" /> </div>
               <UserRound size="38" />
             </div>
-          </div>
-          <div className='mt-4'>
-            {postData.map((post) => (
-              <Card key={post._id}>
-                <CardHeader>
-                  <CardTitle>{post.title} </CardTitle>
-                  <CardDescription></CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p>{post.content}</p>
-                </CardContent>
-                <CardFooter>
-                  <div className='grid  grid-cols-3  w-full'>
-                    <div>
-                      <Button onClick={() => { likeHandler(post.slug) }}>{post.likeCount} likes</Button>
-                    </div>
-                    <p>createdAt: {post.createdAt}</p>
-                    <p className='place-self-end cursor-pointer' onClick={commentHandler}>comment</p>
           </nav>
           <main >
             <div className='bg-gray-100'>
@@ -171,27 +128,22 @@ export default function Home() {
                 </div>
 
 
-                  </div>
-                </CardFooter>
-              </Card>
                 <div className='bg-white rounded-2xl col-start-3 col-end-10 text-white '>
                   hei what's going on
                 </div>
 
 
-            ))}
-          </div>
                 <div className=' col-start-10 col-end-13'>
                   latest post
                 </div>
 
-        </main >
               </div>
 
             </div>
           </main >
         </div>
       </Provider>
+
     </>
   )
 }
