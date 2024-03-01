@@ -10,6 +10,7 @@ import { store, useAppDispatch } from './store/store'
 import axiosInstance from '@/lib/axios'
 import axiosError from '@/lib/axiosError'
 import type { RootState } from "./store/store"
+import { Bell, UserRound } from "lucide-react"
 
 import {
   Card,
@@ -22,6 +23,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { accessUser } from './features/userSlice'
 import { fetchAllStories } from './features/storySlice'
+import { Input } from '@/components/ui/input'
 
 
 
@@ -103,6 +105,13 @@ export default function Home() {
           <div className='grid grid-cols-2  w-full place-content-between'>
             <div className=''>
               <Button>Blog</Button>
+        <div className='' >
+          <nav className='mt-4 mb-2 w-8/12 mx-auto grid grid-cols-2'>
+            <div className='grid grid-cols-6 '>
+              <div>
+                <Button>Blog</Button>
+              </div>
+              <Input className=' -ml-4 w-5/6 col-start-2 col-end-6  '></Input>
             </div>
             <div className='place-self-end '>
               <Button><Link href="/profile">profile</Link>
@@ -125,6 +134,11 @@ export default function Home() {
           <div className='grid grid-cols-3 gap-4'>
             <div className='col-start-2 align-middle'>
               {user && <div>{user}</div>}
+            <div className='grid grid-flow-col justify-self-end '>
+              <div className='grid grid-flow-col gap-x-1'>
+                <Button>Create Post</Button>
+                <Bell className='mt-1' size="38" /> </div>
+              <UserRound size="38" />
             </div>
           </div>
           <div className='mt-4'>
