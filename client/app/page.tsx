@@ -158,17 +158,39 @@ export default function Home() {
                     </div>
                     <p>createdAt: {post.createdAt}</p>
                     <p className='place-self-end cursor-pointer' onClick={commentHandler}>comment</p>
+          </nav>
+          <main >
+            <div className='bg-gray-100'>
+              <div className='grid grid-cols-12 w-8/12 mx-auto pt-6 gap-1  min-h-screen'>
+                <div className=' col-start-1 col-end-3 grid justify-self-start'>
+                  <div className='grid grid-rows-12 justify-self-start'>
+                    <Button variant="outline" className='bg-gray-100 '>Home</Button>
+                    <Button variant="outline" className='mt-1'>About</Button>
+                    <Button variant="outline" className='mt-1'>Liked</Button>
+                  </div>
+                </div>
 
 
                   </div>
                 </CardFooter>
               </Card>
+                <div className='bg-white rounded-2xl col-start-3 col-end-10 text-white '>
+                  hei what's going on
+                </div>
 
 
             ))}
           </div>
+                <div className=' col-start-10 col-end-13'>
+                  latest post
+                </div>
 
         </main >
+              </div>
+
+            </div>
+          </main >
+        </div>
       </Provider>
     </>
   )
