@@ -24,6 +24,8 @@ import { useRouter } from 'next/navigation'
 import { accessUser } from './features/userSlice'
 import { fetchAllStories } from './features/storySlice'
 import { Input } from '@/components/ui/input'
+import { Avatar } from '@/components/ui/avatar'
+import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
 
 
 
@@ -111,30 +113,63 @@ export default function Home() {
             </div>
             <div className='grid grid-flow-col justify-self-end '>
               <div className='grid grid-flow-col gap-x-1'>
-                <Button>Create Post</Button>
+                <Button variant="outline">Create Post</Button>
                 <Bell className='mt-1' size="38" /> </div>
               <UserRound size="38" />
             </div>
           </nav>
           <main >
             <div className='bg-gray-100'>
-              <div className='grid grid-cols-12 w-8/12 mx-auto pt-6 gap-1  min-h-screen'>
+              <div className='grid grid-cols-12 w-8/12 mx-auto pt-6 gap-1  min-h-full'>
                 <div className=' col-start-1 col-end-3 grid justify-self-start'>
                   <div className='grid grid-rows-12 justify-self-start'>
-                    <Button variant="outline" className='bg-gray-100 '>Home</Button>
-                    <Button variant="outline" className='mt-1'>About</Button>
-                    <Button variant="outline" className='mt-1'>Liked</Button>
+                    <p className='hover:bg-cyan-300 w-[200px]'>Home</p>
+                    <p className='mt-1'>About</p>
+                    <p className='mt-1'>Liked</p>
                   </div>
                 </div>
 
 
-                <div className='bg-white rounded-2xl col-start-3 col-end-10 text-white '>
-                  hei what's going on
+                <div className=' col-start-3 col-end-10 text-white '>
+                  <Card>
+                    <div className='grid grid-cols-12 py-2'>
+                      <div className=' col-start-1 col-end-2'>
+                        <Avatar className='w-10 h-10 mx-4'>
+                          <AvatarImage className='' src='"https://github.com/shadcn.png"' alt="jewel" />
+                          <AvatarFallback></AvatarFallback>
+                        </Avatar>
+                      </div>
+                      <div className='col-start-2 col-end-13'>
+                        <p className=' '> raihan</p>
+                        <p className=' text-gray-400 text-xs'>2 march 2024</p>
+                        <CardTitle className=''>
+                          <CardHeader className='pl-0'>PostName</CardHeader>
+                        </CardTitle>
+                        <CardFooter className='p-0'>
+                          <div className='grid grid-flow-col gap-x-5'>
+                            <div>like</div>
+                            <div>comment </div>
+                            <div>save</div>
+                          </div>
+                        </CardFooter>
+                      </div>
+                    </div>
+
+                  </Card>
                 </div>
 
 
+
                 <div className=' col-start-10 col-end-13'>
-                  latest post
+                  <Card className='rounded-b-none p-4'>
+                    <h3 className='text-xl font-medium'>Other posts</h3>
+
+                  </Card>
+
+                  <Card className='rounded-none p-3'>
+                    <p>so many posts</p>
+
+                  </Card>
                 </div>
 
               </div>
