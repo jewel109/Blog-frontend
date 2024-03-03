@@ -27,6 +27,7 @@ const addStory = ErrorWrapper(async (req, res, next) => {
       title,
       content,
       author: req.user._id,
+      author: req.user.username,
       readTime
     })
     return res.status(200).json({
