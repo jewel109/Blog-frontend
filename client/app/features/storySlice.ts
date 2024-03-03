@@ -20,6 +20,21 @@ const initialState: Story = {
   error: null,
 
 }
+export const addStory = createAsyncThunk("addStory", async ({ title, content }) => {
+  try {
+    const token = localStorage.getItem("token") ?? null
+
+    const headers = { "Authorization": `Bearer ${token}` }
+
+    const { data } = await axiosInstance.post("/story/addStory", { title, content }, { headers: headers })
+
+    console.log(data)
+    const postData = data.data.content ?? "no data"
+    return postData
+  } catch (error) {
+    axiosError(error)
+  }
+})
 
 export const fetchAllStories = createAsyncThunk("story", async () => {
   try {
