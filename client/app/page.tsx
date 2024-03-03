@@ -134,8 +134,8 @@ export default function Home() {
                   <Card>
                     <div className='grid grid-cols-12 py-2'>
                       <div className=' col-start-1 col-end-2'>
-                        <Avatar className='w-10 h-10 mx-4'>
-                          <AvatarImage className='' src='"https://github.com/shadcn.png"' alt="jewel" />
+                        <Avatar className='w-10 h-10 mx-2'>
+                          <AvatarImage className='' src="https://github.com/shadcn.png" alt="jewel" />
                           <AvatarFallback></AvatarFallback>
                         </Avatar>
                       </div>
