@@ -5,7 +5,7 @@ const Comment = require('./comment')
 
 const StorySchema = new mongoose.Schema({
   author: {
-    type: mongoose.Schema.ObjectId,
+    type: String,
     ref: "User",
     required: true
   },
