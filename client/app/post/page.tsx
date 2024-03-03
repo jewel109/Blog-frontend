@@ -18,6 +18,10 @@ import { Input } from "@/components/ui/input"
 import axiosInstance from "@/lib/axios"
 import axiosError from "@/lib/axiosError"
 import { redirect, useRouter } from "next/navigation"
+import AddPostHeader from "./postHeader"
+import { useSelector } from "react-redux"
+import { useAppDispatch, type RootState } from "../store/store"
+import { addStory } from "../features/storySlice"
 
 const formSchema = z.object({
   title: z.string().min(5, { message: "title must be 4 characters" }),
@@ -42,6 +46,8 @@ async function forCreatePost({ title, content }) {
 
 export default function ProfileForm() {
   const router = useRouter()
+  const data = useSelector((state: RootState) => state.storyReducer)
+  const dispatch = useAppDispatch()
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,49 +62,57 @@ export default function ProfileForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
-    forCreatePost(values)
+    //forCreatePost(values)
+    dispatch(addStory(values))
     // redirect('/home')
-    //   router.push('/', { scroll: true })
+    values.content = ""
+    values.title = ""
   }
 
   return (<>
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
+    <div className="bg-gray-100 min-h-screen">
+      <AddPostHeader />
+      <div className="bg-white w-7/12 mx-auto  mt-6 rounded-xl">
+        <Form {...form} >
+          <div className="p-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
 
-              <FormLabel>title</FormLabel>
-              <FormControl>
-                <Input  {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+                    <FormLabel>title</FormLabel>
+                    <FormControl>
+                      <Input  {...field} placeholder="your tittle will go here" className="min-h-12" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
 
-          )}
-        />
+                )}
+              />
 
-        <FormField
-          control={form.control}
-          name="content"
-          render={({ field }) => (
-            <FormItem>
+              <FormField
+                control={form.control}
+                name="content"
+                render={({ field }) => (
+                  <FormItem>
 
-              <FormLabel>content</FormLabel>
-              <FormControl >
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+                    <FormLabel>content</FormLabel>
+                    <FormControl >
+                      <Input {...field} className="min-h-60" placeholder="your post content will go here" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
 
-          )}
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-
-    </Form>
+                )}
+              />
+              <Button type="submit">Publish</Button>
+            </form>
+          </div>
+        </Form>
+      </div>
+    </div>
     <div>
       {postData}
     </div>
