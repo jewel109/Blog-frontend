@@ -26,7 +26,12 @@ import { fetchAllStories } from './features/storySlice'
 import { Input } from '@/components/ui/input'
 import { Avatar } from '@/components/ui/avatar'
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
+import { timeStamp } from 'console'
+import moment from 'moment'
 
+function add(date) {
+  return moment(date).format("DD MMM YYYY")
+}
 
 
 
@@ -40,6 +45,8 @@ export default function Home() {
   function commentHandler() {
     router.push("/comment/addComment")
   }
+
+
   async function forPrivateData() {
     try {
 
@@ -63,9 +70,9 @@ export default function Home() {
   }
   async function forAllStories() {
     const response = await dispatch(fetchAllStories())
-    console.log(response)
     console.log(response.payload)
     setPostData(response.payload)
+
   }
   async function likeHandler(slug) {
     try {
@@ -74,7 +81,6 @@ export default function Home() {
       const headers = { "Authorization": `Bearer ${token}` }
 
       const response = await axiosInstance.post(`/story/${slug}/like`, {}, { headers: headers })
-      console.log(response)
 
     } catch (error) {
       axiosError(error)
@@ -133,27 +139,6 @@ export default function Home() {
 
 
                 <div className=' col-start-3 col-end-10 text-white '>
-                  <Card>
-                    <div className='grid grid-cols-12 py-2'>
-                      <div className=' col-start-1 col-end-2'>
-                        <Avatar className='w-10 h-10 mx-2'>
-                          <AvatarImage className='' src="https://github.com/shadcn.png" alt="jewel" />
-                          <AvatarFallback></AvatarFallback>
-                        </Avatar>
-                      </div>
-                      <div className='col-start-2 col-end-13'>
-                        <p className=' '> raihan</p>
-                        <p className=' text-gray-400 text-xs'>2 march 2024</p>
-                        <CardTitle className=''>
-                          <CardHeader className='pl-0'>PostName</CardHeader>
-                        </CardTitle>
-                        <CardFooter className='p-0'>
-                          <div className='grid grid-flow-col gap-x-5'>
-                            <div>like</div>
-                            <div>comment </div>
-                            <div>save</div>
-                          </div>
-                        </CardFooter>
                   {postData.map((post) => (
 
                     <Card className='hover:cursor-pointer'>
@@ -164,9 +149,12 @@ export default function Home() {
                             <AvatarFallback></AvatarFallback>
                           </Avatar>
                         </div>
-                        <div className='col-start-2 col-end-13'>
-                          <p className=' '> raihan</p>
-                          <p className=' text-gray-400 text-xs'>2 march 2024</p>
+                        <div className='col-start-2 col-end-13 ml-6'>
+                          <p className=' '>{post.author ? post.author : "no username found"} </p>
+                          <p className=' text-gray-400 text-xs'>{
+
+                            add(post.createdAt)
+                          }</p>
                           <CardTitle className=''>
                             <CardHeader className='pl-0'>{post.title}</CardHeader>
                           </CardTitle>
@@ -179,9 +167,7 @@ export default function Home() {
                           </CardFooter>
                         </div>
                       </div>
-                    </div>
 
-                  </Card>
                     </Card>
 
                   ))}
