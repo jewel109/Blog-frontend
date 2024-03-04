@@ -57,6 +57,7 @@ export default function ProfileForm() {
     },
   })
 
+
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
@@ -65,8 +66,10 @@ export default function ProfileForm() {
     //forCreatePost(values)
     dispatch(addStory(values))
     // redirect('/home')
-    values.content = ""
-    values.title = ""
+    // resetField("content")
+
+    form.resetField("title")
+    form.resetField("content")
   }
 
   return (<>
@@ -84,7 +87,7 @@ export default function ProfileForm() {
 
                     <FormLabel>title</FormLabel>
                     <FormControl>
-                      <Input  {...field} placeholder="your tittle will go here" className="min-h-12" />
+                      <Input  {...field}{...form.register} placeholder="your tittle will go here" className="min-h-12" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -100,7 +103,7 @@ export default function ProfileForm() {
 
                     <FormLabel>content</FormLabel>
                     <FormControl >
-                      <Input {...field} className="min-h-60" placeholder="your post content will go here" />
+                      <Input {...field} {...form.register} className="min-h-60" placeholder="your post content will go here" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
