@@ -44,9 +44,8 @@ const addStory = ErrorWrapper(async (req, res, next) => {
 
 const getAllStories = ErrorWrapper(async (req, res, next) => {
   try {
-    const query = await Story.aggregate([{ $match: {} }]).sort({ createdAt: -1 }).limit(2)   // query.sort("createdAt")
+    const query = await Story.aggregate([{ $match: {} }]).sort({ createdAt: -1 }).limit(7)   // query.sort("createdAt")
     // query.limit(3)
-    console.log(query)
     return res.status(200).json({
       query
     })
