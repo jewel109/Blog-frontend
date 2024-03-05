@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Provider } from 'react-redux'
 import { store } from './store/store'
+import React from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,13 +20,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Provider store={store}>
-          <div>
-            {children}
+        <React.StrictMode>
+          <Provider store={store}>
+            <div>
+              {children}
 
-          </div>
+            </div>
 
-        </Provider>
+          </Provider>
+        </React.StrictMode>
       </body>
     </html>
   )
