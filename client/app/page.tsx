@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/card"
 import { useRouter } from 'next/navigation'
 import { accessUser } from './features/userSlice'
-import { fetchAllStories } from './features/storySlice'
+import { fetchAllStories, fetchSlug, fetchUser } from './features/storySlice'
 import { Input } from '@/components/ui/input'
 import { Avatar } from '@/components/ui/avatar'
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
@@ -33,19 +33,45 @@ function add(date) {
   return moment(date).format("DD MMM YYYY")
 }
 
+export function MainHeader() {
+  return (
+    <>
+      <nav className='mt-4 mb-2 w-8/12 mx-auto grid grid-cols-2'>
+        <div className='grid grid-cols-6 '>
+          <div>
+            <Button>Blog</Button>
+          </div>
+          <Input className=' -ml-4 w-5/6 col-start-2 col-end-6  '></Input>
+        </div>
+        <div className='grid grid-flow-col justify-self-end '>
+          <div className='grid grid-flow-col gap-x-1'>
+            <Button variant="outline">Create Post</Button>
+            <Bell className='mt-1' size="38" /> </div>
+          <UserRound size="38" />
+        </div>
+      </nav>
 
+    </>
+  )
+}
 
 export default function Home() {
   const [postData, setPostData] = useState([])
   const [user, setUser] = useState(null)
   const data = useSelector((state: RootState) => state.userReducer)
   const storyData = useSelector((state: RootState) => state.storyReducer)
+  console.log(storyData)
   const dispatch = useAppDispatch()
   const router = useRouter()
   function commentHandler() {
     router.push("/comment/addComment")
   }
 
+  async function detailPostHandler(slug, author) {
+    dispatch(fetchSlug(slug))
+    dispatch(fetchUser(author))
+    router.push(`/post/${slug}`)
+  }
 
   async function forPrivateData() {
     try {
@@ -141,7 +167,7 @@ export default function Home() {
                 <div className=' col-start-3 col-end-10 text-white '>
                   {postData.map((post) => (
 
-                    <Card className='hover:cursor-pointer'>
+                    <Card className='hover:cursor-pointer' >
                       <div className='grid grid-cols-12 py-2'>
                         <div className=' col-start-1 col-end-2'>
                           <Avatar className='w-10 h-10 mx-2'>
@@ -149,7 +175,7 @@ export default function Home() {
                             <AvatarFallback></AvatarFallback>
                           </Avatar>
                         </div>
-                        <div className='col-start-2 col-end-13 ml-6'>
+                        <div className='col-start-2 col-end-13 ml-6' onClick={() => detailPostHandler(post.slug, post.author)}>
                           <p className=' '>{post.author ? post.author : "no username found"} </p>
                           <p className=' text-gray-400 text-xs'>{
 
