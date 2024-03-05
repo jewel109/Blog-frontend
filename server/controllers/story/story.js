@@ -60,7 +60,7 @@ const detailStory = ErrorWrapper(async (req, res, next) => {
   const { activeUser } = req.body;
   const story = await Story.findOne({
     slug
-  }).populate(" author likes")
+  })
 
   const storyLikesUserIds = story.likes.map(json => json.id)
   const likeStatus = storyLikesUserIds.includes(activeUser._id)
@@ -78,8 +78,7 @@ const likeStory = ErrorWrapper(async (req, res, next) => {
 
   const story = await Story.findOne({
     slug
-  }).populate("author likes")
-
+  })
   // console.log(user, slug)
   // console.log(chalk.red(story))
   const storyLikesUserIds = story.likes.map(json => {
