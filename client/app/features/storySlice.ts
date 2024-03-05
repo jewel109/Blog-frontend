@@ -1,6 +1,6 @@
 import axiosInstance from "@/lib/axios";
 import axiosError from "@/lib/axiosError";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 
 interface Story {
   author: string,
@@ -57,7 +57,13 @@ export const storySlice = createSlice({
   name: "story",
   initialState,
   reducers: {
-
+    fetchSlug(state, action) {
+      state.slug = action.payload
+      console.log(current(state))
+    },
+    fetchUser(state, action) {
+      state.author = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -81,5 +87,5 @@ export const storySlice = createSlice({
 
   }
 })
-
+export const { fetchSlug, fetchUser } = storySlice.actions
 export default storySlice.reducer 
