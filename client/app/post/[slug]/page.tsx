@@ -1,14 +1,17 @@
 "use client"
 import { MainHeader } from "@/app/page"
-import type { RootState } from "@/app/store/store"
+import classNames from 'classnames'
+import { useAppDispatch, type RootState } from "@/app/store/store"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import axiosInstance from "@/lib/axios"
 import axiosError from "@/lib/axiosError"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import { countOfLike, isLiked } from "@/app/features/storySlice"
 export default function Page() {
   const storyData = useSelector((state: RootState) => state.storyReducer)
+  const dispatch = useAppDispatch()
   const [content, setContent] = useState("")
   const [title, setTitle] = useState("")
   console.log(storyData)
@@ -16,12 +19,23 @@ export default function Page() {
   async function likeClickHandler() {
     try {
       const token = localStorage.getItem("token")
-      console.log(token)
       const headers = { "Authorization": `Bearer ${token}` }
 
       const response = await axiosInstance.post(`/story/${storyData.slug}/like`, {}, { headers: headers })
 
-      console.log(response)
+      const { data } = response
+
+
+
+      if (!response.data.data.isLiked) {
+        dispatch(isLiked(false))
+      } else {
+        dispatch(isLiked(true))
+      }
+      console.log(response.data.data.story.likeCount)
+      dispatch(countOfLike(response.data.data.story.likeCount))
+
+
 
     } catch (error) {
       axiosError(error)
@@ -43,6 +57,11 @@ export default function Page() {
   useEffect(() => {
     fetchDetailStory()
   }, [])
+  useEffect(() => {
+    dispatch(countOfLike(storyData.likeCount))
+  }, [storyData])
+
+
   const router = useRouter()
   return (
     <div>
@@ -51,7 +70,13 @@ export default function Page() {
         <div className='grid grid-cols-12 w-8/12 mx-auto pt-6 gap-1  min-h-screen'>
           <div className=' col-start-1 col-end-3 grid justify-self-start'>
             <div className="grid grid-rows-12 ">
-              <div className="hover:text-red-700 cursor-pointer" onClick={() => likeClickHandler()}>Like</div>
+              <div className="" >
+                <span className={classNames('cursor-pointer',
+                  {
+                    'text-red-700 font-bold': storyData.liked
+                  })} onClick={() => likeClickHandler()}>{storyData.liked ? "liked" : "like"}</span>
+                <span className="ml-2">{storyData.likeCount}</span>
+              </div>
               <div>Comment</div>
               <div>Save</div>
             </div>
