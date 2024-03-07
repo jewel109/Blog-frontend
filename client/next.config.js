@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: false,
-}
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
-module.exports = nextConfig
+module.exports = {
+  plugins:
+    [new MiniCssExtractPlugin()]
+
+  ,
+  reactStrictMode: false,
+
+}
