@@ -8,6 +8,9 @@ interface Story {
   title: string,
   content: string,
   success: boolean,
+  liked: boolean,
+  likes: number,
+  likeCount: number,
   error: string | null,
 
 }
@@ -17,6 +20,9 @@ const initialState: Story = {
   title: "",
   content: "",
   success: false,
+  liked: false,
+  likes: 0,
+  likeCount: 0,
   error: null,
 
 }
@@ -63,6 +69,12 @@ export const storySlice = createSlice({
     },
     fetchUser(state, action) {
       state.author = action.payload
+    },
+    isLiked(state, action) {
+      state.liked = action.payload
+    },
+    countOfLike(state, action) {
+      state.likeCount = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -87,5 +99,5 @@ export const storySlice = createSlice({
 
   }
 })
-export const { fetchSlug, fetchUser } = storySlice.actions
+export const { fetchSlug, fetchUser, countOfLike, isLiked } = storySlice.actions
 export default storySlice.reducer 
