@@ -85,6 +85,7 @@ const likeStory = ErrorWrapper(async (req, res, next) => {
 
     return json._id.toString()
   })
+  let isLiked = false
   console.log(storyLikesUserIds.includes(user._id.toString()))
 
   // console.log(chalk.blueBright(storyLikesUserIds))
@@ -94,7 +95,9 @@ const likeStory = ErrorWrapper(async (req, res, next) => {
   if (!storyLikesUserIds.includes(id)) {
     story.likes.push(user)
     story.likeCount = story?.likes?.length
+    isLiked = true
     console.log(chalk.green(story.likeCount))
+
 
     await story.save()
   } else {
@@ -109,7 +112,7 @@ const likeStory = ErrorWrapper(async (req, res, next) => {
   // console.log(chalk.whiteBright(story))
   return res.status(200).json({
     success: true,
-    data: story
+    data: { story, isLiked }
   })
 
 
