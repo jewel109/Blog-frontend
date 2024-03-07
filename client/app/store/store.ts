@@ -1,15 +1,27 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from "../features/userSlice"
 import storyReducer from "../features/storySlice"
 import commentReducer from "../features/commentSlice"
 import { useDispatch } from 'react-redux'
-export const store = configureStore({
-  reducer: {
-    userReducer: userReducer,
-    storyReducer: storyReducer,
-    commentReducer: commentReducer
-  }
+import storage from "redux-persist/lib/storage"
+import { persistReducer } from "redux-persist"
+import persistStore from 'redux-persist/lib/persistStore'
+
+const rootReducer = combineReducers({
+  userReducer: userReducer,
+  storyReducer: storyReducer,
+  commentReducer: commentReducer
 })
+const persistConfig = {
+  key: "root",
+  storage,
+
+}
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+export const store = configureStore({
+  reducer: persistedReducer
+})
+export const persistor = persistStore(store)
 
 export const useAppDispatch = () => useDispatch<typeof store.dispatch>()
 export type RootState = ReturnType<typeof store.getState>

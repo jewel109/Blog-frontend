@@ -5,8 +5,9 @@ import './globals.css'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Provider } from 'react-redux'
-import { store } from './store/store'
+import { persistor, store } from './store/store'
 import React from 'react'
+import { PersistGate } from 'redux-persist/integration/react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,15 +21,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <React.StrictMode>
-          <Provider store={store}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
             <div>
               {children}
-
             </div>
 
-          </Provider>
-        </React.StrictMode>
+          </PersistGate>
+        </Provider>
       </body>
     </html>
   )
