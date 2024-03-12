@@ -6,8 +6,8 @@ interface Comment {
   content: string,
   author: string,
   likes: Array<string>,
-  likeCount: number,
-  stars: number
+  likeCount: number
+  commentList: Array<string>
 }
 
 const initialState: Comment = {
@@ -15,11 +15,11 @@ const initialState: Comment = {
   author: "",
   likes: [],
   likeCount: 0,
-  stars: 0
+  commentList: [],
 }
 
 
-export const addComment = createAsyncThunk("comment/addComment", async ({ slug, content, star }) => {
+export const addComment = createAsyncThunk("comment/addComment", async ({ slug, content }) => {
   try {
     const token = window?.localStorage.getItem("token")
     if (!token) {
@@ -28,7 +28,7 @@ export const addComment = createAsyncThunk("comment/addComment", async ({ slug, 
     }
 
     const headers = { "Authorization": `Bearer ${token}` }
-    const response = await axiosInstance.post(`/comment/${slug}/addcomment`, { content: content, star: star }, { headers: headers })
+    const response = await axiosInstance.post(`/comment/${slug}/addcomment`, { content: content, }, { headers: headers })
 
     console.log(response)
     return response
@@ -40,6 +40,28 @@ export const addComment = createAsyncThunk("comment/addComment", async ({ slug, 
   }
 
 })
+
+
+// export const getAllCommentOfaStory = createAsyncThunk("comment/getAllComment", async ({ slug }) => {
+//
+//   const response = await axiosInstance.get(`/comment/${slug}/getallcomment`)
+//
+// }
+
+export const getAllCommentOfaStory = createAsyncThunk("comment/getAllComment", async ({ slug }) => {
+  try {
+
+    const response = await axiosInstance.get(`/comment/${slug}/getallcomment`)
+    console.log(response.data.data)
+    return response.data.data
+
+  } catch (error) {
+
+    axiosError(error)
+  }
+
+})
+
 
 const commentSlice = createSlice({
   name: "comment",
@@ -53,12 +75,18 @@ const commentSlice = createSlice({
 
       })
       .addCase(addComment.fulfilled, (state) => {
-        state.author = "jewel"
+
       })
       .addCase(addComment.rejected, (state) => {
 
       })
-
+      ,
+      builder
+        .addCase(getAllCommentOfaStory.pending, (state, { payload }) => {
+        })
+        .addCase(getAllCommentOfaStory.fulfilled, (state, { payload }) => {
+          state.commentList = payload
+        })
   }
 })
 
