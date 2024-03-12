@@ -7,12 +7,13 @@ const CommentSchema = new mongoose.Schema({
     required: true,
     ref: "Story"
   },
+
   content: {
     type: String,
     required: true,
   },
   author: {
-    type: mongoose.Schema.ObjectId,
+    type: String,
     ref: "User",
     required: true
   },
@@ -24,10 +25,7 @@ const CommentSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  star: {
-    type: Number,
-    default: 0
-  }
+
 }, { timestamps: true })
 
 const Comment = mongoose.model("Comment", CommentSchema)
