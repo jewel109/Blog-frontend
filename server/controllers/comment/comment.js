@@ -8,7 +8,6 @@ const log = console.log
 
 const addNewCommentToStory = ErrorWrapper(async (req, res, next) => {
   const { slug } = req.params
-  const { content, star } = req.body
   const { content } = req.body
   console.log(req)
   console.log(req.body)
@@ -16,7 +15,6 @@ const addNewCommentToStory = ErrorWrapper(async (req, res, next) => {
   console.log("star " + star, "content " + content, "slug " + slug)
   console.log("star ", "content " + content, "slug " + slug)
 
-  if (!slug || !star || !content) {
   if (!slug || !content) {
     return next(new CustomError("client didn't provide valid data")
     )
@@ -65,23 +63,12 @@ const getAllCommentByStory = ErrorWrapper(async (req, res, next) => {
   const story = await Story.findOne({ slug })
   console.log(story._id)
 
-  const commentList = Comment.find({
-    story: story.id,
-  }).populate({
-    path: "author",
-    select: "username"
-  }).sort("-createdAt")
-
-  return res.status(200).json({
-    success: true,
-    count: story.commentCount,
-    data: commentList
-  console.log(story._id)
   const commentList = Comment.aggregate([
     {
       $match: {
         story: story._id
       },
+    },
     {
       $addFields: {
         date: {
