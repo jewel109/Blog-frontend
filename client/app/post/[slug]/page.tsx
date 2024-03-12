@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { countOfLike, isLiked } from "@/app/features/storySlice"
+import CommentInPost from "./commentInPost"
 export default function Page() {
   const storyData = useSelector((state: RootState) => state.storyReducer)
   const dispatch = useAppDispatch()
@@ -16,6 +17,10 @@ export default function Page() {
   const [title, setTitle] = useState("")
   console.log(storyData)
 
+  async function commentClickHandler() {
+    const commentBox = document.getElementById("comment-box")
+    commentBox?.scrollIntoView({ behavior: "smooth" })
+  }
   async function likeClickHandler() {
     try {
       const token = localStorage.getItem("token")
@@ -78,6 +83,7 @@ export default function Page() {
                 <span className="ml-2">{storyData.likeCount}</span>
               </div>
               <div>Comment</div>
+              <div onClick={commentClickHandler}>Comment</div>
               <div>Save</div>
             </div>
           </div>
@@ -93,8 +99,21 @@ export default function Page() {
               <CardFooter>
               </CardFooter>
             </Card>
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle> {title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {content}
+                </CardContent>
+                <CardFooter>
+                </CardFooter>
+              </Card>
+            </div>
           </div>
           <div className="col-start-11 col-end-13"> rana</div>
+          <div className="col-start-11 col-end-13">rana</div>
         </div>
       </div>
     </div>
