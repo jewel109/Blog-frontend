@@ -9,12 +9,15 @@ const log = console.log
 const addNewCommentToStory = ErrorWrapper(async (req, res, next) => {
   const { slug } = req.params
   const { content, star } = req.body
+  const { content } = req.body
   console.log(req)
   console.log(req.body)
   console.log("star " + star)
   console.log("star " + star, "content " + content, "slug " + slug)
+  console.log("star ", "content " + content, "slug " + slug)
 
   if (!slug || !star || !content) {
+  if (!slug || !content) {
     return next(new CustomError("client didn't provide valid data")
     )
   }
@@ -29,6 +32,7 @@ const addNewCommentToStory = ErrorWrapper(async (req, res, next) => {
       content,
       author: req.user._id,
       star: star,
+      author: req.user.username,
     })
 
 
