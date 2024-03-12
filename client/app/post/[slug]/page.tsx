@@ -21,6 +21,7 @@ export default function Page() {
     const commentBox = document.getElementById("comment-box")
     commentBox?.scrollIntoView({ behavior: "smooth" })
   }
+
   async function likeClickHandler() {
     try {
       const token = localStorage.getItem("token")
@@ -82,23 +83,11 @@ export default function Page() {
                   })} onClick={() => likeClickHandler()}>{storyData.liked ? "liked" : "like"}</span>
                 <span className="ml-2">{storyData.likeCount}</span>
               </div>
-              <div>Comment</div>
               <div onClick={commentClickHandler}>Comment</div>
               <div>Save</div>
             </div>
           </div>
           <div className=' col-start-3 col-end-10 '>
-            <Card>
-              <CardHeader>
-                <CardTitle> {title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-
-                {content}
-              </CardContent>
-              <CardFooter>
-              </CardFooter>
-            </Card>
             <div>
               <Card>
                 <CardHeader>
@@ -111,8 +100,8 @@ export default function Page() {
                 </CardFooter>
               </Card>
             </div>
+            <CommentInPost />
           </div>
-          <div className="col-start-11 col-end-13"> rana</div>
           <div className="col-start-11 col-end-13">rana</div>
         </div>
       </div>
