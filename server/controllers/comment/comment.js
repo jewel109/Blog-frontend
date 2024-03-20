@@ -13,6 +13,7 @@ const addNewCommentToStory = ErrorWrapper(async (req, res, next) => {
   console.log(req.body)
   console.log("star " + star)
   console.log("star " + star, "content " + content, "slug " + slug)
+  console.log( "content " + content, "slug " + slug)
   console.log("star ", "content " + content, "slug " + slug)
 
   if (!slug || !content) {

@@ -22,10 +22,12 @@ const getAccessToRoute = asyncError(async (req, res, next) => {
   const accessToken = getAccessTokenFromHeader(req)
 
   if (accessToken == 'null') {
+  if (accessToken === 'null') {
     return res
       .status(200)
       .json({ success: false, message: 'not valid jsonwebtoken ' })
   } else if (accessToken != 'null') {
+    console.log(accessToken)
     const decoded = jwt.verify(accessToken, JWT_SECRET)
 
     console.log(`decoded jsonwebtoken ${decoded}`)

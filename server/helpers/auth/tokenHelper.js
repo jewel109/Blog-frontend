@@ -21,6 +21,9 @@ const getAccessTokenFromHeader = (req) => {
   const authrization = req.headers.authorization;
   // console.log(`authrization=${authrization}`)
   const accessToken = authrization.split(" ")[1];
+  if(accessToken === "null"){
+    return new CustomError("accessToken is null")
+  }
   if (!accessToken) {
     return new CustomError("accessToken is not found")
   }
