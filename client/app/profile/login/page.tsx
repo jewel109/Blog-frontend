@@ -65,6 +65,7 @@ export default function ProfileForm() {
   async function handleLogin(values) {
     const response = await dispatch(loginUser(values))
     console.log(response)
+    router.push("/")
   }
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -105,8 +106,10 @@ export default function ProfileForm() {
 
     </div>
     <div className=" my-6 grid grid-cols-1  place-items-center">
+    <div className=" mt-36 grid grid-cols-1  place-items-center">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-[500px]">
           <FormField
             control={form.control}
             name="email"
@@ -139,9 +142,15 @@ export default function ProfileForm() {
             )}
           />
           <div className="grid grid-cols-2 gap-4 content-between">
+          <div className="grid grid-cols-3 gap-4 content-between">
 
             <Button type="submit">Login</Button>
             <Button>
+            <Button type="submit" className="col-end-1">Login</Button>
+            <p className="col-end-3 col-start-1 text-blue-300 hover:text-blue-500 mt-1">
+              <Link href={'/profile/register'}>Have no account ? create one.</Link>
+            </p>
+            <Button type="button">
               <Link href={'/'}>Home</Link>
             </Button>
           </div>
