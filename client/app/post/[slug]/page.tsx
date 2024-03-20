@@ -65,6 +65,8 @@ export default function Page() {
   }, [])
   useEffect(() => {
     dispatch(countOfLike(storyData.likeCount))
+    console.log(storyData.likeCount)
+    console.log(storyData)
   }, [storyData])
 
 
@@ -76,6 +78,7 @@ export default function Page() {
         <div className='grid grid-cols-12 w-8/12 mx-auto pt-6 gap-1  min-h-screen'>
           <div className=' col-start-1 col-end-3 grid justify-self-start'>
             <div className="grid grid-rows-12 ">
+            <div className="grid grid-flow-row h-[100px]  ">
               <div className="" >
                 <span className={classNames('cursor-pointer',
                   {
@@ -85,6 +88,8 @@ export default function Page() {
               </div>
               <div onClick={commentClickHandler}>Comment</div>
               <div>Save</div>
+              <div onClick={commentClickHandler} className="">Comment</div>
+              <div className="" >Save</div>
             </div>
           </div>
           <div className=' col-start-3 col-end-10 '>
@@ -103,6 +108,10 @@ export default function Page() {
             <CommentInPost />
           </div>
           <div className="col-start-11 col-end-13">rana</div>
+          <div className="col-start-11 col-end-13">
+            <h2 className="text-lg font-medium">Author of the post</h2>
+            <p>{storyData.author}</p>
+          </div>
         </div>
       </div>
     </div>
