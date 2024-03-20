@@ -20,6 +20,7 @@ import { useAppDispatch, type RootState } from "@/app/store/store";
 import { addComment, getAllCommentOfaStory } from "@/app/features/commentSlice";
 import { useEffect, useState } from "react";
 import { MessageSquare, ThumbsUp } from "lucide-react";
+import { LogOut, MessageSquare, ThumbsUp } from "lucide-react";
 
 export default function CommentInPost() {
   const commentData = useSelector((state: RootState) => state.commentReducer)
@@ -70,6 +71,7 @@ export default function CommentInPost() {
 
 
               <Comment key={comment.id} username={comment.author} time={comment.date} content={comment.content} />
+              <Comment key={comment._id} username={comment.author} time={comment.date} content={comment.content} />
             )) : (<div className="bg-red-700">no comment</div>)
 
 
@@ -90,6 +92,7 @@ const Comment = ({ username, time, content, }) => {
         <div className="col-span-1 px-4 text-gray-500 ">{username}</div>
         <div className="col-span-11 grid ml-4  ">
           <div className="px-2 grid grid-flow-row shadow-sm border rounded ">
+          <div className="px-2 pt-2 grid grid-flow-row shadow-sm border rounded ">
             <div className="grid grid-cols-3">
               <div className="font-medium col-end-1 text-gray-500 ">{username}</div>
               <div className="font-thin col-start-1 ml-4">{time}</div>
@@ -118,6 +121,17 @@ const Comment = ({ username, time, content, }) => {
       </div>
     </Card>
 
+  )
+}
+export const CustomIconWithText = ({ text, children }) => {
+  return (
+    <div className="font-medium text-gray-500 grid grid-flow-col  ">
+      <div
+        className="">
+        {children}
+      </div>
+      <div className="ml-2 cursor-pointer">{text}</div>
+    </div>
   )
 }
 
@@ -153,6 +167,7 @@ export function CommentForm({ refetchComments }) {
           <FormItem>
             <FormControl>
               <Textarea {...form.register} placeholder="" {...field} />
+              <Textarea className="min-h-[20px]" {...form.register} placeholder="" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
