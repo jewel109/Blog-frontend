@@ -19,9 +19,13 @@ export const accessUser = createAsyncThunk("user/getAccessToServer", async () =>
     const token = localStorage.getItem("token")
 
     console.log(token)
+    if (!token) {
+      return null
+    }
     const { data } = await axiosInstance.get("/auth/private", { headers: { "Authorization": `Bearer ${token}` } })
     console.log(data?.user?.username)
     return data
+    return data.user.username
   } catch (error) {
     return axiosError(error)
   }
@@ -95,24 +99,32 @@ export const userSlice = createSlice({
   name: "userReducer",
   initialState,
   reducers: {
+    logOutUser(state, { payload }) {
+      state.username = ""
+
+    },
 
   },
   extraReducer: (builder) => {
+  extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state: userState) => {
         state.loading = true;
         state.error = null;
         state.success = null;
         console.log(state)
+        console.log(current(state))
       })
       .addCase(registerUser.fulfilled, (state: userState, action) => {
         state.loading = false;
         state.success = true;
+        console.log(current(state))
       })
       .addCase(registerUser.rejected, (state: userState, action) => {
         state.loading = false;
         state.error = action.error.message;
         console.log(state)
+        console.log(current(state))
       });
   },
   extraReducers: (builder) => {
@@ -125,6 +137,7 @@ export const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state: userState, action) => {
         state.loading = false;
         state.success = true;
+        console.log(current(state))
 
       })
       .addCase(loginUser.rejected, (state: userState, action) => {
@@ -135,28 +148,35 @@ export const userSlice = createSlice({
   },
 
   extraReducer: (builder) => {
+  extraReducers: (builder) => {
     builder
       .addCase(accessUser.pending, (state: userState) => {
         state.loading = true;
         state.error = null;
         state.success = null;
         console.log(state)
+        console.log(current(state))
       })
       .addCase(accessUser.fulfilled, (state: userState, action) => {
+      .addCase(accessUser.fulfilled, (state: userState, { payload }) => {
+        state.username = payload
         state.loading = false;
         state.success = true;
         state.username = action.payload.user.username
         console.log(current(state.username))
+        console.log(current(state))
       })
       .addCase(accessUser.rejected, (state: userState, action) => {
         state.loading = false;
         state.error = action.error.message;
         console.log(state)
+        console.log(current(state))
       });
   },
 
 
 
 })
+export const { logOutUser } = userSlice.actions
 
 export default userSlice.reducer
