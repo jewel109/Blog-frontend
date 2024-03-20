@@ -19,7 +19,6 @@ import { useSelector } from "react-redux";
 import { useAppDispatch, type RootState } from "@/app/store/store";
 import { addComment, getAllCommentOfaStory } from "@/app/features/commentSlice";
 import { useEffect, useState } from "react";
-import { MessageSquare, ThumbsUp } from "lucide-react";
 import { LogOut, MessageSquare, ThumbsUp } from "lucide-react";
 
 export default function CommentInPost() {
@@ -71,7 +70,6 @@ export default function CommentInPost() {
 
 
               <Comment key={comment.id} username={comment.author} time={comment.date} content={comment.content} />
-              <Comment key={comment._id} username={comment.author} time={comment.date} content={comment.content} />
             )) : (<div className="bg-red-700">no comment</div>)
 
 
@@ -92,30 +90,31 @@ const Comment = ({ username, time, content, }) => {
         <div className="col-span-1 px-4 text-gray-500 ">{username}</div>
         <div className="col-span-11 grid ml-4  ">
           <div className="px-2 grid grid-flow-row shadow-sm border rounded ">
-          <div className="px-2 pt-2 grid grid-flow-row shadow-sm border rounded ">
-            <div className="grid grid-cols-3">
-              <div className="font-medium col-end-1 text-gray-500 ">{username}</div>
-              <div className="font-thin col-start-1 ml-4">{time}</div>
+            <div className="px-2 pt-2 grid grid-flow-row shadow-sm border rounded ">
+              <div className="grid grid-cols-3">
+                <div className="font-medium col-end-1 text-gray-500 ">{username}</div>
+                <div className="font-thin col-start-1 ml-4">{time}</div>
+              </div>
+              <div className="py-3">
+                {content}
+              </div>
             </div>
-            <div className="py-3">
-              {content}
-            </div>
-          </div>
-          <div className="grid grid-cols-8 mt-[5px]">
-            <div className="font-medium text-gray-500 grid grid-flow-col w-[60px] ">
-              <div
-                className="">
-                <ThumbsUp size="15" className="mt-1" />
+            <div className="grid grid-cols-8 mt-[5px]">
+              <div className="font-medium text-gray-500 grid grid-flow-col w-[60px] ">
+                <div
+                  className="">
+                  <ThumbsUp size="15" className="mt-1" />
+
+                </div>
+                <div>like</div>
+              </div>
+              <div className="font-light text-gray-500 grid  grid-flow-col w-[70px]">
+                <div><MessageSquare size="15" className="mt-[7px]" /></div>
+                <div>reply</div>
 
               </div>
-              <div>like</div>
-            </div>
-            <div className="font-light text-gray-500 grid  grid-flow-col w-[70px]">
-              <div><MessageSquare size="15" className="mt-[7px]" /></div>
-              <div>reply</div>
 
             </div>
-
           </div>
         </div>
       </div>

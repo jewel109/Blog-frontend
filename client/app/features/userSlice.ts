@@ -105,7 +105,6 @@ export const userSlice = createSlice({
     },
 
   },
-  extraReducer: (builder) => {
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state: userState) => {
@@ -147,7 +146,6 @@ export const userSlice = createSlice({
 
   },
 
-  extraReducer: (builder) => {
   extraReducers: (builder) => {
     builder
       .addCase(accessUser.pending, (state: userState) => {
@@ -157,13 +155,11 @@ export const userSlice = createSlice({
         console.log(state)
         console.log(current(state))
       })
-      .addCase(accessUser.fulfilled, (state: userState, action) => {
       .addCase(accessUser.fulfilled, (state: userState, { payload }) => {
         state.username = payload
         state.loading = false;
         state.success = true;
-        state.username = action.payload.user.username
-        console.log(current(state.username))
+        state.username = payload.user.username
         console.log(current(state))
       })
       .addCase(accessUser.rejected, (state: userState, action) => {

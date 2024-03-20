@@ -21,7 +21,6 @@ const getAccessToRoute = asyncError(async (req, res, next) => {
 
   const accessToken = getAccessTokenFromHeader(req)
 
-  if (accessToken == 'null') {
   if (accessToken === 'null') {
     return res
       .status(200)

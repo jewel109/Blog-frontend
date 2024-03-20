@@ -4,7 +4,6 @@ import storyReducer from "../features/storySlice"
 import commentReducer from "../features/commentSlice"
 import { useDispatch } from 'react-redux'
 import storage from "redux-persist/lib/storage"
-import { persistReducer } from "redux-persist"
 import {
   persistReducer, FLUSH,
   REHYDRATE,

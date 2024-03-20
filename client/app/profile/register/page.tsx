@@ -22,7 +22,7 @@ import Link from "next/link"
 import { useDispatch, useSelector } from "react-redux"
 import { store, useAppDispatch } from "@/app/store/store"
 import type { RootState } from "@/app/store/store"
-import { registerUser, userState } from "@/app/features/userSlice"
+import { registerUser, } from "@/app/features/userSlice"
 
 
 const formSchema = z.object({
@@ -72,37 +72,10 @@ export default function ProfileForm() {
   }
 
   return (<>
-    <div className="container mx-auto p-4 mb-4  w-11/12 ">
-      {/* your content here */}
-      <div className='grid grid-cols-2  w-full place-content-between'>
-        <div className=''>
-          <Button>Blog</Button>
-        </div>
-        <div className='place-self-end '>
-          <Button><Link href="/profile">profile</Link>
-          </Button>
-          <Button className='mx-2'>
-            <Link href={`/post`}>Create Post</Link>
-          </Button>
-          <Button className='mx-2'>
-            <Link href={`/users`}>total users</Link>
-          </Button>
-          <Button className='mx-2'>
-            <Link href={`/profile/register`}>register</Link>
-          </Button>
-          <Button className='mx-2'>
-            <Link href={`/profile/login`}>login</Link>
-          </Button>
 
-        </div>
-      </div>
     <div className=" mt-36 grid grid-cols-1  place-items-center">
 
-    </div>
-    <div className=" my-6 grid grid-cols-1  place-items-center">
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
       <Form {...form} >
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-[500px]">
           <FormField
@@ -151,11 +124,9 @@ export default function ProfileForm() {
 
             )}
           />
-          <div className="grid grid-cols-2 gap-4 content-between">
           <div className="grid grid-cols-3 gap-4 content-between">
 
             <Button type="submit">Register</Button>
-            <Button>
             <Button type="submit" className="col-end-1">Register</Button>
             <p className="col-span-2 text-blue-300 hover:text-blue-500 mt-1">
               <Link href={'/profile/login'}>Have Account? Login</Link>
