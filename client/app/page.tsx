@@ -143,29 +143,8 @@ export default function Home() {
     router.push(`/post/${slug}`)
   }
 
-  async function forPrivateData() {
-    try {
 
-      const token = localStorage.getItem("token")
 
-      console.log(token)
-      // console.log(token)
-      const { data } = await axiosInstance.get("/auth/private", { headers: { "Authorization": `Bearer ${token}` } })
-      console.log(data?.user?.username)
-      setUser(data?.user?.username)
-    } catch (error) {
-      axiosError(error)
-    }
-  }
-  async function getAccessServer() {
-    const data = await dispatch(accessUser())
-    console.log(data)
-    // console.log(data)
-    if (!data) {
-      return new Error("no data found from getAccessServer")
-    }
-    return data
-  }
   async function forAllStories() {
     const response = await dispatch(fetchAllStories())
     console.log(response.payload)
@@ -222,36 +201,9 @@ export default function Home() {
 
 
                 <div className=' col-start-3 col-end-10 text-white '>
-                  {postData.map((post) => (
+                  {postData.map(({ _id, author, slug, title, createdAt }) => (
 
-                    <Card className='hover:cursor-pointer' key={post._id}>
-                      <div className='grid grid-cols-12 py-2'>
-                        <div className=' col-start-1 col-end-2'>
-                          <Avatar className='w-10 h-10 mx-2'>
-                            <AvatarImage className='' src="https://github.com/shadcn.png" alt="jewel" />
-                            <AvatarFallback></AvatarFallback>
-                          </Avatar>
-                        </div>
-                        <div className='col-start-2 col-end-13 ml-6' onClick={() => detailPostHandler(post.slug, post.author)}>
-                          <p className=' '>{post.author ? post.author : "no username found"} </p>
-                          <p className=' text-gray-400 text-xs'>{
-
-                            add(post.createdAt)
-                          }</p>
-                          <CardTitle className=''>
-                            <CardHeader className='pl-0'>{post.title}</CardHeader>
-                          </CardTitle>
-                          <CardFooter className='p-0'>
-                            <div className='grid grid-flow-col gap-x-5'>
-                              <div>like</div>
-                              <div>comment </div>
-                              <div>save</div>
-                            </div>
-                          </CardFooter>
-                        </div>
-                      </div>
-
-                    </Card>
+                    <PostComponet key={_id} author={author} createdAt={createdAt} title={title} detailPostHandler={detailPostHandler} slug={slug} />
 
                   ))}
 
@@ -283,3 +235,37 @@ export default function Home() {
   )
 }
 
+const PostComponet = ({ author, slug, createdAt, title, detailPostHandler }) => {
+  return (
+    <Card className='' >
+      <div className='grid grid-cols-12 py-2'>
+        <div className=' col-start-1 col-end-2'>
+          <Avatar className='w-10 h-10 mx-2'>
+            <AvatarImage className='' src="https://github.com/shadcn.png" alt="jewel" />
+            <AvatarFallback></AvatarFallback>
+          </Avatar>
+        </div>
+        <div className='col-start-2 col-end-13 ml-6' >
+          <p className=' '>{author ? author : "no username found"} </p>
+          <p className=' text-gray-400 text-xs'>{
+
+            add(createdAt)
+          }</p>
+          <CardTitle className=''>
+            <CardHeader className='pl-0 cursor-pointer' onClick={() => detailPostHandler(slug, author)}>{title}</CardHeader>
+          </CardTitle>
+          <CardFooter className='p-0'>
+            <div className='grid grid-flow-col gap-x-5'>
+              <div>like</div>
+              <div>comment </div>
+              <div>save</div>
+            </div>
+          </CardFooter>
+        </div>
+      </div>
+
+    </Card>
+
+
+  )
+}
