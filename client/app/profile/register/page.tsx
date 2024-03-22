@@ -126,7 +126,6 @@ export default function ProfileForm() {
           />
           <div className="grid grid-cols-3 gap-4 content-between">
 
-            <Button type="submit">Register</Button>
             <Button type="submit" className="col-end-1">Register</Button>
             <p className="col-span-2 text-blue-300 hover:text-blue-500 mt-1">
               <Link href={'/profile/login'}>Have Account? Login</Link>

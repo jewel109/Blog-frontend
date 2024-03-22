@@ -6,7 +6,7 @@ import { userAgent } from "next/server";
 
 
 interface userState {
-  username: string;
+  username: string | null;
   email: string,
   password: string,
   loading: boolean; // indicates whether data is being fetched
@@ -159,7 +159,7 @@ export const userSlice = createSlice({
         state.username = payload
         state.loading = false;
         state.success = true;
-        state.username = payload.user.username
+        state.username = payload?.user?.username
         console.log(current(state))
       })
       .addCase(accessUser.rejected, (state: userState, action) => {

@@ -86,8 +86,6 @@ export default function Page() {
                     })} onClick={() => likeClickHandler()}>{storyData.liked ? "liked" : "like"}</span>
                   <span className="ml-2">{storyData.likeCount}</span>
                 </div>
-                <div onClick={commentClickHandler}>Comment</div>
-                <div>Save</div>
                 <div onClick={commentClickHandler} className="">Comment</div>
                 <div className="" >Save</div>
               </div>
@@ -105,7 +103,7 @@ export default function Page() {
                   </CardFooter>
                 </Card>
               </div>
-              <CommentInPost />
+              {/* <CommentInPost /> */}
             </div>
             <div className="col-start-11 col-end-13">rana</div>
             <div className="col-start-11 col-end-13">
