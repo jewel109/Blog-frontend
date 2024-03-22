@@ -90,30 +90,31 @@ export default function Page() {
                 <div className="" >Save</div>
               </div>
             </div>
-            <div className=' col-start-3 col-end-10 '>
-              <div>
-                <Card>
-                  <CardHeader>
-                    <CardTitle> {title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {content}
-                  </CardContent>
-                  <CardFooter>
-                  </CardFooter>
-                </Card>
-              </div>
-              {/* <CommentInPost /> */}
+          </div>
+          <div className=' col-start-3 col-end-10 '>
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle> {title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {content}
+                </CardContent>
+                <CardFooter>
+                </CardFooter>
+              </Card>
             </div>
-            <div className="col-start-11 col-end-13">rana</div>
-            <div className="col-start-11 col-end-13">
-              <h2 className="text-lg font-medium">Author of the post</h2>
-              <p>{storyData.author}</p>
-            </div>
+            <CommentInPost />
+          </div>
+          <div className="col-start-11 col-end-13">rana</div>
+          <div className="col-start-11 col-end-13">
+            <h2 className="text-lg font-medium">Author of the post</h2>
+            <p>{storyData.author}</p>
           </div>
         </div>
       </div>
     </div>
+
 
   )
 }

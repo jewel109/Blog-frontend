@@ -62,14 +62,11 @@ export default function CommentInPost() {
           </Card>
         </div>
         <div>
-          <Comment username="jewel" time="03 march" content="Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat." />
-        </div>
-        <div>
           {
             commentData.commentList ? commentData.commentList.map((comment) => (
 
 
-              <Comment key={comment.id} username={comment.author} time={comment.date} content={comment.content} />
+              <Comment key={comment._id} username={comment.author} time={comment.date} content={comment.content} />
             )) : (<div className="bg-red-700">no comment</div>)
 
 
@@ -89,7 +86,7 @@ const Comment = ({ username, time, content, }) => {
       <div className="grid grid-cols-12 gap-2 py-1">
         <div className="col-span-1 px-4 text-gray-500 ">{username}</div>
         <div className="col-span-11 grid ml-4  ">
-          <div className="px-2 grid grid-flow-row shadow-sm border rounded ">
+          <div className="px-2 grid grid-flow-row  ">
             <div className="px-2 pt-2 grid grid-flow-row shadow-sm border rounded ">
               <div className="grid grid-cols-3">
                 <div className="font-medium col-end-1 text-gray-500 ">{username}</div>
@@ -165,7 +162,6 @@ export function CommentForm({ refetchComments }) {
         render={({ field }) => (
           <FormItem>
             <FormControl>
-              <Textarea {...form.register} placeholder="" {...field} />
               <Textarea className="min-h-[20px]" {...form.register} placeholder="" {...field} />
             </FormControl>
             <FormMessage />
