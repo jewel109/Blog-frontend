@@ -96,12 +96,20 @@ const likeStory = ErrorWrapper(async (req, res, next) => {
     story.likes.push(user)
     story.likeCount = story?.likes?.length
     isLiked = true
-    console.log(chalk.green(story.likeCount))
+    // console.log(chalk.green(story.likeCount))
+    // console.log(id)
+    // console.log(story.likes)
 
 
     await story.save()
   } else {
-    story.likes.splice(id, 1)
+    const index = story.likes.indexOf(id);
+
+    story.likes.splice(index, 1)
+    // console.log(story.likes)
+
+    // console.log(id)
+    // console.log("spliced")
     story.likeCount = story.likes.length
 
     // console.log(chalk.red(story.likeCount))
