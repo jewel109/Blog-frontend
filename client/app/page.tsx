@@ -126,6 +126,8 @@ export function MainHeader() {
 export default function Home() {
   const [postData, setPostData] = useState([])
   const [user, setUser] = useState(null)
+  const [page, setPage] = useState(1)
+  const [hasMore, setHasMore] = useState(false)
   const data = useSelector((state: RootState) => state.userReducer)
   const storyData = useSelector((state: RootState) => state.storyReducer)
   console.log(storyData)
@@ -145,10 +147,25 @@ export default function Home() {
 
 
   async function forAllStories() {
-    const response = await dispatch(fetchAllStories())
-    console.log(response.payload)
+    //const response = await dispatch(fetchAllStories())
+    //console.log(response.payload)
     // console.log(response.payload)
-    setPostData(response.payload)
+    //setPostData(response.payload)
+    try {
+
+      const { data } = await axiosInstance.get(`/story/getAllStories?page=${page}`)
+      console.log(data.query)
+      if (!data) {
+        throw new Error("no response found")
+      } else if (!data.query) {
+        throw new Error("response have no query")
+      } else {
+        setPostData(data.query)
+        setHasMore(data.query.length == 10)
+      }
+    } catch (error) {
+      return axiosError(error)
+    }
 
   }
   async function likeHandler(slug) {
@@ -165,6 +182,16 @@ export default function Home() {
     }
   }
 
+  const scrollHandler = (event) => {
+    const { target } = event
+    if (target.scrollHeight - target.scrollTop === target.clientHeight && hasMore) {
+      console.log("scroll")
+      setPage(page + 1)
+    }
+    if (target.scrollTop === 0 && page > 1) { // Check if scrolled to top and not on first page
+      setPage(page - 1);
+    }
+  }
 
 
 
@@ -175,19 +202,18 @@ export default function Home() {
     } catch (error) {
       console.log(error)
     }
-  }, [])
-  console.log('postdata ' + postData)
+  }, [page])
   // console.log('postdata ' + postData)
   return (
     <>
       <Provider store={store}>
-        <div className='' >
+        <div className='max-h-screen overflow-hidden' >
 
           <div>
             <MainHeader />
           </div>
           <main >
-            <div className='bg-gray-100'>
+            <div className='bg-gray-100' >
               <div className='grid grid-cols-12 w-8/12 mx-auto pt-6 gap-1  min-h-full'>
                 <div className=' col-start-1 col-end-3 grid justify-self-start'>
 
@@ -199,7 +225,7 @@ export default function Home() {
                 </div>
 
 
-                <div className=' col-start-3 col-end-10 text-white '>
+                <div className=' col-start-3 col-end-10 text-white overflow-scroll  max-h-screen' onScroll={scrollHandler}>
                   {postData.map(({ _id, author, slug, title, createdAt }) => (
 
                     <PostComponet key={_id} author={author} createdAt={createdAt} title={title} detailPostHandler={detailPostHandler} slug={slug} />
@@ -255,9 +281,9 @@ const PostComponet = ({ author, slug, createdAt, title, detailPostHandler }) => 
           </CardTitle>
           <CardFooter className='p-0'>
             <div className='grid grid-flow-col gap-x-5'>
-              <div>like</div>
-              <div>comment </div>
-              <div>save</div>
+              {/* <div  >like</div> */}
+              {/* <div>comment </div> */}
+              {/* <div>save</div> */}
             </div>
           </CardFooter>
         </div>
