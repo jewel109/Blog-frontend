@@ -60,6 +60,15 @@ export default function Page() {
     }
 
   }
+  async function forShowPostDelelte() {
+
+    console.log("show delete")
+    if (userData.username == storyData.author) {
+      setShowDelete(true)
+      console.log("user == author")
+
+    }
+
   }
 
   async function fetchDetailStory() {
@@ -68,11 +77,38 @@ export default function Page() {
 
       setContent(data.data.content)
       setTitle(data.data.title)
-      console.log(data.data.content)
+      console.log(data.data)
+      dispatch(countOfLike(data.data.likeCount))
     } catch (error) {
       axiosError(error)
     }
   }
+  const postDeleteHandler = async () => {
+    try {
+      const token = localStorage.getItem("token")
+      if (!token) {
+        console.log("no token found")
+        return
+      }
+      if (storyData.author !== userData.username) {
+        console.log("story.author is not equals to user.username")
+        return
+      }
+      const headers = { "Authorization": `Bearer ${token}` }
+
+      const response = await axiosInstance.delete(`/story/${storyData.slug}/delete`, { headers: headers })
+      console.log("got the response for delete")
+      router.push("/")
+
+    } catch (error) {
+
+      axiosError(error)
+
+
+    }
+
+  }
+
   useEffect(() => {
     fetchDetailStory()
   }, [])
@@ -81,6 +117,9 @@ export default function Page() {
     console.log(storyData.likeCount)
     console.log(storyData)
   }, [storyData])
+  useEffect(() => {
+    forShowPostDelelte()
+  }, [showDelete])
 
 
   const router = useRouter()
@@ -108,7 +147,13 @@ export default function Page() {
             <div>
               <Card>
                 <CardHeader>
-                  <CardTitle> {title}</CardTitle>
+                  <div className="grid grid-cols-9">
+
+                    <CardTitle className=" col-span-8"> {title}</CardTitle>
+                    <div className={classNames('cursor-pointer ', {
+                      'invisible': !showDelete
+                    })} onClick={postDeleteHandler}>delete</div>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   {content}
