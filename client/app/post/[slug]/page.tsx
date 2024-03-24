@@ -12,9 +12,11 @@ import { countOfLike, isLiked } from "@/app/features/storySlice"
 import CommentInPost from "./commentInPost"
 export default function Page() {
   const storyData = useSelector((state: RootState) => state.storyReducer)
+  const userData = useSelector((state: RootState) => state.userReducer)
   const dispatch = useAppDispatch()
   const [content, setContent] = useState("")
   const [title, setTitle] = useState("")
+  const [showDelete, setShowDelete] = useState(false)
   console.log(storyData)
 
   async function commentClickHandler() {
@@ -25,6 +27,10 @@ export default function Page() {
   async function likeClickHandler() {
     try {
       const token = localStorage.getItem("token")
+      if (!token) {
+        console.log("no")
+        return
+      }
       const headers = { "Authorization": `Bearer ${token}` }
 
       const response = await axiosInstance.post(`/story/${storyData.slug}/like`, {}, { headers: headers })
@@ -35,8 +41,10 @@ export default function Page() {
 
       if (!response.data.data.isLiked) {
         dispatch(isLiked(false))
-      } else {
+      } else if (response.data.data.isLiked) {
         dispatch(isLiked(true))
+      } else {
+        dispatch(isLiked(false))
       }
       console.log(response.data.data.story.likeCount)
       dispatch(countOfLike(response.data.data.story.likeCount))
@@ -45,8 +53,13 @@ export default function Page() {
 
     } catch (error) {
       axiosError(error)
+      if (!userData.username) {
+        return "you can't like"
+
+      }
     }
 
+  }
   }
 
   async function fetchDetailStory() {
