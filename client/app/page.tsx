@@ -5,7 +5,6 @@ import { useState, useEffect } from "react"
 import Profile from './profile/page'
 import { Button } from '@/components/ui/button'
 import { Provider, useSelector } from 'react-redux'
-import { Model, createServer } from "miragejs"
 import { store, useAppDispatch } from './store/store'
 import axiosInstance from '@/lib/axios'
 import axiosError from '@/lib/axiosError'

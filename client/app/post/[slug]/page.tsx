@@ -75,6 +75,7 @@ export default function Page() {
     try {
       const { data } = await axiosInstance.post(`/story/${storyData.slug}`, { activeUser: storyData.author })
 
+
       setContent(data.data.content)
       setTitle(data.data.title)
       console.log(data.data)
@@ -116,6 +117,9 @@ export default function Page() {
     dispatch(countOfLike(storyData.likeCount))
     console.log(storyData.likeCount)
     console.log(storyData)
+    if (!userData.username) {
+      dispatch(isLiked(false))
+    }
   }, [storyData])
   useEffect(() => {
     forShowPostDelelte()
