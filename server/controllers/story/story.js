@@ -44,7 +44,11 @@ const addStory = ErrorWrapper(async (req, res, next) => {
 
 const getAllStories = ErrorWrapper(async (req, res, next) => {
   try {
-    const query = await Story.aggregate([{ $match: {} }]).sort({ createdAt: -1 }).limit(7)   // query.sort("createdAt")
+    const page = parseInt(req.query?.page) || 1
+
+    const limit = parseInt(req.query?.limit) || 10
+    const skip = (page - 1) * limit
+    const query = await Story.aggregate([{ $match: {} }]).sort({ createdAt: -1 }).skip(skip).limit(limit)   // query.sort("createdAt")
     // query.limit(3)
     return res.status(200).json({
       query
@@ -166,8 +170,11 @@ const editStory = ErrorWrapper(async (req, res, next) => {
 
 const deleteStory = ErrorWrapper(async (req, res, next) => {
   const { slug } = req.params
+  console.log(slug)
 
   const story = await Story.findOne({ slug })
+
+  console.log(story)
 
   await story.remove()
 
