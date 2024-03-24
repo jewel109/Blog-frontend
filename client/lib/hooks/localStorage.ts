@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 type SetValue<T> = T | ((val: T) => T);
 
-function useLocalStorage<T>(
+function useStorage<T>(
   key: string,
   initialValue: T,
 ): [T, (value: SetValue<T>) => void] {
@@ -47,4 +47,4 @@ function useLocalStorage<T>(
   return [storedValue, setStoredValue];
 }
 
-export default useLocalStorage;
+export default useStorage;
