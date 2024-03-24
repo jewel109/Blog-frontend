@@ -135,6 +135,7 @@ export const CustomIconWithText = ({ text, children }) => {
 export function CommentForm({ refetchComments }) {
   const commentData = useSelector((state: RootState) => state.commentReducer)
   const storyData = useSelector((state: RootState) => state.storyReducer)
+  const userData = useSelector((state: RootState) => state.userReducer)
   const dispatch = useAppDispatch()
   const formSchema = z.object({
     comment: z.string().min(2, {
@@ -148,6 +149,12 @@ export function CommentForm({ refetchComments }) {
     },
   })
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!userData.username) {
+      console.log("no user found")
+      refetchComments()
+
+      return
+    }
 
     dispatch(addComment({ slug: storyData.slug, content: values.comment }))
     form.resetField("comment")

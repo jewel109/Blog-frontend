@@ -72,6 +72,7 @@ export const storySlice = createSlice({
     },
     isLiked(state, action) {
       state.liked = action.payload
+      console.log(current(state))
     },
     countOfLike(state, action) {
       state.likeCount = action.payload
