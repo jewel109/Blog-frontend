@@ -20,7 +20,7 @@ router.get("/editstory/:slug", [getAccessToRoute, checkStoryExist, checkUserAndS
 
 router.put("/:slug/edit", [getAccessToRoute, checkStoryExist, checkUserAndStoryExist], editStory)
 
-router.delete("/:slug/delete", [getAccessToRoute, checkStoryExist, checkUserAndStoryExist], deleteStory)
+router.delete("/:slug/delete", [getAccessToRoute, checkStoryExist], deleteStory)
 
 router.get("/getallstories", getAllStories)
 
