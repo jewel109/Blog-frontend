@@ -86,6 +86,8 @@ const commentSlice = createSlice({
         })
         .addCase(getAllCommentOfaStory.fulfilled, (state, { payload }) => {
           state.commentList = payload
+          state.commentCount
+
         })
   }
 })

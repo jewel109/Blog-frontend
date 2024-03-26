@@ -8,7 +8,7 @@ import axiosError from "@/lib/axiosError"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { countOfLike, isLiked } from "@/app/features/storySlice"
+import { countOfComment, countOfLike, isLiked } from "@/app/features/storySlice"
 import CommentInPost from "./commentInPost"
 export default function Page() {
   const storyData = useSelector((state: RootState) => state.storyReducer)
@@ -17,6 +17,7 @@ export default function Page() {
   const [content, setContent] = useState("")
   const [title, setTitle] = useState("")
   const [showDelete, setShowDelete] = useState(false)
+  const [commentCount, setCommentCount] = useState(0)
   console.log(storyData)
 
   async function commentClickHandler() {
@@ -78,8 +79,10 @@ export default function Page() {
 
       setContent(data.data.content)
       setTitle(data.data.title)
-      console.log(data.data)
+      console.log(data.data.commentCount)
       dispatch(countOfLike(data.data.likeCount))
+      setCommentCount(data.data.commentCount)
+      dispatch(countOfComment(data.data.commentCount))
     } catch (error) {
       axiosError(error)
     }
@@ -112,7 +115,7 @@ export default function Page() {
 
   useEffect(() => {
     fetchDetailStory()
-  }, [])
+  }, [likeClickHandler, storyData.commentCount])
   useEffect(() => {
     dispatch(countOfLike(storyData.likeCount))
     console.log(storyData.likeCount)
@@ -128,9 +131,9 @@ export default function Page() {
 
   const router = useRouter()
   return (
-    <div>
+    <div className="max-h-screen overflow-hidden">
       <MainHeader />
-      <div className='bg-gray-100'>
+      <div className='bg-gray-100 max-h-screen'>
         <div className='grid grid-cols-12 w-8/12 mx-auto pt-6 gap-1  min-h-screen'>
           <div className=' col-start-1 col-end-3 grid justify-self-start'>
             <div className="grid grid-rows-12 ">
@@ -142,12 +145,18 @@ export default function Page() {
                     })} onClick={() => likeClickHandler()}>{storyData.liked ? "liked" : "like"}</span>
                   <span className="ml-2">{storyData.likeCount}</span>
                 </div>
-                <div onClick={commentClickHandler} className="">Comment</div>
+                <div className="grid grid-flow-col gap-1">
+                  <div onClick={commentClickHandler} className=" cursor-pointer">
+                    Comment
+                  </div>
+                  <div>{commentCount}</div>
+
+                </div>
                 <div className="" >Save</div>
               </div>
             </div>
           </div>
-          <div className=' col-start-3 col-end-10 '>
+          <div className=' col-start-3 col-end-10 max-h-screen overflow-scroll'>
             <div>
               <Card>
                 <CardHeader>
@@ -168,10 +177,12 @@ export default function Page() {
             </div>
             <CommentInPost />
           </div>
-          <div className="col-start-11 col-end-13">rana</div>
-          <div className="col-start-11 col-end-13">
-            <h2 className="text-lg font-medium">Author of the post</h2>
-            <p>{storyData.author}</p>
+          <div className="col-start-11 col-end-13 max-h-screen ">
+            <div className="col-start-11 col-end-13">
+              <h2 className="text-lg font-medium">Author of the post</h2>
+              <p>{storyData.author}</p>
+            </div>
+
           </div>
         </div>
       </div>

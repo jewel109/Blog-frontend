@@ -35,6 +35,7 @@ export default function CommentInPost() {
   useEffect(() => {
     dispatch(getAllCommentOfaStory({ slug: storyData.slug }))
     console.log("i am called")
+    console.log(storyData)
   }, [submit])
 
 

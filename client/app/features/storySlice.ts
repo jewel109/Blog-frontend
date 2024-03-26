@@ -11,6 +11,7 @@ interface Story {
   liked: boolean,
   likes: number,
   likeCount: number,
+  commentCount: number,
   error: string | null,
 
 }
@@ -23,6 +24,7 @@ const initialState: Story = {
   liked: false,
   likes: 0,
   likeCount: 0,
+  commentCount: 0,
   error: null,
 
 }
@@ -76,21 +78,24 @@ export const storySlice = createSlice({
     },
     countOfLike(state, action) {
       state.likeCount = action.payload
+    },
+    countOfComment(state, { payload }) {
+      state.commentCount = payload
     }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllStories.pending, (state: userState) => {
+      .addCase(fetchAllStories.pending, (state: Story) => {
         state.loading = true;
         state.error = null;
         state.success = null;
         console.log(state)
       })
-      .addCase(fetchAllStories.fulfilled, (state: userState, action) => {
+      .addCase(fetchAllStories.fulfilled, (state: Story, action) => {
         state.loading = false;
         state.success = true;
       })
-      .addCase(fetchAllStories.rejected, (state: userState, action) => {
+      .addCase(fetchAllStories.rejected, (state: Story, action) => {
         state.loading = false;
         state.error = action.error.message;
         console.log(state)
@@ -100,5 +105,5 @@ export const storySlice = createSlice({
 
   }
 })
-export const { fetchSlug, fetchUser, countOfLike, isLiked } = storySlice.actions
+export const { fetchSlug, fetchUser, countOfComment, countOfLike, isLiked } = storySlice.actions
 export default storySlice.reducer 

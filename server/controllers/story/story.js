@@ -67,7 +67,8 @@ const detailStory = ErrorWrapper(async (req, res, next) => {
   })
 
   const storyLikesUserIds = story.likes.map(json => json.id)
-  const likeStatus = storyLikesUserIds.includes(activeUser._id)
+  const likeStatus = storyLikesUserIds.includes(activeUser?._id)
+
 
   return res.status(200).json({
     success: true,
