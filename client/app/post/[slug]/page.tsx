@@ -167,7 +167,7 @@ export default function Page() {
               </div>
             </div>
           </div>
-          <div className=' col-start-3 col-end-10 max-h-screen overflow-scroll'>
+          <div className=' col-start-3 col-end-10 max-h-[800px] overflow-scroll'>
             <div>
               <Card>
                 <CardHeader>
