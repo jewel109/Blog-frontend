@@ -20,6 +20,9 @@ import { useAppDispatch, type RootState } from "@/app/store/store";
 import { addComment, getAllCommentOfaStory } from "@/app/features/commentSlice";
 import { useEffect, useState } from "react";
 import { LogOut, MessageSquare, ThumbsUp } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
+import { ToastAction } from "@radix-ui/react-toast";
+import { useRouter } from "next/navigation";
 
 export default function CommentInPost() {
   const commentData = useSelector((state: RootState) => state.commentReducer)
@@ -138,6 +141,7 @@ export function CommentForm({ refetchComments }) {
   const storyData = useSelector((state: RootState) => state.storyReducer)
   const userData = useSelector((state: RootState) => state.userReducer)
   const dispatch = useAppDispatch()
+  const router = useRouter()
   const formSchema = z.object({
     comment: z.string().min(2, {
       message: "comment must be at least 2 characters.",
@@ -152,6 +156,10 @@ export function CommentForm({ refetchComments }) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!userData.username) {
       console.log("no user found")
+      toast({
+        title: "You are not logged in ",
+        action: <ToastAction altText="Log In" onClick={() => { router.push("/profile/login") }}>Log in</ToastAction>
+      })
       refetchComments()
 
       return
