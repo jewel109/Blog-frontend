@@ -166,6 +166,10 @@ export function CommentForm({ refetchComments }) {
     }
 
     dispatch(addComment({ slug: storyData.slug, content: values.comment }))
+    dispatch(getAllCommentOfaStory({ slug: storyData.slug }))
+
+
+
     form.resetField("comment")
     refetchComments()
   }
