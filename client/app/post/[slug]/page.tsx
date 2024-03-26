@@ -133,6 +133,11 @@ export default function Page() {
   useEffect(() => {
     forShowPostDelelte()
   }, [showDelete])
+  useEffect(() => {
+
+    setCommentCount(commentData.commentList.length)
+    console.log("new comment")
+  }, [commentData])
 
 
   const router = useRouter()
