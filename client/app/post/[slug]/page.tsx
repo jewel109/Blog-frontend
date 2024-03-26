@@ -10,9 +10,12 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { countOfComment, countOfLike, isLiked } from "@/app/features/storySlice"
 import CommentInPost from "./commentInPost"
+import { toast } from "@/components/ui/use-toast"
+import { ToastAction } from "@radix-ui/react-toast"
 export default function Page() {
   const storyData = useSelector((state: RootState) => state.storyReducer)
   const userData = useSelector((state: RootState) => state.userReducer)
+  const commentData = useSelector((state: RootState) => state.commentReducer)
   const dispatch = useAppDispatch()
   const [content, setContent] = useState("")
   const [title, setTitle] = useState("")
@@ -29,7 +32,10 @@ export default function Page() {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        console.log("no")
+        toast({
+          title: "you are not logged in",
+          action: <ToastAction altText="Log In" onClick={() => { router.push("/profile/login") }}>Log in</ToastAction>
+        })
         return
       }
       const headers = { "Authorization": `Bearer ${token}` }
