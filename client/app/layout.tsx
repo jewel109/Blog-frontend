@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import { persistor, store } from './store/store'
 import React from 'react'
 import { PersistGate } from 'redux-persist/integration/react'
+import { Toaster } from '@/components/ui/toaster'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,6 +27,7 @@ export default function RootLayout({
             <div>
               {children}
             </div>
+            <Toaster />
 
           </PersistGate>
         </Provider>
