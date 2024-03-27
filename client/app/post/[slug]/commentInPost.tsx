@@ -23,6 +23,8 @@ import { LogOut, MessageSquare, ThumbsUp } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@radix-ui/react-toast";
 import { useRouter } from "next/navigation";
+import axiosError from "@/lib/axiosError";
+import axiosInstance from "@/lib/axios";
 
 export default function CommentInPost() {
   const commentData = useSelector((state: RootState) => state.commentReducer)
@@ -70,7 +72,7 @@ export default function CommentInPost() {
             commentData.commentList ? commentData.commentList.map((comment) => (
 
 
-              <Comment key={comment._id} username={comment.author} time={comment.date} content={comment.content} />
+              <Comment key={comment._id} id={comment._id} username={comment.author} time={comment.date} content={comment.content} />
             )) : (<div className="bg-red-700">no comment</div>)
 
 
@@ -83,7 +85,32 @@ export default function CommentInPost() {
     </>)
 }
 
-const Comment = ({ username, time, content, }) => {
+const Comment = ({ username, time, content, id }) => {
+  const userData = useSelector((state: RootState) => state.userReducer)
+  const router = useRouter()
+  const commentLikeHandler = async () => {
+    try {
+      if (!userData.username) {
+        toast({
+          description: "You are not logged in ",
+          action: <ToastAction altText="Log in" onClick={() => {
+            router.push("/profile/login")
+          }}>Log in</ToastAction>
+        })
+      }
+      console.log(id)
+      const data = await axiosInstance.post(`comment/${id}/like`, { user: userData.username })
+      console.log(data)
+    } catch (error) {
+      axiosError(error)
+      toast({
+        description: "You can't Like. It's a server error",
+      })
+
+    }
+
+
+  }
 
   return (
     <Card className="border-none mt-6">
@@ -100,18 +127,22 @@ const Comment = ({ username, time, content, }) => {
                 {content}
               </div>
             </div>
-            <div className="grid grid-cols-8 mt-[5px]">
-              <div className="font-medium text-gray-500 grid grid-flow-col w-[60px] ">
+            <div className="grid grid-cols-8 mt-[5px] p-1">
+              <div className="text-gray-900 grid grid-flow-col w-[60px] ">
                 <div
-                  className="">
-                  <ThumbsUp size="15" className="mt-1" />
+                  className="cursor-pointer" onClick={commentLikeHandler}>
+                  <ThumbsUp size="17" className="mt-1" />
 
                 </div>
-                <div>like</div>
+                <div className="grid grid-flow-col pl-[7px]">
+                  <div className="px-1">0</div>
+                  <div className="font-light">likes</div>
+
+                </div>
               </div>
-              <div className="font-light text-gray-500 grid  grid-flow-col w-[70px]">
-                <div><MessageSquare size="15" className="mt-[7px]" /></div>
-                <div>reply</div>
+              <div className=" ml-9 text-gray-900 grid  grid-flow-col w-[70px]">
+                <div className="cursor-pointer" ><MessageSquare size="17" className="mt-[7px]" /></div>
+                <div className="font-light text-gray-900">reply</div>
 
               </div>
 
