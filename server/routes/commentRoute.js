@@ -9,7 +9,7 @@ router.post("/:slug/addcomment", [getAccessToRoute, checkStoryExist], addNewComm
 
 router.get("/:slug/getallcomment", getAllCommentByStory)
 
-router.post("/:commment_id/like", commentLike)
+router.post("/:comment_id/like", commentLike)
 
 router.post("/:comment_id/get_comment_like_status", getCommentLikeStatus)
 
