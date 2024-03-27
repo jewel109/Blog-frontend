@@ -17,10 +17,10 @@ const CommentSchema = new mongoose.Schema({
     ref: "User",
     required: true
   },
-  likes: {
+  likes: [{
     type: mongoose.Schema.ObjectId,
     ref: "User"
-  },
+  }],
   likeCount: {
     type: Number,
     default: 0
