@@ -1,6 +1,7 @@
 const ErrorWrapper = require("express-async-handler")
 const Comment = require("../../model/comment")
 const Story = require("../../model/story")
+const User = require("../../model/user")
 const chalk = require("chalk")
 const CustomError = require("../../middlewares/Error/CustomError")
 
@@ -99,35 +100,96 @@ const getAllCommentByStory = ErrorWrapper(async (req, res, next) => {
 })
 
 const commentLike = ErrorWrapper(async (req, res, next) => {
-  const { activeUser } = req.body
-  const { commment_id } = req.params
+  const { user } = req.body
+  const { comment_id } = req.params
+  console.log(user, comment_id)
+  if (!user && !comment_id) {
 
-  const comment = await Comment.findOne(comment_id)
-
-  if (!comment.likes.includes(activeUser._id)) {
-    comment.likes.push(activeUser._id)
-    comment.likeCount = comment.likes.length
-
-    await comment.save()
-  } else {
-    const index = comment.likes.indexOf(activeUser._id)
-    comment.likes.splice(index, 1)
-    comment.likeCount = comment.likes.length
-
-    await comment.save()
+    throw new CustomError("user and comment_id not provided", 400)
   }
 
-  const likeStatus = comment.likes.includes(activeUser._id)
+  User.findOne({ username: user })
+    .exec(
+      (err, activeUser) => {
 
-  return res.status(200).json({
-    success: true,
-    data: comment,
-    likeStatus
-  })
+        if (err) {
+          next(new Error(err))
+
+        }
+        console.log(activeUser)
+        if (!activeUser) {
+          next(new Error("no user is found"))
+        }
+        console.log(activeUser)
+
+        Comment.findOne({ _id: comment_id }).exec((err, comment) => {
+          if (err) {
+            return next(new Error(err))
+          }
+
+          if (!comment) {
+            return next(new CustomError("no comment found with this id", 400))
+
+          }
+          console.log(comment)
+          // if (!comment.likes) {
+          //   return next(new CustomError("no likes property in comment", 400))
+          // }
+          if (!comment.likes?.includes(activeUser?._id)) {
+            comment.likes?.push(activeUser?._id)
+            comment.likeCount = comment.likes?.length
+
+            comment.save()
+
+          } else {
+            const index = comment.likes.indexOf(activeUser?._id)
+            comment.likes?.splice(index, 1)
+            comment.likeCount = comment.likes.length
+
+            comment.save()
+          }
+
+          const likeStatus = comment.likes?.includes(activeUser?._id) || false
+
+
+          return res.status(200).json({
+            success: true,
+            data: comment,
+            likeStatus
+          })
+
+        })
+
+
+
+      }
+    )
+
+
+  // if (!activeUser) {
+  //   throw new Error("no user is found")
+  // }
+  // console.log(activeUser)
+  // const comment = await Comment.findOne(comment_id)
+  //
+  // if (!comment) {
+  //   throw new Error("no comment found with this id")
+  // }
+  // console.log(comment)
+  //
+  // if (!comment.likes) {
+  //   return new Error("no likes array in the comment")
+  // }
+  //
+
+  //
+
+
+
+
+
 
 })
-
-
 const getCommentLikeStatus = ErrorWrapper(async (req, res, next) => {
   const { activeUser } = req.body
   const { comment_id } = req.params
