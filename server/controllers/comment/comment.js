@@ -149,7 +149,7 @@ const commentLike = ErrorWrapper(async (req, res, next) => {
             comment.save()
           }
 
-          const likeStatus = comment.likes?.includes(activeUser?._id) || false
+          const likeStatus = comment.likes?.includes(activeUser?._id)
 
 
           return res.status(200).json({
@@ -193,14 +193,24 @@ const commentLike = ErrorWrapper(async (req, res, next) => {
 const getCommentLikeStatus = ErrorWrapper(async (req, res, next) => {
   const { activeUser } = req.body
   const { comment_id } = req.params
+  if (!activeUser || !comment_id) {
+    next(new Error("activeUser and comment_id is not valid"))
+  }
 
-  const comment = await Comment.findOne(comment_id)
+  const comment = await Comment.findOne({ _id: comment_id })
+  if (!comment) {
+    next(new Error("no comment found"))
+  }
+  const user = await User.findOne({ username: activeUser })
+  if (!user) {
+    next(new Error("no user found"))
+  }
 
-  const likeStatus = comment.likes.includes(activeUser._id)
+  const likeStatus = comment.likes.includes(user._id)
 
   return res.status(200).json({
     success: true,
-    likeStatus
+    likeStatus, likes: comment.likeCount
   })
 })
 
