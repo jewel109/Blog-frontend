@@ -25,10 +25,12 @@ import { ToastAction } from "@radix-ui/react-toast";
 import { useRouter } from "next/navigation";
 import axiosError from "@/lib/axiosError";
 import axiosInstance from "@/lib/axios";
+import useStorage from "@/lib/hooks/localStorage";
 
 export default function CommentInPost() {
   const commentData = useSelector((state: RootState) => state.commentReducer)
   const storyData = useSelector((state: RootState) => state.storyReducer)
+  const userData = useSelector((state: RootState) => state.userReducer)
 
   const [submit, setSubmit] = useState(false)
   console.log(commentData)
@@ -58,7 +60,7 @@ export default function CommentInPost() {
         <div>
           <Card className="border-none">
             <div className="grid grid-flow-col gap-2 p-4">
-              <div className="col-span-1">user</div>
+              <div className="col-span-1 font-medium">{userData.username}</div>
               <div className="col-span-11 grid">
                 <div className="">
                   <CommentForm refetchComments={refetchComments} />
@@ -88,6 +90,10 @@ export default function CommentInPost() {
 const Comment = ({ username, time, content, id }) => {
   const userData = useSelector((state: RootState) => state.userReducer)
   const router = useRouter()
+  const [comment, setComment] = useState(false)
+  const [responsedCommentData, setResponsedCommentData] = useState({
+    likeStatus: false, likeCount: 0
+  })
   const commentLikeHandler = async () => {
     try {
       if (!userData.username) {
@@ -98,9 +104,11 @@ const Comment = ({ username, time, content, id }) => {
           }}>Log in</ToastAction>
         })
       }
-      console.log(id)
       const data = await axiosInstance.post(`comment/${id}/like`, { user: userData.username })
-      console.log(data)
+      console.log(data.data.likeStatus)
+      console.log(data.data.data.likeCount)
+      setComment(data.data.likeStatus)
+      // setResponsedCommentData({ ...responsedCommentData, likeStatus: data.data.likeStatus })
     } catch (error) {
       axiosError(error)
       toast({
@@ -111,6 +119,33 @@ const Comment = ({ username, time, content, id }) => {
 
 
   }
+
+  console.log(id)
+  console.log(responsedCommentData.likeStatus)
+
+  useEffect(() => {
+    const fetchLikeStatus = async () => {
+      try {
+        if (!userData.username) {
+          toast({
+            description: "You are not Logged in ",
+          })
+        }
+        const data = await axiosInstance.post(`/comment/${id}/getCommentLikeStatus`, { activeUser: userData.username })
+        console.log(data.data.likeStatus)
+        setResponsedCommentData({ ...responsedCommentData, likeStatus: data.data.likeStatus, likeCount: data.data.likes })
+        console.log("fetchLikeStatus")
+
+      } catch (error) {
+        axiosError(error)
+        toast({
+          description: "likeStatus can't be fetched . Server Error"
+        })
+
+      }
+    }
+    fetchLikeStatus()
+  }, [comment])
 
   return (
     <Card className="border-none mt-6">
@@ -130,12 +165,12 @@ const Comment = ({ username, time, content, id }) => {
             <div className="grid grid-cols-8 mt-[5px] p-1">
               <div className="text-gray-900 grid grid-flow-col w-[60px] ">
                 <div
-                  className="cursor-pointer" onClick={commentLikeHandler}>
-                  <ThumbsUp size="17" className="mt-1" />
+                  className="  cursor-pointer" onClick={commentLikeHandler} >
+                  <ThumbsUp size="17" className="mt-1 "  {...(responsedCommentData.likeStatus ? { fill: "rgb(185 28 28 /1", color: "rgb(185 28 28 /1)" } : {})} />
 
                 </div>
                 <div className="grid grid-flow-col pl-[7px]">
-                  <div className="px-1">0</div>
+                  <div className="px-1">{responsedCommentData.likeCount}</div>
                   <div className="font-light">likes</div>
 
                 </div>
@@ -150,7 +185,7 @@ const Comment = ({ username, time, content, id }) => {
           </div>
         </div>
       </div>
-    </Card>
+    </Card >
 
   )
 }
