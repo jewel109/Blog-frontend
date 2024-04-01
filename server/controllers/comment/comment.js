@@ -64,7 +64,8 @@ const getAllCommentByStory = ErrorWrapper(async (req, res, next) => {
   const commentList = Comment.aggregate([
     {
       $match: {
-        story: story._id
+        story: story._id,
+        refModel: "Story"
       },
     },
     {
@@ -75,7 +76,7 @@ const getAllCommentByStory = ErrorWrapper(async (req, res, next) => {
             ,
             format: "%d %b %Y"
           }
-        }
+        },
       }
     },
     {
@@ -92,7 +93,7 @@ const getAllCommentByStory = ErrorWrapper(async (req, res, next) => {
     }
     return res.status(200).json({
       success: true,
-      count: story.commentCount,
+      count: resp.length,
       data: resp,
     })
   })
