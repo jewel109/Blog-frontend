@@ -135,7 +135,7 @@ export default function Page() {
   }, [showDelete])
   useEffect(() => {
 
-    setCommentCount(commentData.commentList.length)
+    setCommentCount(commentData?.commentList?.length)
     console.log("new comment")
   }, [commentData])
 
