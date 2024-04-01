@@ -9,7 +9,7 @@ const log = console.log
 
 const addNewCommentToStory = ErrorWrapper(async (req, res, next) => {
   const { slug } = req.params
-  const { content } = req.body
+  const { content, refModel } = req.body
   console.log(req)
   console.log(req.body)
   console.log("content " + content, "slug " + slug)
@@ -27,7 +27,7 @@ const addNewCommentToStory = ErrorWrapper(async (req, res, next) => {
     const comment = await Comment.create({
       story: story._id,
       content,
-      author: req.user._id,
+      refModel: refModel,
       author: req.user.username,
     })
 
