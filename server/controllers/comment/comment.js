@@ -4,6 +4,7 @@ const Story = require("../../model/story")
 const User = require("../../model/user")
 const chalk = require("chalk")
 const CustomError = require("../../middlewares/Error/CustomError")
+const { default: mongoose } = require("mongoose")
 
 const log = console.log
 
@@ -186,11 +187,57 @@ const commentLike = ErrorWrapper(async (req, res, next) => {
   //
 
 
-
-
-
-
 })
+
+const addReplyToAComment = async (req, res, next) => {
+  try {
+    const { comment_id } = req.params
+    const { slug, content, refModel } = req.body
+
+
+    let user = req.user
+
+
+    // console.log(comment_id, slug, user)
+    if (!slug) {
+      next(new Error("slug  is not valid"))
+    }
+    const story = await Story.findOne({ slug })
+    if (!story) {
+      next(new Error("no story found"))
+    }
+
+
+    // console.log(story)
+    const newComment = await Comment.create({
+      story: story._id,
+      content,
+      refModel: refModel,
+      author: req.user.username
+    })
+    if (!newComment) {
+      next(new Error("Comment isn't created"))
+    }
+    // console.log(newComment)
+
+    const comment = await Comment.findOneAndUpdate({ _id: mongoose.Types.ObjectId(comment_id) }, { $push: { replies: newComment._id }, refModel: refModel }, { new: true })
+
+    console.log(comment)
+
+
+    console.log(comment)
+    res.status(200).json({
+      updatedComment: comment
+    })
+
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+}
+
+
+
 const getCommentLikeStatus = ErrorWrapper(async (req, res, next) => {
   const { activeUser } = req.body
   const { comment_id } = req.params
@@ -221,6 +268,7 @@ module.exports = {
   getAllCommentByStory,
   commentLike,
   getCommentLikeStatus,
+  addReplyToAComment,
   chalk,
   log
 
