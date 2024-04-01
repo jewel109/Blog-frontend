@@ -125,11 +125,11 @@ const commentLike = ErrorWrapper(async (req, res, next) => {
 
         Comment.findOne({ _id: comment_id }).exec((err, comment) => {
           if (err) {
-            return next(new Error(err))
+            next(new Error(err))
           }
 
           if (!comment) {
-            return next(new CustomError("no comment found with this id", 400))
+            next(new CustomError("no comment found with this id", 400))
 
           }
           console.log(comment)
