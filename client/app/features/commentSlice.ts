@@ -28,7 +28,7 @@ export const addComment = createAsyncThunk("comment/addComment", async ({ slug, 
     }
 
     const headers = { "Authorization": `Bearer ${token}` }
-    const response = await axiosInstance.post(`/comment/${slug}/addcomment`, { content: content, }, { headers: headers })
+    const response = await axiosInstance.post(`/comment/${slug}/addcomment`, { content: content, refModel: "Story" }, { headers: headers })
 
     console.log(response)
     return response
