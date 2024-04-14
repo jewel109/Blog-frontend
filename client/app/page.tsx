@@ -214,7 +214,7 @@ export default function Home() {
           </div>
           <main >
             <div className='bg-gray-100' >
-              <div className='grid grid-cols-12 w-8/12 mx-auto pt-6 gap-1  min-h-full'>
+              <div className='grid grid-cols-12 w-8/12 mx-auto pt-6 gap-1  min-h-screen'>
                 <div className=' col-start-1 col-end-3 grid justify-self-start'>
 
                   <div className='grid grid-rows-12 justify-self-start h-96'>
@@ -225,7 +225,7 @@ export default function Home() {
                 </div>
 
 
-                <div className=' col-start-3 col-end-10 text-white overflow-scroll  max-h-screen' onScroll={scrollHandler}>
+                <div className=' col-start-3 col-end-10 text-white overflow-scroll min-h-screen max-h-screen ' onScroll={scrollHandler}>
                   {postData.map(({ _id, author, slug, title, createdAt }) => (
 
                     <PostComponet key={_id} author={author} createdAt={createdAt} title={title} detailPostHandler={detailPostHandler} slug={slug} />

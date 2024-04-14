@@ -142,9 +142,9 @@ export default function Page() {
 
   const router = useRouter()
   return (
-    <div className="max-h-screen overflow-hidden">
+    <div className="  min-h-screen  ">
       <MainHeader />
-      <div className='bg-gray-100 max-h-screen'>
+      <div className='bg-gray-100 min-h-screen '>
         <div className='grid grid-cols-12 w-8/12 mx-auto pt-6 gap-1  min-h-screen'>
           <div className=' col-start-1 col-end-3 grid justify-self-start'>
             <div className="grid grid-rows-12 ">
@@ -167,7 +167,7 @@ export default function Page() {
               </div>
             </div>
           </div>
-          <div className=' col-start-3 col-end-10 max-h-[800px] overflow-scroll'>
+          <div className=' col-start-3 col-end-10 max-h-screen overflow-scroll'>
             <div>
               <Card>
                 <CardHeader>

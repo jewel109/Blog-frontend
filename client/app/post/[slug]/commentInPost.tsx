@@ -26,6 +26,12 @@ import { useRouter } from "next/navigation";
 import axiosError from "@/lib/axiosError";
 import axiosInstance from "@/lib/axios";
 import useStorage from "@/lib/hooks/localStorage";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 export default function CommentInPost() {
   const commentData = useSelector((state: RootState) => state.commentReducer)
@@ -177,7 +183,7 @@ const Comment = ({ username, time, content, id }) => {
               </div>
               <div className=" ml-9 text-gray-900 grid  grid-flow-col w-[70px]">
                 <div className="cursor-pointer" ><MessageSquare size="17" className="mt-[7px]" /></div>
-                <div className="font-light text-gray-900">reply</div>
+                <div className="font-light text-gray-900"><ReplyAccordion /></div>
 
               </div>
 
@@ -260,3 +266,47 @@ export function CommentForm({ refetchComments }) {
   )
 }
 
+const ReplyAccordion = () => {
+  const commentLikeHandler = () => { }
+
+
+  return (
+    <div>
+      <Accordion type="single" collapsible>
+        <AccordionItem value="item-1" className="py-0">
+          <AccordionTrigger className="ml-2">reply</AccordionTrigger>
+          <AccordionContent className="">
+            <div>
+
+              <Textarea className="min-w-80" />
+              <Button size="sm" className="mt-3">reply</Button>
+
+              <div className="grid grid-cols-6 mt-[5px] p-1">
+                <div className="text-gray-900 grid grid-flow-col w-[60px] ">
+                  <div
+                    className="  cursor-pointer" onClick={commentLikeHandler} >
+                    <ThumbsUp size="17" className="mt-1 "  /*{...(responsedCommentData.likeStatus ? { fill: "rgb(185 28 28 /1", color: "rgb(185 28 28 /1)" } : {})}*/ />
+
+                  </div>
+                  <div className="grid grid-flow-col pl-[7px]">
+                    <div className="px-1"> 0</div>
+                    <div className="font-light">likes</div>
+
+                  </div>
+                </div>
+                <div className=" ml-9 text-gray-900 grid  grid-flow-col w-[70px]">
+                  <div className="cursor-pointer" ><MessageSquare size="17" className="mt-[7px]" /></div>
+                  <div className="font-light text-gray-900"><ReplyAccordion /></div>
+
+                </div>
+
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
+
+    </div>
+  )
+}
