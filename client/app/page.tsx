@@ -1,15 +1,11 @@
 "use client"
-import Image from 'next/image'
-import Link from 'next/link'
 import { useState, useEffect } from "react"
-import Profile from './profile/page'
 import { Button } from '@/components/ui/button'
 import { Provider, useSelector } from 'react-redux'
 import { store, useAppDispatch } from './store/store'
 import axiosInstance from '@/lib/axios'
 import axiosError from '@/lib/axiosError'
 import type { RootState } from "./store/store"
-import { Bell, LogOut, UserRound } from "lucide-react"
 
 import {
   Card,
@@ -31,8 +27,9 @@ import { Popover } from '@radix-ui/react-popover'
 import { PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { CustomIconWithText } from './post/[slug]/commentInPost'
 import localStorage from 'redux-persist/es/storage'
+import { toast } from '@/components/ui/use-toast'
 
-function add(date) {
+function dateConvert(date: string) {
   return moment(date).format("DD MMM YYYY")
 }
 
@@ -164,6 +161,9 @@ export default function Home() {
         setHasMore(data.query.length == 10)
       }
     } catch (error) {
+      toast({
+        description: "No post found may be server error",
+      })
       return axiosError(error)
     }
 
@@ -274,7 +274,7 @@ const PostComponet = ({ author, slug, createdAt, title, detailPostHandler }) => 
           <p className=' '>{author ? author : "no username found"} </p>
           <p className=' text-gray-400 text-xs'>{
 
-            add(createdAt)
+            dateConvert(createdAt)
           }</p>
           <CardTitle className=''>
             <CardHeader className='pl-0 cursor-pointer' onClick={() => detailPostHandler(slug, author)}>{title}</CardHeader>
