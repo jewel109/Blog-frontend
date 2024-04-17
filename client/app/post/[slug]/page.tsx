@@ -59,9 +59,14 @@ export default function Page() {
 
 
     } catch (error) {
+      toast({
+        description: "you cannot like now"
+      })
       axiosError(error)
       if (!userData.username) {
-        return "you can't like"
+        toast({
+          description: "You haven't logged in yet"
+        })
 
       }
     }

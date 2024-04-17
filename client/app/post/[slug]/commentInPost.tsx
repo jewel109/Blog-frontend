@@ -77,6 +77,7 @@ export default function CommentInPost() {
         </div>
         <div>
           {
+            //TODO must be give the comment type in
             commentData.commentList ? commentData.commentList.map((comment) => (
 
 
@@ -304,6 +305,9 @@ const ReplyAccordion = () => {
             </div>
           </AccordionContent>
         </AccordionItem>
+        <div>
+
+        </div>
       </Accordion>
 
 
