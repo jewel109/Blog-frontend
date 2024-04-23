@@ -291,7 +291,7 @@ const addReplyToAComment = async (req, res, next) => {
     const newComment = await Comment.create({
       story: story._id,
       content,
-      refModel: refModel,
+      refModel: "Comment",
       author: req.user.username
     })
     if (!newComment) {
@@ -299,7 +299,7 @@ const addReplyToAComment = async (req, res, next) => {
     }
     // console.log(newComment)
 
-    const comment = await Comment.findOneAndUpdate({ _id: mongoose.Types.ObjectId(comment_id) }, { $push: { replies: newComment._id }, refModel: refModel }, { new: true })
+    const comment = await Comment.findOneAndUpdate({ _id: mongoose.Types.ObjectId(comment_id) }, { $push: { replies: newComment._id } }, { new: true })
 
     console.log(comment)
 
@@ -345,10 +345,12 @@ const getCommentLikeStatus = ErrorWrapper(async (req, res, next) => {
 module.exports = {
   addNewCommentToStory,
   getAllCommentByStory,
+  getAllRepliesOfAComment,
   commentLike,
   getCommentLikeStatus,
   addReplyToAComment,
   chalk,
   log
+
 
 }
