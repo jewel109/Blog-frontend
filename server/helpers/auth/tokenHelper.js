@@ -4,12 +4,15 @@ const isTokenIncluded = (req) => {
 
   // console.log(`in isTokenIncluded ${req}`)
   // console.log('in req.headers ' + req.headers.authrization)
-  if (!req.headers.authrization) {
-    console.log("authorization  is not found")
-    return new CustomError("authrization in headers is not found")
-  } else if (req.headers.authorization.startsWith("Bearer")
+  // console.log(req.headers)
+
+  if (!req.headers.authorization) {
+    //console.log("authorization in header is not found")
+    throw new Error("authrization in headers is not found")
+  } else if (!req.headers.authorization.startsWith("Bearer")
   ) {
-    return new CustomError("no token in authorization")
+
+    throw new CustomError("no token in authorization")
   }
   return (req.headers.authorization && req.headers.authorization.startsWith("Bearer"))
 
@@ -18,14 +21,17 @@ const isTokenIncluded = (req) => {
 
 const getAccessTokenFromHeader = (req) => {
 
-  const authrization = req.headers.authorization;
+  const authorization = req.headers.authorization;
   // console.log(`authrization=${authrization}`)
-  const accessToken = authrization.split(" ")[1];
-  if(accessToken === "null"){
-    return new CustomError("accessToken is null")
+  if (!authorization) {
+    throw new Error("not valid authorization")
+  }
+  const accessToken = authorization.split(" ")[1];
+  if (accessToken === "null") {
+    throw new CustomError("accessToken is null")
   }
   if (!accessToken) {
-    return new CustomError("accessToken is not found")
+    throw new CustomError("accessToken is not found")
   }
   console.log(`access token ${accessToken}`)
   return accessToken;
