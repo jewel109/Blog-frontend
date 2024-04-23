@@ -34,7 +34,7 @@ export const addComment = createAsyncThunk("comment/addComment", async ({ slug, 
     return response
 
   } catch (error) {
-    console.log("got the error")
+    console.log("addcomment " + error)
     return axiosError(error)
 
   }
@@ -56,7 +56,7 @@ export const getAllCommentOfaStory = createAsyncThunk("comment/getAllComment", a
     return response.data.data
 
   } catch (error) {
-
+    console.log("getAllCommentOfaStory " + error)
     axiosError(error)
   }
 

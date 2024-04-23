@@ -41,6 +41,7 @@ async function forCreatePost({ title, content }) {
     console.log(data)
     postData = data.data.content ?? "no data"
   } catch (error) {
+    console.log("forCreatePost " + error)
     axiosError(error)
   }
 }

@@ -12,6 +12,7 @@ import { countOfComment, countOfLike, isLiked } from "@/app/features/storySlice"
 import CommentInPost from "./commentInPost"
 import { toast } from "@/components/ui/use-toast"
 import { ToastAction } from "@radix-ui/react-toast"
+import { log } from "console"
 export default function Page() {
   const storyData = useSelector((state: RootState) => state.storyReducer)
   const userData = useSelector((state: RootState) => state.userReducer)
@@ -62,6 +63,7 @@ export default function Page() {
       toast({
         description: "you cannot like now"
       })
+      console.log("likeClickHandler " + error)
       axiosError(error)
       if (!userData.username) {
         toast({
@@ -95,7 +97,9 @@ export default function Page() {
       setCommentCount(data.data.commentCount)
       dispatch(countOfComment(data.data.commentCount))
     } catch (error) {
+      console.log("fetchDetailStory " + error)
       axiosError(error)
+
     }
   }
   const postDeleteHandler = async () => {
@@ -116,6 +120,8 @@ export default function Page() {
       router.push("/")
 
     } catch (error) {
+
+      console.log("postDeleteHandler " + error);
 
       axiosError(error)
 

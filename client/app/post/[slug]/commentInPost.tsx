@@ -117,6 +117,7 @@ const Comment = ({ username, time, content, id }) => {
       setComment(data.data.likeStatus)
       // setResponsedCommentData({ ...responsedCommentData, likeStatus: data.data.likeStatus })
     } catch (error) {
+      console.log("commentLikeHandler " + error)
       axiosError(error)
       toast({
         description: "You can't Like. It's a server error",
@@ -144,6 +145,7 @@ const Comment = ({ username, time, content, id }) => {
         console.log("fetchLikeStatus")
 
       } catch (error) {
+        console.log("fetchLikeStatus " + error)
         axiosError(error)
         toast({
           description: "likeStatus can't be fetched . Server Error"
@@ -184,7 +186,7 @@ const Comment = ({ username, time, content, id }) => {
               </div>
               <div className=" ml-9 text-gray-900 grid  grid-flow-col w-[70px]">
                 <div className="cursor-pointer" ><MessageSquare size="17" className="mt-[7px]" /></div>
-                <div className="font-light text-gray-900"><ReplyAccordion /></div>
+                <div className="font-light text-gray-900"><ReplyAccordion id={id} /></div>
 
               </div>
 

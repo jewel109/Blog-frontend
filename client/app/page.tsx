@@ -178,6 +178,7 @@ export default function Home() {
       const response = await axiosInstance.post(`/story/${slug}/like`, {}, { headers: headers })
 
     } catch (error) {
+      console.log("likeHandler " + error)
       axiosError(error)
     }
   }

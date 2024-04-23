@@ -40,6 +40,7 @@ export const addStory = createAsyncThunk("addStory", async ({ title, content }) 
     const postData = data.data.content ?? "no data"
     return postData
   } catch (error) {
+    console.log("addStory " + error)
     axiosError(error)
   }
 })
@@ -56,6 +57,7 @@ export const fetchAllStories = createAsyncThunk("story", async () => {
       return data.query
     }
   } catch (error) {
+    console.log("fetchAllStories " + error)
     return axiosError(error)
   }
 

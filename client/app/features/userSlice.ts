@@ -27,6 +27,7 @@ export const accessUser = createAsyncThunk("user/getAccessToServer", async () =>
     return data
     return data.user.username
   } catch (error) {
+    console.log("accessUser " + error)
     return axiosError(error)
   }
 })
@@ -81,6 +82,7 @@ export const loginUser = createAsyncThunk("user/login", async ({ email, password
     }
 
   } catch (error) {
+    console.log("loginUser " + error)
     return axiosError(error)
   }
 

@@ -45,6 +45,7 @@ async function forLogin({ email, password }) {
     const tok = localStorage.getItem("token")
     console.log(tok)
   } catch (error) {
+    console.log("forLogin " + error)
     axiosError(error)
   }
 }
