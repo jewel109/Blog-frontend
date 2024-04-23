@@ -28,7 +28,7 @@ const addNewCommentToStory = ErrorWrapper(async (req, res, next) => {
     const comment = await Comment.create({
       story: story._id,
       content,
-      refModel: refModel,
+      refModel: "Story",
       author: req.user.username,
     })
 
@@ -55,20 +55,37 @@ const addNewCommentToStory = ErrorWrapper(async (req, res, next) => {
 
 })
 
+const getAllRepliesOfAComment = ErrorWrapper(async (req, res, next) => {
+  const { comment_id } = req.params
+  if (!comment_id) {
+    return next("No id found")
+  }
+  console.log(comment_id)
 
-const getAllCommentByStory = ErrorWrapper(async (req, res, next) => {
-  const { slug } = req.params
 
-  const story = await Story.findOne({ slug })
-  console.log(story._id)
+  const comment = await Comment.findOne({
+    _id: mongoose.Types.ObjectId(comment_id)
+  })
 
-  const commentList = Comment.aggregate([
+  console.log(comment.replies)
+
+  if (!comment.replies) {
+    return next("no replies found")
+  }
+
+  //
+  // const replies = await Comment.find({ _id: { $in: comment.replies.map(id => mongoose.Types.ObjectId(id)) } })
+  //never use callback and async/await in same function
+  // console.log(replies)
+  const allReply = await Comment.aggregate([
     {
       $match: {
-        story: story._id,
-        refModel: "Story"
-      },
+        _id: {
+          $in: comment.replies.map(id => mongoose.Types.ObjectId(id))
+        }
+      }
     },
+
     {
       $addFields: {
         date: {
@@ -86,17 +103,11 @@ const getAllCommentByStory = ErrorWrapper(async (req, res, next) => {
 
       }
     }
-  ], function(err, resp) {
-    if (err) {
-      return res.status(500).json({
-        message: `${err}`
-      })
-    }
-    return res.status(200).json({
-      success: true,
-      count: resp.length,
-      data: resp,
-    })
+  ])
+
+  console.log(allReply)
+  res.status(200).json({
+    allReply
   })
 
 })
