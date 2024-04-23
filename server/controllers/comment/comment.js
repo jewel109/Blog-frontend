@@ -168,63 +168,84 @@ const getAllCommentByStory = ErrorWrapper(async (req, res, next) => {
 
   }
 
-  User.findOne({ username: user })
-    .exec(
-      (err, activeUser) => {
+})
 
-        if (err) {
-          next(new Error(err))
+const commentLike = async (req, res, next) => {
+  try {
+    const { user } = req.body
+    const { comment_id } = req.params
+    console.log(user, comment_id)
+    if (!user && !comment_id) {
 
-        }
-        console.log(activeUser)
-        if (!activeUser) {
-          next(new Error("no user is found"))
-        }
-        console.log(activeUser)
+      throw new CustomError("user and comment_id not provided", 400)
+    }
 
-        Comment.findOne({ _id: comment_id }).exec((err, comment) => {
+    User.findOne({ username: user })
+      .exec(
+        (err, activeUser) => {
+
           if (err) {
             next(new Error(err))
+            return
           }
-
-          if (!comment) {
-            next(new CustomError("no comment found with this id", 400))
-
+          console.log(activeUser)
+          if (!activeUser) {
+            next(new Error("no user is found"))
+            return
           }
-          console.log(comment)
-          // if (!comment.likes) {
-          //   return next(new CustomError("no likes property in comment", 400))
-          // }
-          if (!comment.likes?.includes(activeUser?._id)) {
-            comment.likes?.push(activeUser?._id)
-            comment.likeCount = comment.likes?.length
+          console.log(activeUser)
 
-            comment.save()
+          Comment.findOne({ _id: comment_id }).exec((err, comment) => {
+            if (err) {
+              next(new Error(err))
+              return
+            }
 
-          } else {
-            const index = comment.likes.indexOf(activeUser?._id)
-            comment.likes?.splice(index, 1)
-            comment.likeCount = comment.likes.length
+            if (!comment) {
+              next(new CustomError("no comment found with this id", 400))
 
-            comment.save()
-          }
+              return
+            }
+            console.log(comment)
+            // if (!comment.likes) {
+            //   return next(new CustomError("no likes property in comment", 400))
+            // }
+            if (!comment.likes?.includes(activeUser?._id)) {
+              comment.likes?.push(activeUser?._id)
+              comment.likeCount = comment.likes?.length
 
-          const likeStatus = comment.likes?.includes(activeUser?._id)
+              comment.save()
 
+            } else {
+              const index = comment.likes.indexOf(activeUser?._id)
+              comment.likes?.splice(index, 1)
+              comment.likeCount = comment.likes.length
 
-          return res.status(200).json({
-            success: true,
-            data: comment,
-            likeStatus
+              comment.save()
+            }
+
+            const likeStatus = comment.likes?.includes(activeUser?._id)
+
+            console.log(comment)
+            return res.status(200).json({
+              success: true,
+              data: comment,
+              likeStatus: likeStatus
+            })
+
           })
 
-        })
 
 
+        }
+      )
 
-      }
-    )
 
+  } catch (error) {
+    console.log(error)
+    next(error)
+
+  }
 
   // if (!activeUser) {
   //   throw new Error("no user is found")
@@ -245,7 +266,7 @@ const getAllCommentByStory = ErrorWrapper(async (req, res, next) => {
   //
 
 
-})
+}
 
 const addReplyToAComment = async (req, res, next) => {
   try {
