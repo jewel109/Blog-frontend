@@ -112,13 +112,60 @@ const getAllRepliesOfAComment = ErrorWrapper(async (req, res, next) => {
 
 })
 
-const commentLike = ErrorWrapper(async (req, res, next) => {
-  const { user } = req.body
-  const { comment_id } = req.params
-  console.log(user, comment_id)
-  if (!user && !comment_id) {
+const getAllCommentByStory = ErrorWrapper(async (req, res, next) => {
+  try {
+    const { slug } = req.params
 
-    throw new CustomError("user and comment_id not provided", 400)
+    const story = await Story.findOne({ slug })
+    if (!story) {
+      throw new Error("Story is not foun with this slug")
+    }
+    console.log(story._id)
+
+    const commentList = Comment.aggregate([
+      {
+        $match: {
+          story: story._id,
+          refModel: "Story"
+        },
+      },
+      {
+        $addFields: {
+          date: {
+            $dateToString: {
+              date: "$createdAt"
+              ,
+              format: "%d %b %Y"
+            }
+          },
+        }
+      },
+      {
+        $sort: {
+          "createdAt": -1
+
+        }
+      }
+    ], function(err, resp) {
+      if (err) {
+        return res.status(500).json({
+          message: `${err}`
+        })
+      }
+      console.log(resp)
+      return res.status(200).json({
+        success: true,
+        count: resp.length,
+        data: resp,
+      })
+    })
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      error: `${error}`
+    })
+
   }
 
   User.findOne({ username: user })
