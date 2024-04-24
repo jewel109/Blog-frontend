@@ -112,6 +112,37 @@ const getAllRepliesOfAComment = ErrorWrapper(async (req, res, next) => {
 
 })
 
+const totalLikedComment = async (req, res, next) => {
+  try {
+    const { username } = req.body
+    if (!username) {
+      throw new Error("username is not provided")
+    }
+    const user = await User.findOne({ username: username })
+    if (!user) {
+      throw new Error("no user found with this username")
+    }
+
+    console.log(user)
+
+    const totalComment = await Comment.find({ refModel: "Story", likes: { $in: [mongoose.Types.ObjectId(user._id)] } })
+    if (!totalComment) {
+      throw new Error("sorry totalComment is not found")
+    }
+    console.log(totalComment.length)
+
+    res.status(200).json({
+      data: totalComment,
+      totalLikedComment: totalComment.length
+    })
+
+  } catch (error) {
+    console.error(error)
+    next(error)
+
+  }
+}
+
 const getAllCommentByStory = ErrorWrapper(async (req, res, next) => {
   try {
     const { slug } = req.params
@@ -350,7 +381,8 @@ module.exports = {
   getCommentLikeStatus,
   addReplyToAComment,
   chalk,
-  log
+  log,
+  totalLikedComment
 
 
 }
