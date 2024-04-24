@@ -221,7 +221,10 @@ export default function Home() {
                   <div className='grid grid-rows-12 justify-self-start h-96'>
                     <p className='hover:bg-indigo-100 cursor-pointer pl-2 w-[200px]'>Home</p>
                     <p className='hover:bg-indigo-100 cursor-pointer pl-2 mt-1'>About</p>
-                    <p className='hover:bg-indigo-100 cursor-pointer pl-2 mt-1'>Liked</p>
+                    <p className='hover:bg-indigo-100 cursor-pointer pl-2 mt-1' onClick={() => {
+
+
+                    }}>Liked</p>
                   </div>
                 </div>
 
