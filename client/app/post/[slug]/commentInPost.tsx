@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { useAppDispatch, type RootState } from "@/app/store/store";
 import { addComment, getAllCommentOfaStory } from "@/app/features/commentSlice";
 import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { LogOut, MessageSquare, ThumbsUp } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@radix-ui/react-toast";
@@ -32,6 +33,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { LoadingSpinner } from "@/components/ui/loading";
 
 export default function CommentInPost() {
   const commentData = useSelector((state: RootState) => state.commentReducer)
@@ -157,44 +159,46 @@ const Comment = ({ username, time, content, id }) => {
   }, [comment])
 
   return (
-    <Card className="border-none mt-6">
-      <div className="grid grid-cols-12 gap-2 py-1">
-        <div className="col-span-1 px-4 text-gray-500 ">{username}</div>
-        <div className="col-span-11 grid ml-4  ">
-          <div className="px-2 grid grid-flow-row  ">
-            <div className="px-2 pt-2 grid grid-flow-row shadow-sm border rounded ">
-              <div className="grid grid-cols-3">
-                <div className="font-medium col-end-1 text-gray-500 ">{username}</div>
-                <div className="font-thin col-start-1 ml-4">{time}</div>
-              </div>
-              <div className="py-3">
-                {content}
-              </div>
-            </div>
-            <div className="grid grid-cols-8 mt-[5px] p-1">
-              <div className="text-gray-900 grid grid-flow-col w-[60px] ">
-                <div
-                  className="  cursor-pointer" onClick={commentLikeHandler} >
-                  <ThumbsUp size="17" className="mt-1 "  {...(responsedCommentData.likeStatus ? { fill: "rgb(185 28 28 /1", color: "rgb(185 28 28 /1)" } : {})} />
-
+    <Suspense fallback={<LoadingSpinner className={"mr-2 h-4 w-4 animate-spin"} >loading</LoadingSpinner>}>
+      <Card className="border-none mt-6">
+        <div className="grid grid-cols-12 gap-2 py-1">
+          <div className="col-span-1 px-4 text-gray-500 ">{username}</div>
+          <div className="col-span-11 grid ml-4  ">
+            <div className="px-2 grid grid-flow-row  ">
+              <div className="px-2 pt-2 grid grid-flow-row shadow-sm border rounded ">
+                <div className="grid grid-cols-3">
+                  <div className="font-medium col-end-1 text-gray-500 ">{username}</div>
+                  <div className="font-thin col-start-1 ml-4">{time}</div>
                 </div>
-                <div className="grid grid-flow-col pl-[7px]">
-                  <div className="px-1">{responsedCommentData.likeCount}</div>
-                  <div className="font-light">likes</div>
-
+                <div className="py-3">
+                  {content}
                 </div>
               </div>
-              <div className=" ml-9 text-gray-900 grid  grid-flow-col w-[70px]">
-                <div className="cursor-pointer" ><MessageSquare size="17" className="mt-[7px]" /></div>
-                <div className="font-light text-gray-900"><ReplyAccordion id={id} /></div>
+              <div className="grid grid-cols-8 mt-[5px] p-1">
+                <div className="text-gray-900 grid grid-flow-col w-[60px] ">
+                  <div
+                    className="  cursor-pointer" onClick={commentLikeHandler} >
+                    <ThumbsUp size="17" className="mt-1 "  {...(responsedCommentData.likeStatus ? { fill: "rgb(185 28 28 /1", color: "rgb(185 28 28 /1)" } : {})} />
+
+                  </div>
+                  <div className="grid grid-flow-col pl-[7px]">
+                    <div className="px-1">{responsedCommentData.likeCount}</div>
+                    <div className="font-light">likes</div>
+
+                  </div>
+                </div>
+                <div className=" ml-9 text-gray-900 grid  grid-flow-col w-[70px]">
+                  <div className="cursor-pointer" ><MessageSquare size="17" className="mt-[7px]" /></div>
+                  <div className="font-light text-gray-900"><ReplyAccordion id={id} /></div>
+
+                </div>
 
               </div>
-
             </div>
           </div>
         </div>
-      </div>
-    </Card >
+      </Card >
+    </Suspense>
 
   )
 }
