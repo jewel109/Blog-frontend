@@ -1,6 +1,6 @@
 const express = require("express")
 const { getAccessToRoute } = require("../middlewares/auth/accessRoute")
-const { commentLike, addNewCommentToStory, getAllCommentByStory, getCommentLikeStatus, addReplyToAComment, getAllRepliesOfAComment } = require("../controllers/comment/comment")
+const { commentLike, addNewCommentToStory, getAllCommentByStory, getCommentLikeStatus, addReplyToAComment, getAllRepliesOfAComment, totalLikedComment } = require("../controllers/comment/comment")
 const { checkStoryExist } = require("../middlewares/database/databaseErrorHandler")
 
 const router = express.Router()
@@ -13,6 +13,7 @@ router.post("/:comment_id/like", commentLike)
 
 router.post("/:comment_id/getCommentLikeStatus", getCommentLikeStatus)
 router.post("/:comment_id/addReplyToAComment", getAccessToRoute, addReplyToAComment)
+router.get("/totalLikedComment", totalLikedComment)
 
 
 
