@@ -4,7 +4,7 @@ const Story = require("../../model/story")
 const User = require("../../model/user")
 const chalk = require("chalk")
 const CustomError = require("../../middlewares/Error/CustomError")
-const { default: mongoose } = require("mongoose")
+const { default: mongoose, Promise } = require("mongoose")
 
 const log = console.log
 

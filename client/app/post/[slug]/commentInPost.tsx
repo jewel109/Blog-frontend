@@ -32,7 +32,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { LoadingSpinner } from "@/components/ui/loading";
 
 export default function CommentInPost() {
   const commentData = useSelector((state: RootState) => state.commentReducer)
@@ -159,6 +158,7 @@ const Comment = ({ username, time, content, id }) => {
 
   return (
     <Suspense fallback={<LoadingSpinner className={"mr-2 h-4 w-4 animate-spin"} >loading</LoadingSpinner>}>
+    <Suspense fallback={}>
       <Card className="border-none mt-6">
         <div className="grid grid-cols-12 gap-2 py-1">
           <div className="col-span-1 px-4 text-gray-500 ">{username}</div>
