@@ -6,6 +6,7 @@ const {
 const CustomError = require('../../middlewares/Error/CustomError')
 const Story = require('../../model/story')
 const User = require('../../model/user')
+const { default: mongoose } = require('mongoose')
 
 const profile = ErrorWrapper(async (req, res) => {
   return res.status(200).json({
@@ -40,7 +41,58 @@ const editProfile = ErrorWrapper(async (req, res) => {
     message: 'user found',
   })
 })
+const totalLikedStory = async (req, res, next) => {
+  try {
+    const { username } = req.body
+    if (!username) {
+      throw new Error("username is not provided")
+    }
+    const user = await User.findOne({ username: username })
+    if (!user) {
+      throw new Error("no user found with this username")
+    }
 
+    console.log(user)
+
+    //TODO i have to find story which have not null likes properties
+    const allStory = await Story.find({
+      likes: { $in: [mongoose.Types.ObjectId(user._id)] }
+    })
+    //TODO how to do this with aggregation
+
+    if (!allStory) {
+      throw new Error("allStory is not found")
+    }
+
+    console.log(allStory)
+    console.log(allStory.length)
+
+    // const aggregationData = await Story.aggregate([
+    //   {
+    //     $match: {
+    //       _id: {
+    //         $in:          }
+    //     }
+    //   }
+    // ],)
+    //
+    // if (!aggregationData) {
+    //   throw new Erro("aggregationData is not found")
+    // }
+    // console.log(aggregationData)
+    //
+
+    res.status(200).json({
+      data: allStory,
+      totalLiked: allStory.length
+    })
+
+  } catch (error) {
+    console.error(error)
+    next(error)
+
+  }
+}
 const changePassword = ErrorWrapper(async (req, res, next) => {
   const { newPassword, oldPassword } = req.body
 
@@ -127,7 +179,7 @@ const readListPage = ErrorWrapper(async (req, res, next) => {
   return res.status(200).json({
     success: true,
     data: readList,
-    message:"Your readlist"
+    message: "Your readlist"
   })
 })
 
@@ -137,4 +189,5 @@ module.exports = {
   changePassword,
   addStoryToReadList,
   readListPage,
+  totalLikedStory,
 }
