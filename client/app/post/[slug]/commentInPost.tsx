@@ -349,21 +349,42 @@ const ReplyAction = ({ ...props }) => {
   )
 }
 
-const ReplyAccordion = () => {
+const ReplyAccordion = ({ ...props }) => {
+  const [replies, setReplies] = useState([])
+  const { id } = props
   const commentLikeHandler = () => { }
 
+  useEffect(() => {
+    const fetchReplies = async () => {
+      try {
+        const data = await axiosInstance.get(`/comment/${id}/getallreplies`)
+        console.log(data.data)
+        setReplies(data.data.allReply)
+
+      } catch (error) {
+        console.log("onSubmit " + error)
+        axiosError(error)
+        toast({
+          description: "Replies can't be fetched"
+        })
+      }
+    }
+    fetchReplies()
+  }, [])
+
+  console.log(replies)
 
   return (
     <div>
       <Accordion type="single" collapsible>
-        <AccordionItem value="item-1" className="py-0">
-          <AccordionTrigger className="ml-2">reply</AccordionTrigger>
-          <AccordionContent className="">
+        <AccordionItem value="item-1" className="" >
+          <AccordionTrigger className="ml-2" >reply</AccordionTrigger>
+          <AccordionContent className="w-full "  >
             <div>
 
-              <Textarea className="min-w-80" />
-              <Button size="sm" className="mt-3">reply</Button>
-
+              <div className="w-[400px] min-w-[200px]">
+                <ReplyAction comment_id={id} />
+              </div>
               <div className="grid grid-cols-6 mt-[5px] p-1">
                 <div className="text-gray-900 grid grid-flow-col w-[60px] ">
                   <div
@@ -379,20 +400,29 @@ const ReplyAccordion = () => {
                 </div>
                 <div className=" ml-9 text-gray-900 grid  grid-flow-col w-[70px]">
                   <div className="cursor-pointer" ><MessageSquare size="17" className="mt-[7px]" /></div>
-                  <div className="font-light text-gray-900"><ReplyAccordion /></div>
+                  <div className="font-light text-gray-900"><ReplyAccordion id={id} /></div>
 
                 </div>
 
               </div>
             </div>
+            <div>
+              {
+                replies.map(({ _id, author, date, content }) => (
+
+
+                  <Comment key={_id} id={_id} username={author} time={date} content={content}></Comment>
+                )
+
+                )
+              }
+            </div>
           </AccordionContent>
         </AccordionItem>
-        <div>
 
-        </div>
       </Accordion>
 
 
-    </div>
+    </div >
   )
 }
