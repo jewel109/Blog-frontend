@@ -272,6 +272,82 @@ export function CommentForm({ refetchComments }) {
   </Form>
   )
 }
+const ReplyAction = ({ ...props }) => {
+  const { comment_id } = props
+
+
+  const userData = useSelector((state: RootState) => state.userReducer)
+  const storyData = useSelector((state: RootState) => state.storyReducer)
+
+  const router = useRouter()
+
+  const formSchema = z.object({
+    comment: z.string().min(2, {
+      message: "comment must be at least 2 characters.",
+    }),
+  })
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      comment: "",
+    },
+  })
+  console.log(comment_id)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+
+
+      if (!userData.username) {
+        console.log("no user found")
+        toast({
+          title: "You are not logged in ",
+          action: <ToastAction altText="Log In" onClick={() => { router.push("/profile/login") }}>Log in</ToastAction>
+        })
+
+        return
+      }
+      const savedToken = localStorage.getItem("token")
+      const headers = { "Authorization": `Bearer ${savedToken}` }
+
+      const response = await axiosInstance.post(`/comment/${comment_id}/addReplyToAComment`, { slug: storyData.slug, refModel: "Comment", content: values.comment }, { headers: headers })
+      console.log(response)
+      if (response) {
+        toast({
+          description: "You have commented successfully"
+        })
+      }
+
+      // console.log(comment_id)
+
+
+      form.resetField("comment")
+    } catch (error) {
+      console.log("onSubmit " + error)
+      axiosError(error)
+      toast({
+        description: " It's a server error",
+      })
+    }
+  }
+  return (<Form {...form}>
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <FormField
+        control={form.control}
+        name="comment"
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <Textarea className="min-h-[20px]" {...form.register} placeholder="" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <Button type="submit">Publish</Button>
+    </form>
+  </Form>
+  )
+}
 
 const ReplyAccordion = () => {
   const commentLikeHandler = () => { }
