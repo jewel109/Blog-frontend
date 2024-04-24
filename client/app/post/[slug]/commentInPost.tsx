@@ -157,7 +157,6 @@ const Comment = ({ username, time, content, id }) => {
   }, [comment])
 
   return (
-    <Suspense fallback={<LoadingSpinner className={"mr-2 h-4 w-4 animate-spin"} >loading</LoadingSpinner>}>
     <Suspense fallback={}>
       <Card className="border-none mt-6">
         <div className="grid grid-cols-12 gap-2 py-1">
