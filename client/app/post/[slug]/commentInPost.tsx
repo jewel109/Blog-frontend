@@ -157,7 +157,6 @@ const Comment = ({ username, time, content, id }) => {
   }, [comment])
 
   return (
-    <Suspense fallback={}>
     <Suspense >
       <Card className="border-none mt-6">
         <div className="grid grid-cols-12 gap-2 py-1">
