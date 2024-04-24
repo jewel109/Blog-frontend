@@ -18,7 +18,6 @@ import { Input } from "@/components/ui/input"
 import { useSelector } from "react-redux";
 import { useAppDispatch, type RootState } from "@/app/store/store";
 import { addComment, getAllCommentOfaStory } from "@/app/features/commentSlice";
-import { useEffect, useState } from "react";
 import { Suspense, useEffect, useState } from "react";
 import { LogOut, MessageSquare, ThumbsUp } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
