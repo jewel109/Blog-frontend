@@ -127,38 +127,62 @@ const changePassword = ErrorWrapper(async (req, res, next) => {
   })
 })
 
-const addStoryToReadList = ErrorWrapper(async (req, res, next) => {
-  const { slug } = req.params
-  const { activeUser } = req.body
+const addStoryToReadList = async (req, res, next) => {
+  try {
+    const { slug } = req.body
+    const { username } = req.body
 
-  const story = await Story.findOne(slug)
-  const user = await User.findById(activeUser._id)
-  if (!story || !user) {
-    return res.status(200).json({
-      success: false,
-      message: 'User/story is not found',
-    })
+    if (!slug) {
+      throw new Error("slug is not provided")
+    }
+    if (!username) {
+      throw new Error("username is not provided")
+    }
+    const story = await Story.findOne({ slug: slug })
+    if (!story) {
+      throw new Error("story is not found")
+    }
+    // console.log(story)
+
+    const user = await User.findOne({ username: username })
+    if (!user) {
+      throw new Error("user is not found")
+    }
+    console.log(user)
+    const findUserHavingIdInReadList = await User.findOne({ _id: mongoose.Types.ObjectId(user._id), readList: { $in: [mongoose.Types.ObjectId(story._id)] } })
+
+    console.log(`if found the user having the story id  ${findUserHavingIdInReadList} `)
+    if (findUserHavingIdInReadList) {
+      console.log("in here")
+      console.log(findUserHavingIdInReadList)
+    }
+    if (!findUserHavingIdInReadList) {
+      const updatedUser = await User.findOneAndUpdate({ username: username }, { $addToSet: { readList: story._id } }, { new: true })
+      if (!updatedUser) {
+        throw new Error("updatedUser is not found")
+      }
+      console.log(updatedUser)
+
+      console.log("if not found the user in the readlist" + updatedUser)
+
+    }
+
+    if (findUserHavingIdInReadList?.readList) {
+
+      const updatedUser = await User.findOneAndUpdate({ username: username }, { $pull: { "readList": mongoose.Types.ObjectId(story._id) } }, { new: true })
+      console.log("user updated " + updatedUser)
+    }
+
+
+
+  } catch (error) {
+    console.error(error)
+    next(error)
+
   }
-  if (!user.readList.includes(story.id)) {
-    user.readList.push(story.id)
-    user.readListLength = user.readList.length
-    await user.save()
-  } else {
-    const index = user.readList.indexOf(story.id)
-    user.readList.splice(index, 1)
-    user.readList.readListLength = user.readList.length
-    await user.save()
-  }
 
-  const status = user.readList.includes(story.id)
 
-  return res.status(200).json({
-    success: true,
-    story: story,
-    user: user,
-    status: status,
-  })
-})
+}
 
 const readListPage = ErrorWrapper(async (req, res, next) => {
   const user = await User.findById(req.user.id)
