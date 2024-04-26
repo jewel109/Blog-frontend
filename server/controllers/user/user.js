@@ -190,34 +190,53 @@ const addStoryToReadList = async (req, res, next) => {
 
 }
 
-const readListPage = ErrorWrapper(async (req, res, next) => {
-  const user = await User.findById(req.user.id)
-  if (!user) {
-    return res.status(200).json({
-      success: false,
-      message: 'User is not found',
-    })
+
+const showReadList = async (req, res, next) => {
+  try {
+
+    const user = await User.findById(req.user._id)
+    if (!user) {
+      throw new Error("user is not found")
+    }
+    if (user.readList) {
+      const storyData = await Story.find({
+        _id: {
+          $in: user?.readList?.map(id => mongoose.Types.ObjectId(id))
+        }
+      })
+      console.log(storyData)
+      res.status(200).json({
+        data: storyData
+      })
+      return
+    }
+    next("no data found")
+
+  } catch (error) {
+    console.error(error)
+    next(error)
   }
-  const readList = []
 
-  for (let index = 0; index < user.readList.length; index++) {
-    let story = await Story.findById(user.readList[index]).populate('author')
-
-    readList.push(story)
-  }
-
-  return res.status(200).json({
-    success: true,
-    data: readList,
-    message: "Your readlist"
-  })
-})
+  // const readList = []
+  //
+  // for (let index = 0; index < user.readList.length; index++) {
+  //   let story = await Story.findById(user.readList[index]).populate('author')
+  //
+  //   readList.push(story)
+  // }
+  //
+  // return res.status(200).json({
+  //   success: true,
+  //   data: readList,
+  //   message: "Your readlist"
+  // })
+}
 
 module.exports = {
   profile,
   editProfile,
   changePassword,
   addStoryToReadList,
-  readListPage,
   totalLikedStory,
+  showReadList
 }
