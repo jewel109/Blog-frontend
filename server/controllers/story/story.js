@@ -148,6 +148,31 @@ const editStoryPage = ErrorWrapper(async (req, res, next) => {
 
 })
 
+const searchInStory = async (req, res, next) => {
+  try {
+    const { searchString } = req.body
+    if (!searchString) {
+      return next("you should give a searchString")
+    }
+
+    const searchResult = await Story.find({
+      $text: {
+        $search: searchString
+      }
+    })
+    console.log(searchResult)
+
+    res.status(200).json({
+      searchResult
+    })
+
+
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+}
+
 const editStory = ErrorWrapper(async (req, res, next) => {
   const { slug } = req.params
   const { title, content } = req.body
@@ -193,5 +218,6 @@ module.exports = {
   likeStory,
   editStoryPage,
   editStory,
+  searchInStory,
   deleteStory
 }
