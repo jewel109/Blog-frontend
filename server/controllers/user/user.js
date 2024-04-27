@@ -7,6 +7,7 @@ const CustomError = require('../../middlewares/Error/CustomError')
 const Story = require('../../model/story')
 const User = require('../../model/user')
 const Message = require("../../model/message.js")
+const Notification = require("../../model/notification.js")
 const { default: mongoose } = require('mongoose')
 const handleError = require('../../helpers/libraries/handleError.js')
 
@@ -330,9 +331,34 @@ const sendMessageToUser = async (req, res, next) => {
   }
 }
 
+const makeNotification = async (req, res, next) => {
+  try {
+    const { message } = req.body
+
+    if (!message) next("no message for notification found")
+
+    const notification = await Notification.create({ message: message, sendingTo: req.user._id }).catch(handleError)
+    if (!notification) {
+      next("notification is not created")
+    }
+
+
+    const user = await User.findOneAndUpdate({ _id: mongoose.Types.ObjectId(req.user._id) }, { $addToSet: { notifications: notification._id } }, { new: true }).catch(handleError)
+    if (!user) next("user is not found or updated")
+
+    console.log(notification)
+    console.log(user)
+
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+}
+
 module.exports = {
   profile,
   editProfile,
+  makeNotification,
   changePassword,
   addStoryToReadList,
   totalLikedStory,
