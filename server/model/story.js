@@ -56,14 +56,14 @@ StorySchema.pre("save", function(next) {
   next()
 })
 
-StorySchema.pre('remove', async function() {
-
-  const story = await Story.findById(this._id)
-
-  await Comment.deleteMany({
-    story: story
-  })
-})
+// StorySchema.pre('remove', async function() {
+//
+//   const story = await Story.findById(this._id)
+//
+//   await Comment.deleteMany({
+//     story: story
+//   })
+// })
 
 StorySchema.methods.makeSlug = function() {
   return slugify(this.title, {
