@@ -6,6 +6,7 @@ const {
 const CustomError = require('../../middlewares/Error/CustomError')
 const Story = require('../../model/story')
 const User = require('../../model/user')
+const Message = require("../../model/message.js")
 const { default: mongoose } = require('mongoose')
 const handleError = require('../../helpers/libraries/handleError.js')
 
@@ -298,6 +299,37 @@ const showReadList = async (req, res, next) => {
   // })
 }
 
+const sendMessageToUser = async (req, res, next) => {
+  try {
+    const { author, body, sendTo } = req.body
+    if (!author || !body || !sendTo) {
+      next("no author or body or sendTo found")
+    }
+
+    const sendingAuthor = await User.findOne({ username: author }).catch(handleError)
+    if (!sendingAuthor) {
+      next('author is not found')
+    }
+    const receivingAuthor = await User.findOne({ username: sendTo }).catch(handleError)
+    if (!receivingAuthor) {
+      next('receivingAuthor is not found')
+    }
+    const message = await Message.create({ author: sendingAuthor._id, body: body, sendTo: receivingAuthor._id }).catch(handleError)
+    if (!message) {
+      next('message is not created')
+    }
+
+
+    console.log(message)
+    res.status(200).json({
+      message
+    })
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+}
+
 module.exports = {
   profile,
   editProfile,
@@ -305,5 +337,6 @@ module.exports = {
   addStoryToReadList,
   totalLikedStory,
   followerOfUser,
+  sendMessageToUser,
   showReadList
 }

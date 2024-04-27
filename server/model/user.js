@@ -40,6 +40,12 @@ const UserSchema = new mongoose.Schema(
         ref: "Story",
       },
     ],
+    messages: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Message"
+      }
+    ],
     readListLength: {
       type: Number,
       default: 0,
