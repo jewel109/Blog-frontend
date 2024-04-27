@@ -46,6 +46,12 @@ const UserSchema = new mongoose.Schema(
         ref: "Message"
       }
     ],
+    notifications: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Notification"
+      }
+    ],
     readListLength: {
       type: Number,
       default: 0,
