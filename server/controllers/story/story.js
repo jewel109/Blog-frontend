@@ -4,6 +4,7 @@ const Story = require("../../model/story")
 const { searchHelper, paginateHelper } = require("../../helpers/queryhelpers.js")
 const chalk = require("chalk")
 const { objectId, default: mongoose } = require("mongoose")
+const { handleError } = require("../../helpers/libraries/handleError")
 
 
 
@@ -132,21 +133,33 @@ const likeStory = ErrorWrapper(async (req, res, next) => {
 })
 
 
-const editStoryPage = ErrorWrapper(async (req, res, next) => {
-  const { slug } = req.params
+const editStoryPage = async (req, res, next) => {
+  try {
+    const { slug } = req.params
+    const { title, content } = req.body
 
-  const story = await Story.find({
-    slug
-  }).populate("author likes")
+    if (!title || !content) {
+      next("no title or content")
+    }
+
+    const story = await Story.findOneAndUpdate({
+      slug
+    }, { title: title, content: content }, { new: true }).catch(handleError)
+
+    console.log("story is " + story)
+
+    return res.status(200).json({
+      success: true,
+      data: story
+    })
 
 
-  return res.status(200).json({
-    success: true,
-    data: story
-  })
 
-
-})
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+}
 
 const searchInStory = async (req, res, next) => {
   try {

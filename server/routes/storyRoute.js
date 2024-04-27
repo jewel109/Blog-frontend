@@ -8,7 +8,7 @@ const { getAccessToRoute } = require("../middlewares/auth/accessRoute")
 const { addStory, editStory, deleteStory, editStoryPage, likeStory, detailStory, getAllStories, searchInStory } = require("../controllers/story/story")
 
 const { checkStoryExist, checkUserAndStoryExist } = require("../middlewares/database/databaseErrorHandler")
-const { addStoryToReadList } = require("../controllers/user/user")
+const { addStoryToReadList, followerOfUser } = require("../controllers/user/user")
 
 
 router.post("/addstory", [getAccessToRoute, addStory])
@@ -18,7 +18,7 @@ router.post("/:slug", checkStoryExist, detailStory)
 
 router.post("/:slug/like", getAccessToRoute, likeStory)
 
-router.get("/editstory/:slug", [getAccessToRoute, checkStoryExist, checkUserAndStoryExist], editStoryPage)
+router.post("/editstory/:slug", editStoryPage)
 
 router.put("/:slug/edit", [getAccessToRoute, checkStoryExist, checkUserAndStoryExist], editStory)
 
