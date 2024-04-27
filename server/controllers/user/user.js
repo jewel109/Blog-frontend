@@ -7,6 +7,7 @@ const CustomError = require('../../middlewares/Error/CustomError')
 const Story = require('../../model/story')
 const User = require('../../model/user')
 const { default: mongoose } = require('mongoose')
+const handleError = require('../../helpers/libraries/handleError.js')
 
 const profile = ErrorWrapper(async (req, res) => {
   return res.status(200).json({
@@ -190,6 +191,71 @@ const addStoryToReadList = async (req, res, next) => {
 
 }
 
+const followerOfUser = async (req, res, next) => {
+  try {
+    const { username, followingUser } = req.body
+
+    let message = ''
+
+    let userData
+
+    const user = await User.findOne({ username: username }).catch(handleError)
+    if (!user) {
+      next("no user found with the name")
+    }
+    console.log(user)
+
+    const followedUser = await User.findOne({ username: followingUser }).catch(handleError)
+    if (!followedUser) {
+      next("followingUser is not found")
+    }
+    console.log(followedUser)
+
+    const userAlreadyFollowed = await User.findOne({ username: username, following: { $in: [mongoose.Types.ObjectId(followedUser._id)] } }).catch(handleError)
+
+    console.log("userAlreadyFollowed " + userAlreadyFollowed)
+
+    if (!userAlreadyFollowed) {
+      const updatedUser = await User.findOneAndUpdate({ username: username }, {
+        $addToSet: {
+          following: followedUser._id
+        }
+        // if u want to update a field you must have the filed in your schema
+
+      }, { new: true }).catch(handleError)
+
+      if (!updatedUser) {
+        next("user is not updated")
+      }
+      console.log("updated user is " + updatedUser)
+
+      message = `you are now following ${followedUser.username}`
+
+      userData = updatedUser
+
+    } else {
+      const userAfterRemoveIdFromFollowing = await User.findOneAndUpdate({ username: username }, { $pull: { "following": mongoose.Types.ObjectId(followedUser._id) } }, { new: true }).catch(handleError)
+
+      console.log("userAfterRemoveIdFromFollowing " + userAfterRemoveIdFromFollowing)
+      message = `${followedUser.username} is removed from your following list`
+
+      userData = userAfterRemoveIdFromFollowing
+
+
+    }
+
+
+    res.status(200).json({
+      message: message,
+      userData
+    })
+
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+}
+
 
 const showReadList = async (req, res, next) => {
   try {
@@ -238,5 +304,6 @@ module.exports = {
   changePassword,
   addStoryToReadList,
   totalLikedStory,
+  followerOfUser,
   showReadList
 }

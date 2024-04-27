@@ -26,5 +26,6 @@ router.delete("/:slug/delete", [getAccessToRoute, checkStoryExist], deleteStory)
 
 router.get("/getallstories", getAllStories)
 router.get("/search", searchInStory)
+router.post("/follow", followerOfUser)
 
 module.exports = router

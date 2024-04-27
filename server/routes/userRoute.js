@@ -1,5 +1,5 @@
 const express = require('express')
-const { profile, editProfile, changePassword, addStoryToReadList, totalLikedStory, showReadList } = require('../controllers/user/user')
+const { profile, editProfile, changePassword, addStoryToReadList, totalLikedStory, showReadList, followerOfUser } = require('../controllers/user/user')
 const { getAccessToRoute } = require('../middlewares/auth/accessRoute')
 
 const router = express.Router()
@@ -12,5 +12,6 @@ router.post('/addStoryToReadList', getAccessToRoute, addStoryToReadList)
 router.get('/showReadList', getAccessToRoute, showReadList)
 router.get("/totalLikedStory", totalLikedStory)
 
+router.post("/follow", followerOfUser)
 
 module.exports = router;
