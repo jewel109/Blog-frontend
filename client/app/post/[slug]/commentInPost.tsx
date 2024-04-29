@@ -359,10 +359,15 @@ const ReplyAction = ({ ...props }) => {
   )
 }
 
-const ReplyAccordion = ({ ...props }) => {
+const ReplyAccordion = ({ id, clicked }: { id: string, clicked: boolean }) => {
   const [replies, setReplies] = useState([])
-  const { id } = props
+  const [value, setValue] = useState<string>()
+  const [replyClicked, setReplyClicked] = useState(false)
   const commentLikeHandler = () => { }
+
+  const replyClickHandler = () => {
+    setReplyClicked(!replyClicked)
+  }
 
   useEffect(() => {
     const fetchReplies = async () => {
@@ -383,50 +388,70 @@ const ReplyAccordion = ({ ...props }) => {
     fetchReplies()
   }, [])
 
+  useEffect(() => {
+    const accordionHandler = () => {
+      if (value == "") {
+        setValue("item")
+      } else {
+        setValue("")
+      }
+    }
+    "i am called"
+    accordionHandler()
+  }, [clicked])
+
   console.log(replies)
 
   return (
     <div>
-      <Accordion type="single" collapsible>
-        <AccordionItem value="item-1" className="" >
-          <AccordionTrigger className="ml-2" >reply</AccordionTrigger>
+
+      <Accordion type="single" collapsible value={value} onValueChange={setValue}>
+        <AccordionItem value="item" className="" >
+          <AccordionTrigger className="ml-2" ></AccordionTrigger>
+
+
           <AccordionContent className="w-full "  >
-            <div>
 
-              <div className="w-[400px] min-w-[200px]">
-                <ReplyAction comment_id={id} />
-              </div>
-              <div className="grid grid-cols-6 mt-[5px] p-1">
-                <div className="text-gray-900 grid grid-flow-col w-[60px] ">
-                  <div
-                    className="  cursor-pointer" onClick={commentLikeHandler} >
-                    <ThumbsUp size="17" className="mt-1 "  /*{...(responsedCommentData.likeStatus ? { fill: "rgb(185 28 28 /1", color: "rgb(185 28 28 /1)" } : {})}*/ />
+            <div className="vertical-line-accordion">
+              <div className="">
+
+                <div className="w-[400px] min-w-[200px]">
+                  <ReplyAction comment_id={id} />
+                </div>
+                <div className="grid grid-cols-6 mt-[5px] p-1">
+                  <div className="text-gray-900 grid grid-flow-col w-[60px] ">
+                    <div
+                      className="  cursor-pointer" onClick={commentLikeHandler} >
+                      <ThumbsUp size="17" className="mt-1 "  /*{...(responsedCommentData.likeStatus ? { fill: "rgb(185 28 28 /1", color: "rgb(185 28 28 /1)" } : {})}*/ />
+
+                    </div>
+                    <div className="grid grid-flow-col pl-[7px]">
+                      <div className="px-1"> 0</div>
+                      <div className="font-light">likes</div>
+
+                    </div>
+                  </div>
+                  <div className=" ml-9 text-gray-900 grid  grid-flow-col w-[70px]">
+                    <div className="cursor-pointer" ><MessageSquare size="17" className="mt-[7px]" /></div>
+                    <div className="cursor-pointer" onClick={replyClickHandler}>reply</div>
 
                   </div>
-                  <div className="grid grid-flow-col pl-[7px]">
-                    <div className="px-1"> 0</div>
-                    <div className="font-light">likes</div>
-
-                  </div>
-                </div>
-                <div className=" ml-9 text-gray-900 grid  grid-flow-col w-[70px]">
-                  <div className="cursor-pointer" ><MessageSquare size="17" className="mt-[7px]" /></div>
-                  <div className="font-light text-gray-900"><ReplyAccordion id={id} /></div>
 
                 </div>
 
+                <div className="font-light text-gray-900 ml-2"><ReplyAccordion id={id} clicked={replyClicked} /></div>
               </div>
-            </div>
-            <div>
-              {
-                replies.map(({ _id, author, date, content }) => (
+              <div className="px-2 ">
+                {
+                  replies.map(({ _id, author, date, content }) => (
 
 
-                  <Comment key={_id} id={_id} username={author} time={date} content={content}></Comment>
-                )
+                    <Comment key={_id} id={_id} username={author} time={date} content={content}></Comment>
+                  )
 
-                )
-              }
+                  )
+                }
+              </div>
             </div>
           </AccordionContent>
         </AccordionItem>
