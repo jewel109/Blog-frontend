@@ -13,6 +13,7 @@ import CommentInPost from "./commentInPost"
 import { toast } from "@/components/ui/use-toast"
 import { ToastAction } from "@radix-ui/react-toast"
 import { log } from "console"
+import { AxiosError } from "axios"
 export default function Page() {
   const storyData = useSelector((state: RootState) => state.storyReducer)
   const userData = useSelector((state: RootState) => state.userReducer)
@@ -59,7 +60,9 @@ export default function Page() {
 
 
 
-    } catch (error) {
+    } catch (err) {
+
+      const error = err as AxiosError
       toast({
         description: "you cannot like now"
       })
@@ -96,7 +99,8 @@ export default function Page() {
       dispatch(countOfLike(data.data.likeCount))
       setCommentCount(data.data.commentCount)
       dispatch(countOfComment(data.data.commentCount))
-    } catch (error) {
+    } catch (err) {
+      const error = err as AxiosError
       console.log("fetchDetailStory " + error)
       axiosError(error)
 

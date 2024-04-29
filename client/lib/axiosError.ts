@@ -1,4 +1,6 @@
-export default function axiosError(error ) {
+import { AxiosError } from "axios";
+
+export default function axiosError(error: AxiosError) {
   let data = null;
   if (error.response) {
     // The request was made and the server responded with a status code

@@ -23,6 +23,7 @@ import { useSelector } from "react-redux"
 import { useAppDispatch, type RootState } from "../../store/store"
 import { addStory } from "../../features/storySlice"
 import { Textarea } from "@/components/ui/textarea"
+import { AxiosError } from "axios"
 
 const formSchema = z.object({
   title: z.string().min(5, { message: "title must be 4 characters" }),
@@ -40,7 +41,8 @@ async function forCreatePost({ title, content }) {
 
     console.log(data)
     postData = data.data.content ?? "no data"
-  } catch (error) {
+  } catch (err) {
+    const error = err as AxiosError
     console.log("forCreatePost " + error)
     axiosError(error)
   }

@@ -28,6 +28,7 @@ import { PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { CustomIconWithText } from './post/[slug]/commentInPost'
 import localStorage from 'redux-persist/es/storage'
 import { toast } from '@/components/ui/use-toast'
+import { AxiosError } from "axios"
 
 function dateConvert(date: string) {
   return moment(date).format("DD MMM YYYY")
@@ -179,7 +180,7 @@ export default function Home() {
 
     } catch (error) {
       console.log("likeHandler " + error)
-      axiosError(error)
+      axiosError(error as AxiosError)
     }
   }
 

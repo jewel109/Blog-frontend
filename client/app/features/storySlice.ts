@@ -1,6 +1,7 @@
 import axiosInstance from "@/lib/axios";
 import axiosError from "@/lib/axiosError";
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 
 interface Story {
   author: string,
@@ -56,9 +57,10 @@ export const fetchAllStories = createAsyncThunk("story", async () => {
     } else {
       return data.query
     }
-  } catch (error) {
+  } catch (err) {
+    const error = err as AxiosError
     console.log("fetchAllStories " + error)
-    return axiosError(error)
+    axiosError(error)
   }
 
 })

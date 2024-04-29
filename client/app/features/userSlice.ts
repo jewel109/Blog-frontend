@@ -2,6 +2,7 @@
 import axiosInstance from "@/lib/axios";
 import axiosError from "@/lib/axiosError";
 import { asyncThunkCreator, createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { userAgent } from "next/server";
 
 
@@ -26,7 +27,8 @@ export const accessUser = createAsyncThunk("user/getAccessToServer", async () =>
     console.log(data?.user?.username)
     return data
     return data.user.username
-  } catch (error) {
+  } catch (err) {
+    const error = err as AxiosError
     console.log("accessUser " + error)
     return axiosError(error)
   }
@@ -50,11 +52,12 @@ export const registerUser = createAsyncThunk("user/register", async (user: userS
 
     const tok = localStorage.getItem("token")
     console.log(tok)
-  } catch (error) {
+  } catch (err) {
 
-    const err = axiosError(error)
+    const error = err as AxiosError
+
     console.log(err)
-    return err
+    axiosError(error)
   }
 
 })
@@ -81,9 +84,10 @@ export const loginUser = createAsyncThunk("user/login", async ({ email, password
       return data.success
     }
 
-  } catch (error) {
+  } catch (err) {
+    const error = err as AxiosError
     console.log("loginUser " + error)
-    return axiosError(error)
+    axiosError(error)
   }
 
 })

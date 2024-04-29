@@ -23,6 +23,7 @@ import { useAppDispatch } from "@/app/store/store"
 import type { RootState } from "@/app/store/store"
 import { useSelector } from "react-redux"
 import { loginUser } from "@/app/features/userSlice"
+import { AxiosError } from "axios"
 
 const formSchema = z.object({
   email: z.string().min(4, { message: "email must be 4 characters" }),
@@ -45,8 +46,9 @@ async function forLogin({ email, password }) {
     const tok = localStorage.getItem("token")
     console.log(tok)
   } catch (error) {
+
     console.log("forLogin " + error)
-    axiosError(error)
+    axiosError(error as AxiosError)
   }
 }
 

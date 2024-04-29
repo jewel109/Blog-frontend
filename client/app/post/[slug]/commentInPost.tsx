@@ -32,6 +32,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { AxiosError, AxiosError } from "axios";
 
 export default function CommentInPost() {
   const commentData = useSelector((state: RootState) => state.commentReducer)
@@ -116,7 +117,8 @@ const Comment = ({ username, time, content, id }) => {
       console.log(data.data.data.likeCount)
       setComment(data.data.likeStatus)
       // setResponsedCommentData({ ...responsedCommentData, likeStatus: data.data.likeStatus })
-    } catch (error) {
+    } catch (err) {
+      const error = err as AxiosError
       console.log("commentLikeHandler " + error)
       axiosError(error)
       toast({
@@ -144,7 +146,9 @@ const Comment = ({ username, time, content, id }) => {
         setResponsedCommentData({ ...responsedCommentData, likeStatus: data.data.likeStatus, likeCount: data.data.likes })
         console.log("fetchLikeStatus")
 
-      } catch (error) {
+      } catch (err) {
+        const error = err as AxiosError
+
         console.log("fetchLikeStatus " + error)
         axiosError(error)
         toast({
@@ -359,7 +363,8 @@ const ReplyAccordion = ({ ...props }) => {
         console.log(data.data)
         setReplies(data.data.allReply)
 
-      } catch (error) {
+      } catch (err) {
+        const error = err as AxiosError
         console.log("onSubmit " + error)
         axiosError(error)
         toast({

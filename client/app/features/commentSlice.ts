@@ -1,6 +1,7 @@
 import axiosInstance from "@/lib/axios";
 import axiosError from "@/lib/axiosError";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 
 interface Comment {
   content: string,
@@ -33,7 +34,8 @@ export const addComment = createAsyncThunk("comment/addComment", async ({ slug, 
     console.log(response)
     return response
 
-  } catch (error) {
+  } catch (err) {
+    const error = err as AxiosError
     console.log("addcomment " + error)
     return axiosError(error)
 
@@ -55,7 +57,8 @@ export const getAllCommentOfaStory = createAsyncThunk("comment/getAllComment", a
     console.log(response.data.data)
     return response.data.data
 
-  } catch (error) {
+  } catch (err) {
+    const error = err as AxiosError
     console.log("getAllCommentOfaStory " + error)
     axiosError(error)
   }
