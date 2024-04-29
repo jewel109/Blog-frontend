@@ -211,7 +211,7 @@ const Comment = ({ username, time, content, id }: { username: string, time: stri
 
   )
 }
-export const CustomIconWithText = ({ text, children }) => {
+export const CustomIconWithText = ({ text, children }: { text: string, children: ReactNode }) => {
   return (
     <div className="font-medium text-gray-500 grid grid-flow-col  ">
       <div
@@ -224,7 +224,7 @@ export const CustomIconWithText = ({ text, children }) => {
 }
 
 
-export function CommentForm({ refetchComments }) {
+export function CommentForm({ refetchComments }: { refetchComments: () => void }) {
   const commentData = useSelector((state: RootState) => state.commentReducer)
   const storyData = useSelector((state: RootState) => state.storyReducer)
   const userData = useSelector((state: RootState) => state.userReducer)
@@ -333,14 +333,14 @@ const ReplyAction = ({ ...props }) => {
       form.resetField("comment")
     } catch (error) {
       console.log("onSubmit " + error)
-      axiosError(error)
+      axiosError(error as AxiosError)
       toast({
         description: " It's a server error",
       })
     }
   }
   return (<Form {...form}>
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ml-2">
       <FormField
         control={form.control}
         name="comment"
