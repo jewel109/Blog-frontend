@@ -315,7 +315,8 @@ const ReplyAction = ({ ...props }) => {
       console.log(response)
       if (response) {
         toast({
-          description: "You have commented successfully"
+          description: "You have replied",
+          variant: "success"
         })
       }
 
