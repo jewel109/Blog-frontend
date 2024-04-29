@@ -20,7 +20,11 @@ const initialState: Comment = {
 }
 
 
-export const addComment = createAsyncThunk("comment/addComment", async ({ slug, content }) => {
+interface AddCommentData {
+  slug: string,
+  content: string
+}
+export const addComment = createAsyncThunk("comment/addComment", async ({ slug, content }: AddCommentData) => {
   try {
     const token = window?.localStorage.getItem("token")
     if (!token) {
@@ -50,7 +54,9 @@ export const addComment = createAsyncThunk("comment/addComment", async ({ slug, 
 //
 // }
 
-export const getAllCommentOfaStory = createAsyncThunk("comment/getAllComment", async ({ slug }) => {
+
+
+export const getAllCommentOfaStory = createAsyncThunk("comment/getAllComment", async ({ slug }: { slug: string }) => {
   try {
 
     const response = await axiosInstance.get(`/comment/${slug}/getallcomment`)
