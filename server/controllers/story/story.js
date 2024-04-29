@@ -80,6 +80,31 @@ const detailStory = ErrorWrapper(async (req, res, next) => {
   })
 })
 
+const storyLikeStatus = async (req, res, next) => {
+  try {
+    let likeStatus = false
+    const { slug } = req.params
+    if (!slug) next("no slug is found")
+    const user = req.user
+
+    const story = await Story.findOne({ slug, likes: { $in: mongoose.Types.ObjectId(user._id) } }).catch(handleError)
+
+    console.log(story)
+    if (story) {
+      likeStatus = true
+    }
+
+
+    res.status(200).json({
+      likeStatus
+    })
+
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+}
+
 const likeStory = ErrorWrapper(async (req, res, next) => {
   const user = req.user;
   const { slug } = req.params;
@@ -234,5 +259,6 @@ module.exports = {
   editStoryPage,
   editStory,
   searchInStory,
+  storyLikeStatus,
   deleteStory
 }

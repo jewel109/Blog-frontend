@@ -5,7 +5,7 @@ const router = express.Router()
 const { getAccessToRoute } = require("../middlewares/auth/accessRoute")
 
 
-const { addStory, editStory, deleteStory, editStoryPage, likeStory, detailStory, getAllStories, searchInStory } = require("../controllers/story/story")
+const { addStory, editStory, deleteStory, editStoryPage, likeStory, detailStory, getAllStories, searchInStory, storyLikeStatus } = require("../controllers/story/story")
 
 const { checkStoryExist, checkUserAndStoryExist } = require("../middlewares/database/databaseErrorHandler")
 const { addStoryToReadList, followerOfUser } = require("../controllers/user/user")
@@ -14,7 +14,8 @@ const { addStoryToReadList, followerOfUser } = require("../controllers/user/user
 router.post("/addstory", [getAccessToRoute, addStory])
 router.post("/addStoryToReadList", addStoryToReadList)
 
-router.post("/:slug", checkStoryExist, detailStory)
+router.post("/:slug", getAccessToRoute, detailStory)
+router.get("/:slug/likeStatus", getAccessToRoute, storyLikeStatus)
 
 router.post("/:slug/like", getAccessToRoute, likeStory)
 
