@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Provider, useSelector } from 'react-redux'
 import { store, useAppDispatch } from './store/store'
 import axiosInstance from '@/lib/axios'
+import "./globals.css"
 import axiosError from '@/lib/axiosError'
 import type { RootState } from "./store/store"
 
