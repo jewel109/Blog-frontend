@@ -5,6 +5,7 @@ const { searchHelper, paginateHelper } = require("../../helpers/queryhelpers.js"
 const chalk = require("chalk")
 const { objectId, default: mongoose } = require("mongoose")
 const { handleError } = require("../../helpers/libraries/handleError")
+const User = require("../../model/user")
 
 
 
@@ -62,19 +63,20 @@ const getAllStories = ErrorWrapper(async (req, res, next) => {
 
 const detailStory = ErrorWrapper(async (req, res, next) => {
   const { slug } = req.params;
-  const { activeUser } = req.body;
+  const user = req.user
+
+  if (!slug) next("no slug  is provided")
   const story = await Story.findOne({
     slug
   })
 
-  const storyLikesUserIds = story.likes.map(json => json.id)
-  const likeStatus = storyLikesUserIds.includes(activeUser?._id)
+  // const user = await User.findOne({ username: activeUser }).catch(handleError)
 
 
+  console.log(likeStatus)
   return res.status(200).json({
     success: true,
     data: story,
-    likeStatus,
   })
 })
 
