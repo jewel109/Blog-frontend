@@ -3,12 +3,18 @@ import axiosError from "@/lib/axiosError";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 
+interface AllComment {
+  _id: string,
+  date: string,
+  content: string,
+  author: string
+}
 interface Comment {
   content: string,
   author: string,
   likes: Array<string>,
   likeCount: number
-  commentList: Array<string>
+  commentList: Array<AllComment>
 }
 
 const initialState: Comment = {

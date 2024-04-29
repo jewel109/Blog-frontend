@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { useSelector } from "react-redux";
 import { useAppDispatch, type RootState } from "@/app/store/store";
 import { addComment, getAllCommentOfaStory } from "@/app/features/commentSlice";
-import { Suspense, useEffect, useState } from "react";
+import { ReactChildren, ReactNode, Suspense, useEffect, useState } from "react";
 import { LogOut, MessageSquare, ThumbsUp } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@radix-ui/react-toast";
@@ -32,7 +32,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { AxiosError, AxiosError } from "axios";
+import { AxiosError } from "axios";
 
 export default function CommentInPost() {
   const commentData = useSelector((state: RootState) => state.commentReducer)
@@ -79,10 +79,10 @@ export default function CommentInPost() {
         <div>
           {
             //TODO must be give the comment type in
-            commentData.commentList ? commentData.commentList.map((comment) => (
+            commentData.commentList ? commentData.commentList.map(({ _id, date, content, author }) => (
 
 
-              <Comment key={comment._id} id={comment._id} username={comment.author} time={comment.date} content={comment.content} />
+              <Comment key={_id} id={_id} username={author} time={date} content={content} />
             )) : (<div className="bg-red-700">no comment</div>)
 
 
@@ -95,7 +95,7 @@ export default function CommentInPost() {
     </>)
 }
 
-const Comment = ({ username, time, content, id }) => {
+const Comment = ({ username, time, content, id }: { username: string, time: string, content: string, id: string }) => {
   const userData = useSelector((state: RootState) => state.userReducer)
   const router = useRouter()
   const [comment, setComment] = useState(false)
