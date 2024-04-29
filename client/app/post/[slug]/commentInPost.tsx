@@ -99,6 +99,7 @@ const Comment = ({ username, time, content, id }: { username: string, time: stri
   const userData = useSelector((state: RootState) => state.userReducer)
   const router = useRouter()
   const [comment, setComment] = useState(false)
+  const [replyButtonCliked, setReplyButtonCliked] = useState(false)
   const [responsedCommentData, setResponsedCommentData] = useState({
     likeStatus: false, likeCount: 0
   })
@@ -132,6 +133,10 @@ const Comment = ({ username, time, content, id }: { username: string, time: stri
 
   console.log(id)
   console.log(responsedCommentData.likeStatus)
+
+  const replyClickHandler = () => {
+    setReplyButtonCliked(!replyButtonCliked)
+  }
 
   useEffect(() => {
     const fetchLikeStatus = async () => {
@@ -191,11 +196,13 @@ const Comment = ({ username, time, content, id }: { username: string, time: stri
                 </div>
                 <div className=" ml-9 text-gray-900 grid  grid-flow-col w-[70px]">
                   <div className="cursor-pointer" ><MessageSquare size="17" className="mt-[7px]" /></div>
-                  <div className="font-light text-gray-900"><ReplyAccordion id={id} /></div>
+                  <div className="cursor-pointer" onClick={replyClickHandler}>reply</div>
 
                 </div>
 
               </div>
+
+              <div className="font-light text-gray-900"><ReplyAccordion id={id} clicked={replyButtonCliked} /></div>
             </div>
           </div>
         </div>
