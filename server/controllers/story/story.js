@@ -61,24 +61,22 @@ const getAllStories = ErrorWrapper(async (req, res, next) => {
   }
 })
 
-const detailStory = ErrorWrapper(async (req, res, next) => {
+const detailStory = async (req, res, next) => {
   const { slug } = req.params;
-  const user = req.user
 
   if (!slug) next("no slug  is provided")
   const story = await Story.findOne({
     slug
-  })
+  }).catch(handleError)
 
   // const user = await User.findOne({ username: activeUser }).catch(handleError)
 
 
-  console.log(likeStatus)
   return res.status(200).json({
     success: true,
     data: story,
   })
-})
+}
 
 const storyLikeStatus = async (req, res, next) => {
   try {
@@ -94,6 +92,7 @@ const storyLikeStatus = async (req, res, next) => {
       likeStatus = true
     }
 
+    console.log(likeStatus)
 
     res.status(200).json({
       likeStatus
@@ -105,59 +104,94 @@ const storyLikeStatus = async (req, res, next) => {
   }
 }
 
-const likeStory = ErrorWrapper(async (req, res, next) => {
+const likeStory = async (req, res, next) => {
   const user = req.user;
   const { slug } = req.params;
 
-  const story = await Story.findOne({
+  const foundStory = await Story.findOne({ slug: slug }).catch(handleError)
+  console.log(foundStory)
+  const story = await Story.findOneAndUpdate({
     slug
-  })
+  }, [
+    {
+      $set: {
+        "likes": {
+          $cond: [
+            {
+              $in: [user._id, "$likes"]
+            },
+            {
+              $setDifference: ["$likes", [user._id]]
+            },
+            {
+              $concatArrays: ["$likes", [user._id]]
+            }
+          ]
+        }
+      },
+
+    },
+    {
+      $set: {
+        "isLiked": {
+          $cond: [
+            { $in: [user._id, "$likes"] }, true, false
+          ]
+        }
+      }
+    }
+  ]).catch(handleError)
+
+
+  console.log(story)
+
+
   // console.log(user, slug)
   // console.log(chalk.red(story))
-  const storyLikesUserIds = story.likes.map(json => {
-
-    return json._id.toString()
-  })
-  let isLiked = false
-  console.log(storyLikesUserIds.includes(user._id.toString()))
-
-  // console.log(chalk.blueBright(storyLikesUserIds))
-
-  const id = user._id.toString()
-
-  if (!storyLikesUserIds.includes(id)) {
-    story.likes.push(user)
-    story.likeCount = story?.likes?.length
-    isLiked = true
-    // console.log(chalk.green(story.likeCount))
-    // console.log(id)
-    // console.log(story.likes)
-
-
-    await story.save()
-  } else {
-    const index = story.likes.indexOf(id);
-
-    story.likes.splice(index, 1)
-    // console.log(story.likes)
-
-    // console.log(id)
-    // console.log("spliced")
-    story.likeCount = story.likes.length
-
-    // console.log(chalk.red(story.likeCount))
-
-    await story.save()
-  }
-
+  // const storyLikesUserIds = story.likes.map(json => {
+  //
+  //   return json._id.toString()
+  // })
+  // let isLiked = false
+  // console.log(storyLikesUserIds.includes(user._id.toString()))
+  //
+  // // console.log(chalk.blueBright(storyLikesUserIds))
+  //
+  // const id = user._id.toString()
+  //
+  // if (!storyLikesUserIds.includes(id)) {
+  //   story.likes.push(user)
+  //   story.likeCount = story?.likes?.length
+  //   isLiked = true
+  //   // console.log(chalk.green(story.likeCount))
+  //   // console.log(id)
+  //   // console.log(story.likes)
+  //
+  //
+  //   await story.save()
+  // } else {
+  //   const index = story.likes.indexOf(id);
+  //
+  //   story.likes.splice(index, 1)
+  //   // console.log(story.likes)
+  //
+  //   // console.log(id)
+  //   // console.log("spliced")
+  //   story.likeCount = story.likes.length
+  //
+  //   // console.log(chalk.red(story.likeCount))
+  //
+  //   await story.save()
+  // }
+  //
   // console.log(chalk.whiteBright(story))
   return res.status(200).json({
     success: true,
-    data: { story, isLiked }
+    data: { story }
   })
 
 
-})
+}
 
 
 const editStoryPage = async (req, res, next) => {
