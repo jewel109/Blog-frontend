@@ -67,12 +67,12 @@ const getAllRepliesOfAComment = ErrorWrapper(async (req, res, next) => {
     _id: mongoose.Types.ObjectId(comment_id)
   })
 
-  console.log(comment.replies)
 
   if (!comment.replies) {
     return next("no replies found")
   }
 
+  console.log(comment?.replies)
   //
   // const replies = await Comment.find({ _id: { $in: comment.replies.map(id => mongoose.Types.ObjectId(id)) } })
   //never use callback and async/await in same function
