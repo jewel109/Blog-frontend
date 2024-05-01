@@ -8,17 +8,20 @@ import axiosError from "@/lib/axiosError"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { countOfComment, countOfLike, isLiked } from "@/app/features/storySlice"
 import CommentInPost from "./commentInPost"
 import { toast } from "@/components/ui/use-toast"
 import { ToastAction } from "@radix-ui/react-toast"
-import { log } from "console"
 import { AxiosError } from "axios"
+import { countOfComment, countOfLike } from "@/app/features/storySlice"
+
+
+
 export default function Page() {
   const storyData = useSelector((state: RootState) => state.storyReducer)
   const userData = useSelector((state: RootState) => state.userReducer)
   const commentData = useSelector((state: RootState) => state.commentReducer)
   const dispatch = useAppDispatch()
+  const [liked, setLiked] = useState(false)
   const [content, setContent] = useState("")
   const [title, setTitle] = useState("")
   const [showDelete, setShowDelete] = useState(false)
@@ -29,6 +32,7 @@ export default function Page() {
     const commentBox = document.getElementById("comment-box")
     commentBox?.scrollIntoView({ behavior: "smooth" })
   }
+
 
   async function likeClickHandler() {
     try {
@@ -42,21 +46,21 @@ export default function Page() {
       }
       const headers = { "Authorization": `Bearer ${token}` }
 
-      const response = await axiosInstance.post(`/story/${storyData.slug}/like`, {}, { headers: headers })
-
-      const { data } = response
+      const { data: { message, isLiked } } = await axiosInstance.post<{ message: string, isLiked: boolean }>(`/story/${storyData.slug}/like`, {}, { headers: headers })
 
 
 
-      if (!response.data.data.isLiked) {
-        dispatch(isLiked(false))
-      } else if (response.data.data.isLiked) {
-        dispatch(isLiked(true))
-      } else {
-        dispatch(isLiked(false))
-      }
-      console.log(response.data.data.story.likeCount)
-      dispatch(countOfLike(response.data.data.story.likeCount))
+      console.log(message)
+
+      setLiked(isLiked)
+
+      const variant = isLiked ? "success" : "destructive"
+
+      toast({
+        description: `${message}`,
+        variant: variant
+      })
+
 
 
 
@@ -64,7 +68,7 @@ export default function Page() {
 
       const error = err as AxiosError
       toast({
-        description: "you cannot like now"
+        description: "you cannot like now server error"
       })
       console.log("likeClickHandler " + error)
       axiosError(error)
