@@ -85,20 +85,26 @@ const commentStatusOfAStory = async (req, res, next) => {
 }
 
 const detailStory = async (req, res, next) => {
-  const { slug } = req.params;
+  try {
+    const { slug } = req.params;
 
-  if (!slug) next("no slug  is provided")
-  const story = await Story.findOne({
-    slug
-  }).catch(handleError)
+    if (!slug) next("no slug  is provided")
+    const story = await Story.findOne({
+      slug
+    }).catch(handleError)
 
-  // const user = await User.findOne({ username: activeUser }).catch(handleError)
+    // const user = await User.findOne({ username: activeUser }).catch(handleError)
 
 
-  return res.status(200).json({
-    success: true,
-    data: story,
-  })
+    console.log(story)
+    return res.status(200).json({
+      story
+    })
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+
 }
 
 const storyLikeStatus = async (req, res, next) => {
