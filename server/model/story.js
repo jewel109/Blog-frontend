@@ -44,7 +44,7 @@ const StorySchema = new mongoose.Schema({
   commentCount: {
     type: Number,
     default: 0
-  }
+  },
 }, { timestamps: true })
 
 StorySchema.pre("save", function(next) {
