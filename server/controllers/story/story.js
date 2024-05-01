@@ -110,6 +110,7 @@ const detailStory = async (req, res, next) => {
 const storyLikeStatus = async (req, res, next) => {
   try {
     let likeStatus = false
+    let message = null
     const { slug } = req.params
     if (!slug) next("no slug is found")
     const user = req.user
@@ -119,12 +120,13 @@ const storyLikeStatus = async (req, res, next) => {
     console.log(story)
     if (story) {
       likeStatus = true
+      message = "story found"
     }
 
     console.log(likeStatus)
 
     res.status(200).json({
-      likeStatus
+      likeStatus, message
     })
 
   } catch (error) {
