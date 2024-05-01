@@ -1,37 +1,37 @@
 const CustomError = require("../../middlewares/Error/CustomError");
 
-const isTokenIncluded = (req) => {
+const isTokenIncluded = (req, next) => {
 
   // console.log(`in isTokenIncluded ${req}`)
   // console.log('in req.headers ' + req.headers.authrization)
-  // console.log(req.headers)
+  console.log(req.headers)
 
   if (!req.headers.authorization) {
     //console.log("authorization in header is not found")
-    throw new Error("authrization in headers is not found")
+    next("authrization in headers is not found")
   } else if (!req.headers.authorization.startsWith("Bearer")
   ) {
 
-    throw new CustomError("no token in authorization")
+    next("no token in authorization")
   }
   return (req.headers.authorization && req.headers.authorization.startsWith("Bearer"))
 
 
 }
 
-const getAccessTokenFromHeader = (req) => {
+const getAccessTokenFromHeader = (req, next) => {
 
   const authorization = req.headers.authorization;
   // console.log(`authrization=${authrization}`)
   if (!authorization) {
-    throw new Error("not valid authorization")
+    next("not valid authorization")
   }
   const accessToken = authorization.split(" ")[1];
   if (accessToken === "null") {
-    throw new CustomError("accessToken is null")
+    next("accessToken is null")
   }
   if (!accessToken) {
-    throw new CustomError("accessToken is not found")
+    next("accessToken is not found")
   }
   console.log(`access token ${accessToken}`)
   return accessToken;

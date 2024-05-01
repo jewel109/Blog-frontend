@@ -11,20 +11,16 @@ const { log, chalk } = require('../../controllers/comment/comment')
 const getAccessToRoute = asyncError(async (req, res, next) => {
   const { JWT_SECRET } = process.env
 
-  if (!isTokenIncluded(req)) {
+  if (!isTokenIncluded(req, next)) {
     log(chalk("no token found"))
-    return res.status(500).json({
-      success: false,
-      message: 'No token found',
-    })
+    next("no token found")
   }
 
-  const accessToken = getAccessTokenFromHeader(req)
+  const accessToken = getAccessTokenFromHeader(req, next)
 
   if (accessToken === 'null') {
-    return res
-      .status(200)
-      .json({ success: false, message: 'not valid jsonwebtoken ' })
+
+    next("accessToken is null")
   } else if (accessToken != 'null') {
     console.log(accessToken)
     const decoded = jwt.verify(accessToken, JWT_SECRET)
