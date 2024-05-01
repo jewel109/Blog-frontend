@@ -6,6 +6,7 @@ const chalk = require("chalk")
 const { objectId, default: mongoose } = require("mongoose")
 const { handleError } = require("../../helpers/libraries/handleError")
 const User = require("../../model/user")
+const Comment = require("../../model/comment")
 
 
 
@@ -60,6 +61,28 @@ const getAllStories = ErrorWrapper(async (req, res, next) => {
     return next(error)
   }
 })
+
+const commentStatusOfAStory = async (req, res, next) => {
+  try {
+
+    const { slug } = req.params
+    if (!slug) next("no slug is provided")
+    const story = await Story.findOne({ slug }).catch(handleError)
+    console.log(story)
+
+    const comment = await Comment.find({
+      _id: {
+        $in: story?.comments?.map(id => mongoose.Types.ObjectId(id))
+      }
+    }).catch(handleError)
+
+    console.log(comment)
+
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+}
 
 const detailStory = async (req, res, next) => {
   const { slug } = req.params;
