@@ -139,7 +139,7 @@ export default function Page() {
 
       console.log("postDeleteHandler " + error);
 
-      axiosError(error)
+      axiosError(error as AxiosError)
 
 
     }
@@ -147,24 +147,42 @@ export default function Page() {
   }
 
   useEffect(() => {
+    const fetchLikeStatus = async () => {
+
+      try {
+        const token = localStorage.getItem("token")
+
+        const headers = { "Authorization": `Bearer ${token}` }
+
+        const { data: response } = await axiosInstance.get<{ likeStatus: boolean, message: string }>(`/story/${storyData.slug}/likeStatus`, { headers: headers })
+        console.log(response)
+
+        setLiked(response.likeStatus)
+
+      } catch (error) {
+
+        console.log(error)
+        axiosError(error as AxiosError)
+      }
+    }
+    fetchLikeStatus()
+  }, [liked])
+
+  useEffect(() => {
     fetchDetailStory()
   }, [likeClickHandler, storyData.commentCount])
-  useEffect(() => {
-    dispatch(countOfLike(storyData.likeCount))
-    console.log(storyData.likeCount)
-    console.log(storyData)
-    if (!userData.username) {
-      dispatch(isLiked(false))
-    }
-  }, [storyData])
+
   useEffect(() => {
     forShowPostDelelte()
   }, [showDelete])
-  useEffect(() => {
 
+
+  useEffect(() => {
     setCommentCount(commentData?.commentList?.length)
     console.log("new comment")
   }, [commentData])
+
+
 
 
   const router = useRouter()
@@ -179,8 +197,8 @@ export default function Page() {
                 <div className="" >
                   <span className={classNames('cursor-pointer',
                     {
-                      'text-red-700 font-bold': storyData.liked
-                    })} onClick={() => likeClickHandler()}>{storyData.liked ? "liked" : "like"}</span>
+                      'text-red-700 font-bold': liked
+                    })} onClick={() => likeClickHandler()}>{liked ? "liked" : "like"}</span>
                   <span className="ml-2">{storyData.likeCount}</span>
                 </div>
                 <div className="grid grid-flow-col gap-1">

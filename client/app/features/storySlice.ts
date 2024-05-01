@@ -29,7 +29,7 @@ const initialState: Story = {
   error: null,
 
 }
-export const addStory = createAsyncThunk("addStory", async ({ title, content }) => {
+export const addStory = createAsyncThunk("addStory", async ({ title, content }: { title: string, content: string }) => {
   try {
     const token = localStorage.getItem("token") ?? null
 
@@ -42,7 +42,7 @@ export const addStory = createAsyncThunk("addStory", async ({ title, content }) 
     return postData
   } catch (error) {
     console.log("addStory " + error)
-    axiosError(error)
+    axiosError(error as AxiosError)
   }
 })
 
