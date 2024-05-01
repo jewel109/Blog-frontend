@@ -139,8 +139,6 @@ const likeStory = async (req, res, next) => {
   const user = req.user;
   const { slug } = req.params;
 
-  const foundStory = await Story.findOne({ slug: slug }).catch(handleError)
-  console.log(foundStory)
   const story = await Story.findOneAndUpdate({
     slug
   }, [
@@ -158,11 +156,34 @@ const likeStory = async (req, res, next) => {
               $concatArrays: ["$likes", [user._id]]
             }
           ]
-        }
+        },
       },
 
     },
     {
+      $set: {
+        "likeCount":
+        {
+          $cond:
+            { if: { $isArray: "$likes" }, then: { $size: "$likes" }, else: 0 }
+        }
+
+      }
+
+    }
+
+
+  ],).catch(handleError)
+
+
+
+  const findStory = await Story.aggregate([
+    {
+      $match: {
+        slug: slug
+      },
+
+    }, {
       $set: {
         "isLiked": {
           $cond: [
@@ -170,55 +191,27 @@ const likeStory = async (req, res, next) => {
           ]
         }
       }
+    },
+    {
+      $set: {
+        "likeStatus": {
+          $cond: [
+            { $in: [user._id, "$likes"] }, "liked", "unliked"
+          ]
+        }
+      }
     }
+
   ]).catch(handleError)
+
+  // console.log(findStory[0].likeStatus)
 
 
   console.log(story)
 
-
-  // console.log(user, slug)
-  // console.log(chalk.red(story))
-  // const storyLikesUserIds = story.likes.map(json => {
-  //
-  //   return json._id.toString()
-  // })
-  // let isLiked = false
-  // console.log(storyLikesUserIds.includes(user._id.toString()))
-  //
-  // // console.log(chalk.blueBright(storyLikesUserIds))
-  //
-  // const id = user._id.toString()
-  //
-  // if (!storyLikesUserIds.includes(id)) {
-  //   story.likes.push(user)
-  //   story.likeCount = story?.likes?.length
-  //   isLiked = true
-  //   // console.log(chalk.green(story.likeCount))
-  //   // console.log(id)
-  //   // console.log(story.likes)
-  //
-  //
-  //   await story.save()
-  // } else {
-  //   const index = story.likes.indexOf(id);
-  //
-  //   story.likes.splice(index, 1)
-  //   // console.log(story.likes)
-  //
-  //   // console.log(id)
-  //   // console.log("spliced")
-  //   story.likeCount = story.likes.length
-  //
-  //   // console.log(chalk.red(story.likeCount))
-  //
-  //   await story.save()
-  // }
-  //
-  // console.log(chalk.whiteBright(story))
   return res.status(200).json({
-    success: true,
-    data: { story }
+    message: `you have ${findStory[0].likeStatus} the story`,
+    isLiked: findStory[0].isLiked
   })
 
 
@@ -325,5 +318,6 @@ module.exports = {
   editStory,
   searchInStory,
   storyLikeStatus,
+  commentStatusOfAStory,
   deleteStory
 }
