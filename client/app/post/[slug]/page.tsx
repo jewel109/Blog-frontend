@@ -94,15 +94,23 @@ export default function Page() {
 
   async function fetchDetailStory() {
     try {
-      const { data } = await axiosInstance.post(`/story/${storyData.slug}`, { activeUser: storyData.author })
+      const token = localStorage.getItem("token")
 
+      //MEM I got error here cause localStorage was imported from persisted
+      const headers = { "Authorization": `Bearer ${token}` }
 
-      setContent(data.data.content)
-      setTitle(data.data.title)
-      console.log(data.data.commentCount)
-      dispatch(countOfLike(data.data.likeCount))
-      setCommentCount(data.data.commentCount)
-      dispatch(countOfComment(data.data.commentCount))
+      const { data: { story: { title, content, likeCount, commentCount }
+      } } = await axiosInstance.post(`/story/${storyData.slug}`, {}, { headers: headers })
+      // You have to give headers like this
+
+      // console.log()
+
+      setTitle(title)
+      setContent(content)
+      dispatch(countOfLike(likeCount))
+      dispatch(countOfComment(commentCount))
+      setCommentCount(commentCount)
+
     } catch (err) {
       const error = err as AxiosError
       console.log("fetchDetailStory " + error)
