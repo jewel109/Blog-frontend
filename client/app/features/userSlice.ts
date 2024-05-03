@@ -105,7 +105,7 @@ export const userSlice = createSlice({
   name: "userReducer",
   initialState,
   reducers: {
-    logOutUser(state, { payload }) {
+    logOutUser(state, { payload }: { payload: string }) {
       state.username = ""
 
     },
