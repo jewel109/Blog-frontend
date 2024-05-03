@@ -1,6 +1,7 @@
 const express = require('express')
-const { profile, editProfile, changePassword, addStoryToReadList, totalLikedStory, showReadList, followerOfUser, sendMessageToUser, makeNotification } = require('../controllers/user/user')
+const { profile, editProfile, changePassword, addStoryToReadList, totalLikedStory, showReadList, followerOfUser, sendMessageToUser, makeNotification, totalPostedStory } = require('../controllers/user/user')
 const { getAccessToRoute } = require('../middlewares/auth/accessRoute')
+const { totalCommentOfaUser } = require('../controllers/comment/comment')
 
 const router = express.Router()
 
@@ -10,10 +11,11 @@ router.post('/editProfile', getAccessToRoute, editProfile)
 router.put('changePassword', getAccessToRoute, changePassword)
 router.post('/addStoryToReadList', getAccessToRoute, addStoryToReadList)
 router.get('/showReadList', getAccessToRoute, showReadList)
-router.get("/totalLikedStory", totalLikedStory)
-
+router.post("/totalLikedStory", totalLikedStory)
+router.post("/totalPostedStory", getAccessToRoute, totalPostedStory)
 router.post("/follow", followerOfUser)
 router.post("/message", sendMessageToUser)
 router.post("/addNotification", getAccessToRoute, makeNotification)
+router.post("/totalCommentOfaUser", getAccessToRoute, totalCommentOfaUser)
 
 module.exports = router;
