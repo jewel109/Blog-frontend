@@ -16,22 +16,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { accessUser, logOutUser } from './features/userSlice'
-import { fetchAllStories, fetchSlug, fetchUser } from './features/storySlice'
+import { fetchSlug, fetchUser } from './features/storySlice'
 import { Input } from '@/components/ui/input'
 import { Avatar } from '@/components/ui/avatar'
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
-import { timeStamp } from 'console'
 import moment from 'moment'
 import { Popover } from '@radix-ui/react-popover'
 import { PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { CustomIconWithText } from './post/[slug]/commentInPost'
-import localStorage from 'redux-persist/es/storage'
 import { toast } from '@/components/ui/use-toast'
 import { AxiosError } from "axios"
+import { PostComponet } from "./(page)/helper"
 
-function dateConvert(date: string) {
+export function dateConvert(date: string) {
   return moment(date).format("DD MMM YYYY")
 }
 
@@ -54,7 +52,7 @@ export function MainHeader() {
   const logOutHandler = () => {
 
     localStorage.removeItem("token")
-    dispatch(logOutUser())
+    dispatch(logOutUser(""))
     router.push("/")
 
   }
@@ -91,7 +89,7 @@ export function MainHeader() {
                     <PopoverTrigger asChild>
                       <Avatar className='cursor-pointer'>
                         <AvatarImage className='' src="https://github.com/shadcn.png" alt="jewel" />
-                        <AvatarFallback></AvatarFallback>
+                        <AvatarFallback className="p-2">{userState.username}</AvatarFallback>
                       </Avatar>
 
                     </PopoverTrigger>
@@ -123,7 +121,7 @@ export function MainHeader() {
 }
 
 export default function Home() {
-  const [postData, setPostData] = useState([])
+  const [postData, setPostData] = useState<Array<{ _id: string, slug: string, author: string, title: string, createdAt: string }>>([{ _id: "", slug: "", author: "", title: "", createdAt: "" }])
   const [user, setUser] = useState(null)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(false)
@@ -137,7 +135,7 @@ export default function Home() {
     router.push("/comment/addComment")
   }
 
-  async function detailPostHandler(slug, author) {
+  async function detailPostHandler(slug: string, author: string) {
     dispatch(fetchSlug(slug))
     dispatch(fetchUser(author))
     router.push(`/post/${slug}`)
@@ -166,25 +164,25 @@ export default function Home() {
       toast({
         description: "No post found may be server error",
       })
-      return axiosError(error)
+      return axiosError(error as AxiosError)
     }
 
   }
-  async function likeHandler(slug) {
-    try {
-      const token = localStorage.getItem("token")
-      console.log(token)
-      // console.log(token)
-      const headers = { "Authorization": `Bearer ${token}` }
-
-      const response = await axiosInstance.post(`/story/${slug}/like`, {}, { headers: headers })
-
-    } catch (error) {
-      console.log("likeHandler " + error)
-      axiosError(error as AxiosError)
-    }
-  }
-
+  // async function likeHandler(slug) {
+  //   try {
+  //     const token = localStorage.getItem("token")
+  //     console.log(token)
+  //     // console.log(token)
+  //     const headers = { "Authorization": `Bearer ${token}` }
+  //
+  //     const response = await axiosInstance.post(`/story/${slug}/like`, {}, { headers: headers })
+  //
+  //   } catch (error) {
+  //     console.log("likeHandler " + error)
+  //     axiosError(error as AxiosError)
+  //   }
+  // }
+  //
   const scrollHandler = (event) => {
     const { target } = event
     if (target.scrollHeight - target.scrollTop === target.clientHeight && hasMore) {
@@ -234,7 +232,7 @@ export default function Home() {
                 <div className=' col-start-3 col-end-10 text-white overflow-scroll min-h-screen max-h-screen ' onScroll={scrollHandler}>
                   {postData.map(({ _id, author, slug, title, createdAt }) => (
 
-                    <PostComponet key={_id} author={author} createdAt={createdAt} title={title} detailPostHandler={detailPostHandler} slug={slug} />
+                    <PostComponet _id={_id} key={_id} author={author} createdAt={createdAt} title={title} detailPostHandler={detailPostHandler} slug={slug} />
 
                   ))}
 
@@ -266,37 +264,4 @@ export default function Home() {
   )
 }
 
-const PostComponet = ({ author, slug, createdAt, title, detailPostHandler }) => {
-  return (
-    <Card className='' >
-      <div className='grid grid-cols-12 py-2'>
-        <div className=' col-start-1 col-end-2'>
-          <Avatar className='w-10 h-10 mx-2'>
-            <AvatarImage className='' src="https://github.com/shadcn.png" alt="jewel" />
-            <AvatarFallback></AvatarFallback>
-          </Avatar>
-        </div>
-        <div className='col-start-2 col-end-13 ml-6' >
-          <p className=' '>{author ? author : "no username found"} </p>
-          <p className=' text-gray-400 text-xs'>{
 
-            dateConvert(createdAt)
-          }</p>
-          <CardTitle className=''>
-            <CardHeader className='pl-0 cursor-pointer' onClick={() => detailPostHandler(slug, author)}>{title}</CardHeader>
-          </CardTitle>
-          <CardFooter className='p-0'>
-            <div className='grid grid-flow-col gap-x-5'>
-              {/* <div  >like</div> */}
-              {/* <div>comment </div> */}
-              {/* <div>save</div> */}
-            </div>
-          </CardFooter>
-        </div>
-      </div>
-
-    </Card>
-
-
-  )
-}
