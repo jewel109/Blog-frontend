@@ -5,6 +5,7 @@ const User = require("../../model/user")
 const chalk = require("chalk")
 const CustomError = require("../../middlewares/Error/CustomError")
 const { default: mongoose, Promise } = require("mongoose")
+const handleError = require("../../helpers/libraries/handleError")
 
 const log = console.log
 
@@ -54,6 +55,33 @@ const addNewCommentToStory = ErrorWrapper(async (req, res, next) => {
   }
 
 })
+
+const totalCommentOfaUser = async (req, res, next) => {
+  try {
+
+    const { username } = req.body
+
+    const comment = await Comment.find({ author: username, refModel: "Story" }).catch(handleError)
+
+    // console.log(comment)
+
+    const story = await Story.find({
+      "comments": {
+        $in: comment?.map(({ _id }) => mongoose.Types.ObjectId(_id))
+      }
+    }).catch(handleError)
+
+    console.log(story)
+
+    res.status(200).json({
+      stories:story, total: comment.length,storyLength:story.length, comments:comment
+    })
+
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+}
 
 const getAllRepliesOfAComment = ErrorWrapper(async (req, res, next) => {
   const { comment_id } = req.params
@@ -382,7 +410,7 @@ module.exports = {
   addReplyToAComment,
   chalk,
   log,
-  totalLikedComment
-
+  totalLikedComment,
+  totalCommentOfaUser
 
 }
