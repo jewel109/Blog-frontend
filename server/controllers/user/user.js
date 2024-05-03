@@ -50,7 +50,7 @@ const totalLikedStory = async (req, res, next) => {
     if (!username) {
       throw new Error("username is not provided")
     }
-    const user = await User.findOne({ username: username })
+    const user = await User.findOne({ username: username }).catch(handleError)
     if (!user) {
       throw new Error("no user found with this username")
     }
@@ -86,8 +86,8 @@ const totalLikedStory = async (req, res, next) => {
     //
 
     res.status(200).json({
-      data: allStory,
-      totalLiked: allStory.length
+      stories: allStory,
+      total: allStory.length
     })
 
   } catch (error) {
@@ -331,6 +331,29 @@ const sendMessageToUser = async (req, res, next) => {
   }
 }
 
+const totalPostedStory = async (req, res, next) => {
+  try {
+
+    const { username } = req.body
+    console.log(username)
+    const story = await Story.find({ author: username }).catch(handleError)
+    console.log(story)
+
+    if (story) {
+      res.status(200).json({
+        story, total: story.length
+      })
+    } else {
+      next("totalPostedStory is not found")
+    }
+
+
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+}
+
 const makeNotification = async (req, res, next) => {
   try {
     const { message } = req.body
@@ -359,6 +382,7 @@ module.exports = {
   profile,
   editProfile,
   makeNotification,
+  totalPostedStory,
   changePassword,
   addStoryToReadList,
   totalLikedStory,
