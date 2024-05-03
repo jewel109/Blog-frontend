@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from "../features/userSlice"
 import storyReducer from "../features/storySlice"
 import commentReducer from "../features/commentSlice"
+import postUserDetailsReducer from '../features/postUserDetailsSlice'
 import { useDispatch } from 'react-redux'
 import storage from "redux-persist/lib/storage"
 import {
@@ -17,7 +18,8 @@ import persistStore from 'redux-persist/lib/persistStore'
 const rootReducer = combineReducers({
   userReducer: userReducer,
   storyReducer: storyReducer,
-  commentReducer: commentReducer
+  commentReducer: commentReducer,
+  postUserDetailsReducer: postUserDetailsReducer
 })
 const persistConfig = {
   key: "root",
