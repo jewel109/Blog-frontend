@@ -13,6 +13,7 @@ import { toast } from "@/components/ui/use-toast"
 import { ToastAction } from "@radix-ui/react-toast"
 import { AxiosError } from "axios"
 import { countOfComment, countOfLike } from "@/app/features/storySlice"
+import { fetchPostUser } from "@/app/features/postUserDetailsSlice"
 
 
 
@@ -191,7 +192,7 @@ export default function Page() {
       <MainHeader />
       <div className='bg-gray-100 min-h-screen '>
         <div className='grid grid-cols-12 w-8/12 mx-auto pt-6 gap-1  min-h-screen'>
-          <div className=' col-start-1 col-end-3 grid justify-self-start'>
+          <section className=' col-start-1 col-end-3 grid justify-self-start left-section'>
             <div className="grid grid-rows-12 ">
               <div className="grid grid-flow-row h-[100px]  ">
                 <div className="" >
@@ -211,8 +212,8 @@ export default function Page() {
                 <div className="" >Save</div>
               </div>
             </div>
-          </div>
-          <div className=' col-start-3 col-end-10 max-h-screen overflow-scroll'>
+          </section>
+          <section className=' col-start-3 col-end-10 max-h-screen overflow-scroll main-content'>
             <div>
               <Card>
                 <CardHeader>
@@ -232,17 +233,20 @@ export default function Page() {
               </Card>
             </div>
             <CommentInPost />
-          </div>
-          <div className="col-start-11 col-end-13 max-h-screen ">
+          </section>
+          <section className="col-start-11 col-end-13 max-h-screen right-section">
             <div className="col-start-11 col-end-13">
-              <h2 className="text-lg font-medium">Author of the post</h2>
-              <p>{storyData.author}</p>
+              <h2 className="scroll-m-20 text-xl font-semibold text-muted-foreground ">Author of the post</h2>
+              <p className="scroll-m-20 text-2xl font-semibold tracking-tight cursor-pointer" onClick={() => {
+                router.push("/profile")
+                dispatch(fetchPostUser(storyData.author))
+              }}>{storyData.author}</p>
             </div>
 
-          </div>
+          </section>
         </div>
       </div>
-    </div>
+    </div >
 
 
   )
