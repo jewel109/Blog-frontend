@@ -11,9 +11,10 @@ import { useSelector } from "react-redux"
 import CommentInPost from "./commentInPost"
 import { toast } from "@/components/ui/use-toast"
 import { ToastAction } from "@radix-ui/react-toast"
-import { AxiosError } from "axios"
+import { AxiosError, AxiosRequestConfig } from "axios"
 import { countOfComment, countOfLike } from "@/app/features/storySlice"
 import { fetchPostUser } from "@/app/features/postUserDetailsSlice"
+import SaveStory from "./(helper)/saveStory"
 
 
 
@@ -27,7 +28,9 @@ export default function Page() {
   const [title, setTitle] = useState("")
   const [showDelete, setShowDelete] = useState(false)
   const [commentCount, setCommentCount] = useState(0)
-  console.log(storyData)
+  const [saveStoryCliked, setSaveStoryClicked] = useState<Boolean>(false)
+
+  // console.log(storyData)
 
   async function commentClickHandler() {
     const commentBox = document.getElementById("comment-box")
@@ -180,7 +183,7 @@ export default function Page() {
 
   useEffect(() => {
     setCommentCount(commentData?.commentList?.length)
-    console.log("new comment")
+    // console.log("new comment")
   }, [commentData])
 
 
@@ -209,8 +212,7 @@ export default function Page() {
                   <div>{commentCount}</div>
 
                 </div>
-                <div className="" >Save</div>
-              </div>
+                <SaveStory />              </div>
             </div>
           </section>
           <section className=' col-start-3 col-end-10 max-h-screen overflow-scroll main-content'>
