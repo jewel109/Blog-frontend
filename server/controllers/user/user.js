@@ -133,6 +133,7 @@ const changePassword = ErrorWrapper(async (req, res, next) => {
 const addStoryToReadList = async (req, res, next) => {
   try {
     let message = ""
+    let addedStory = false
     const { slug } = req.body
     const { username } = req.body
 
@@ -167,6 +168,7 @@ const addStoryToReadList = async (req, res, next) => {
 
       }
       message = "story added to readList"
+      addedStory = true
       console.log(updatedUser)
 
       console.log("if not found the user in the readlist" + updatedUser)
@@ -177,11 +179,12 @@ const addStoryToReadList = async (req, res, next) => {
 
       const updatedUser = await User.findOneAndUpdate({ username: username }, { $pull: { "readList": mongoose.Types.ObjectId(story._id) } }, { new: true })
       message = "story removed from readList"
+      addedStory = false
       console.log("user updated " + updatedUser)
     }
 
     res.status(200).json({
-      message: message
+      message: message, addedStory
     })
 
   } catch (error) {
