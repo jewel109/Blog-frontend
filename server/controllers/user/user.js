@@ -261,6 +261,23 @@ const followerOfUser = async (req, res, next) => {
   }
 }
 
+const showReadListStatus = async (req, res, next) => {
+  const user = await User.findById(req.user._id).catch(handleError)
+  if (!user) next("no user found")
+
+  if (!user.readList) next("no saved story found")
+
+  const story = await Story.find({
+    _id: {
+      $in: user?.readList?.map(id => mongoose.Types.ObjectId(id))
+    }
+  })
+  console.log(story)
+  res.status(200).json({
+    story
+  })
+}
+
 
 const showReadList = async (req, res, next) => {
   try {
@@ -391,5 +408,6 @@ module.exports = {
   totalLikedStory,
   followerOfUser,
   sendMessageToUser,
-  showReadList
+  showReadList,
+  showReadListStatus
 }

@@ -1,5 +1,5 @@
 const express = require('express')
-const { profile, editProfile, changePassword, addStoryToReadList, totalLikedStory, showReadList, followerOfUser, sendMessageToUser, makeNotification, totalPostedStory } = require('../controllers/user/user')
+const { profile, editProfile, changePassword, addStoryToReadList, totalLikedStory, showReadList, followerOfUser, sendMessageToUser, makeNotification, totalPostedStory, showReadListStatus } = require('../controllers/user/user')
 const { getAccessToRoute } = require('../middlewares/auth/accessRoute')
 const { totalCommentOfaUser } = require('../controllers/comment/comment')
 
@@ -17,5 +17,6 @@ router.post("/follow", followerOfUser)
 router.post("/message", sendMessageToUser)
 router.post("/addNotification", getAccessToRoute, makeNotification)
 router.post("/totalCommentOfaUser", getAccessToRoute, totalCommentOfaUser)
+router.post("/showReadListStatus", getAccessToRoute, showReadListStatus)
 
 module.exports = router;
