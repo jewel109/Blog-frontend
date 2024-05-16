@@ -1,4 +1,8 @@
 "use client"
+
+
+
+
 import { useState, useEffect } from "react"
 import { Button } from '@/components/ui/button'
 import { Provider, useSelector } from 'react-redux'
@@ -24,100 +28,22 @@ import { Avatar } from '@/components/ui/avatar'
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
 import moment from 'moment'
 import { Popover } from '@radix-ui/react-popover'
-import { PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { toast } from '@/components/ui/use-toast'
 import { AxiosError } from "axios"
 import { PostComponet } from "./(page)/helper"
+import MainHeader from "@/components/mainHeader"
+
+// TODO error page 
+// TODO theme color , font variable
+// TODO search functionality
+//
+
+
+
+
 
 export function dateConvert(date: string) {
   return moment(date).format("DD MMM YYYY")
-}
-
-export function MainHeader() {
-  const userState = useSelector((state: RootState) => state.userReducer)
-  const dispatch = useAppDispatch()
-  const router = useRouter()
-  const gotoregister = () => {
-    console.log("clicked")
-    router.push("/profile/register")
-  }
-  const createAccountHandler = () => {
-    router.push("/profile/register")
-  }
-
-  const loginHandler = () => {
-    router.push("/profile/login")
-  }
-
-  const logOutHandler = () => {
-
-    localStorage.removeItem("token")
-    dispatch(logOutUser(""))
-    router.push("/")
-
-  }
-  const handleclik = () => {
-    console.log("clicked")
-    router.push("/post/addPost")
-  }
-  useEffect(() => {
-    console.log("called")
-    dispatch(accessUser())
-  }, [])
-  console.log(userState.username)
-  return (
-    <>
-      <nav className='mt-4 mb-2 w-8/12 mx-auto grid grid-cols-2'>
-        <div className='grid grid-cols-6 '>
-          <div>
-
-            <Button onClick={() => {
-              router.push("/")
-            }}>Blog</Button>
-          </div>
-          <Input className=' -ml-4 w-5/6 col-start-2 col-end-6  '></Input>
-        </div>
-        <div className='grid grid-flow-col justify-self-end '>
-
-
-          {
-            userState.username ?
-              <div className='flex flex-row items-center gap-1'>
-                <Button variant="outline" onClick={() => handleclik()}>Create Post</Button>
-                <div>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Avatar className='cursor-pointer'>
-                        <AvatarImage className='' src="https://github.com/shadcn.png" alt="jewel" />
-                        <AvatarFallback className="p-2">{userState.username}</AvatarFallback>
-                      </Avatar>
-
-                    </PopoverTrigger>
-                    <PopoverContent className='w-40' align='end'>
-                      <div className=' p-2 cursor-pointer hover:bg-indigo-100 rounded' >
-                        {userState.username}
-                      </div>
-                      <div className=' p-2 cursor-pointer hover:bg-indigo-100 rounded' >
-                        Dashboard
-                      </div>
-
-                      <div className='cursor-pointer hover:bg-indigo-100 p-2 rounded' onClick={() => logOutHandler()}  >
-                        Logout
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              </div> :
-              <div className='grid grid-flow-col gap-x-1'>
-                <Button variant="outline" onClick={() => createAccountHandler()}>Create Account</Button>
-                <Button onClick={() => loginHandler()}>Login</Button>
-              </div>
-          }
-        </div>
-      </nav>
-
-    </>
-  )
 }
 
 export default function Home() {
@@ -127,6 +53,8 @@ export default function Home() {
   const [hasMore, setHasMore] = useState(false)
   const data = useSelector((state: RootState) => state.userReducer)
   const storyData = useSelector((state: RootState) => state.storyReducer)
+
+  console.log("userdata ", data)
   console.log(storyData)
   // console.log(storyData)
   const dispatch = useAppDispatch()
@@ -141,6 +69,7 @@ export default function Home() {
     router.push(`/post/${slug}`)
   }
 
+  // LEARNED- git checkout -- filname for undo the changes
 
 
   async function forAllStories() {
@@ -214,7 +143,7 @@ export default function Home() {
             <MainHeader />
           </div>
           <main >
-            <div className='bg-gray-100' >
+            <div className='bg-light-foreground' >
               <div className='grid grid-cols-12 w-8/12 mx-auto pt-6 gap-1  min-h-screen'>
                 <div className=' col-start-1 col-end-3 grid justify-self-start'>
 
