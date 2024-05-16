@@ -262,9 +262,13 @@ const followerOfUser = async (req, res, next) => {
 }
 
 const showReadListStatus = async (req, res, next) => {
+  const { slug } = req.body
+  if (!slug) return next("no slug is found")
   const user = await User.findById(req.user._id).catch(handleError)
   if (!user) next("no user found")
 
+  const thisStory = await Story.findOne({ slug: slug }).catch(handleError)
+  // console.log(thisStory)
   if (!user.readList) next("no saved story found")
 
   const story = await Story.find({
@@ -272,17 +276,21 @@ const showReadListStatus = async (req, res, next) => {
       $in: user?.readList?.map(id => mongoose.Types.ObjectId(id))
     }
   })
-  console.log(story)
+  const data = user?.readList?.includes(mongoose.Types.ObjectId(thisStory._id));
+
+  console.log(data)
+
+  // console.log(story)
   res.status(200).json({
-    story
+    data
   })
 }
 
 
 const showReadList = async (req, res, next) => {
   try {
-
-    const user = await User.findById(req.user._id)
+    const { username } = req.body
+    const user = await User.findOne({ username: username }).catch(handleError)
     if (!user) {
       throw new Error("user is not found")
     }
@@ -291,7 +299,7 @@ const showReadList = async (req, res, next) => {
         _id: {
           $in: user?.readList?.map(id => mongoose.Types.ObjectId(id))
         }
-      })
+      }).catch(handleError)
       console.log(storyData)
       res.status(200).json({
         data: storyData
