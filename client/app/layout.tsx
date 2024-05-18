@@ -9,6 +9,9 @@ import { persistor, store } from './store/store'
 import React from 'react'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Toaster } from '@/components/ui/toaster'
+import { ThemeProvider } from 'next-themes'
+import { ErrorBoundary } from 'next/dist/client/components/error-boundary'
+import ErrorPage from '@/components/erroPage'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,11 +27,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <div>
-              {children}
-            </div>
-            <Toaster />
-
+            <ErrorBoundary errorComponent={ErrorPage}>
+              <div>
+                {children}
+              </div>
+              <Toaster />
+            </ErrorBoundary>
           </PersistGate>
         </Provider>
       </body>
