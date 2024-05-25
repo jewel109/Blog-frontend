@@ -175,8 +175,11 @@ const likeStory = async (req, res, next) => {
 
   ],).catch(handleError)
 
+  if (!story) {
+    next("story is not found")
+  }
 
-
+  console.log(story)
   const findStory = await Story.aggregate([
     {
       $match: {
@@ -207,7 +210,6 @@ const likeStory = async (req, res, next) => {
   // console.log(findStory[0].likeStatus)
 
 
-  console.log(story)
 
   return res.status(200).json({
     message: `you have ${findStory[0].likeStatus} the story`,
