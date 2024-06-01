@@ -2,8 +2,8 @@
 import { accessUser, logOutUser } from '@/lib/features/userSlice'
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Button } from '../ui/button'
 import { Avatar } from '../ui/avatar'
@@ -12,25 +12,27 @@ import { Input } from '../ui/input'
 import { SwitchDemo } from './switch'
 import { type RootState, useAppDispatch } from '@/lib/store/store'
 import { toggleClick } from '@/lib/features/sidebarSlice'
+import { toast } from '../ui/use-toast'
 
 
 export default function MainHeader() {
   const userState = useSelector((state: RootState) => state.userReducer)
   const sideBarState = useSelector((state: RootState) => state.sidebarReducer)
-  console.log(sideBarState)
+  const pathName = usePathname()
+  // console.log(sideBarState)
   // console.log(userState)
   const dispatch = useAppDispatch()
   const router = useRouter()
   const gotoregister = () => {
-    console.log("clicked")
-    router.push("/profile/register")
+    // console.log("clicked")
+    router.push("/register")
   }
   const createAccountHandler = () => {
-    router.push("/profile/register")
+    router.push("/register")
   }
 
   const loginHandler = () => {
-    router.push("/profile/login")
+    router.push("/login")
   }
 
   const logOutHandler = () => {
@@ -41,16 +43,44 @@ export default function MainHeader() {
 
   }
   const handleclik = () => {
-    console.log("clicked")
+    // console.log("clicked")
     router.push("/post/addPost")
   }
   useEffect(() => {
-    console.log("called")
+    // console.log("called")
     dispatch(accessUser())
+    if (userState.username) {
+      toast({
+        description: "You are logged in",
+        variant: "success"
+      })
+      console.log(userState.username)
 
-    console.log("accessUser " + userState.error)
+    } else {
+      console.log("i am called")
+      toast({
+        description: "You are not logged in",
+        variant: "destructive"
+      })
+    }
+
+
+    console.log("accessUser " + userState)
+
+
 
   }, [])
+
+  useEffect(() => {
+    if (userState.error) {
+      toast({
+        description: userState.error,
+        variant: "destructive"
+      })
+    }
+  }, [userState.error])
+
+
   return (
     <>
       <nav className=' md:mr-4 md:fixed md:top-0 md:left-0 md:z-50 md:py-4  bg-gray-50 dark:bg-gray-800 mx-auto flex flex-row justify-between w-full px-2 gap-x-4 py-2'>
