@@ -20,12 +20,17 @@ import Link from "next/link"
 import { useSelector } from "react-redux"
 import { AxiosError } from "axios"
 import { type RootState, useAppDispatch } from "@/lib/store/store"
+import { toast } from "@/components/ui/use-toast"
+import { ToastAction } from "@radix-ui/react-toast"
+import { addComment, getAllCommentOfaStory } from "@/lib/features/commentSlice"
 const formSchema = z.object({
   comment: z.string().min(20)
 })
 
 export const CommentForm: React.FC = () => {
 
+  const userData = useSelector((state: RootState) => state.userReducer)
+  const storyData = useSelector((state: RootState) => state.storyReducer)
   const router = useRouter()
   const data = useSelector((state: RootState) => state.userReducer)
   const dispatch = useAppDispatch()
@@ -43,6 +48,22 @@ export const CommentForm: React.FC = () => {
     // forLogin(values)
     // redirect('/home')
     // router.push('/', { scroll: true })
+    if (!userData.username) {
+      console.log("no user found")
+      toast({
+        title: "You are not logged in ",
+        action: <ToastAction altText="Log In" onClick={() => { router.push("/profile/login") }}>Log in</ToastAction>
+      })
+
+      return
+    }
+
+    dispatch(addComment({ slug: storyData.slug, content: values.comment }))
+
+
+
+    form.resetField("comment")
+
   }
 
 
@@ -60,7 +81,7 @@ export const CommentForm: React.FC = () => {
                 <FormItem>
 
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none focus-visible:ring-offset-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800" />
+                    <Input placeholder="shadcn" {...field} {...form.register} className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none focus-visible:ring-offset-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
