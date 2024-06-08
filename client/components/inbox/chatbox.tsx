@@ -1,8 +1,53 @@
 "use client"
 
+import { useSelector } from "react-redux"
 import { MessageForm } from "./messageForm"
+import { type RootState } from "@/lib/store/store"
+import { useEffect, useState, useRef } from "react"
+import axiosInstance from "@/lib/axios"
+import axiosError from "@/lib/axiosError"
+import { AxiosError } from "axios"
+import { ChatSent } from "./chatSent"
+import { ChatReply } from "./chatReply"
+import { MobileContactList } from "./mobileContactList"
+
+type ChatData = {
+  reciverName: string,
+  senderName: string,
+  body: string
+}
 
 export const ChatBox: React.FC = () => {
+
+  const chatData = useSelector((state: RootState) => state.chatReducer)
+  const userData = useSelector((state: RootState) => state.userReducer)
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [data, setData] = useState<ChatData[]>([])
+
+
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const { data } = await axiosInstance.post("/user/getMessages", { author: userData.username, sendTo: chatData.username })
+        console.log(data.messages)
+
+        setData(data.messages.reverse())
+
+      } catch (error) {
+        console.error(error)
+        axiosError(error as AxiosError)
+      }
+    }
+    fetchChats()
+  }, [chatData.messageSent])
+
+
+  useEffect(() => {
+    // Scroll to the bottom when messages change
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [data]);
 
   return (
     <div className="bg-gray-100 dark:bg-primary-foreground">
@@ -22,7 +67,7 @@ export const ChatBox: React.FC = () => {
             </div>
             <div className="flex-1 min-w-0 ms-4 space-y-1">
               <p className="text-sm font-bold text-gray-800 truncate dark:text-gray-500">
-                Neil Sims
+                {chatData.username}
               </p>
               <p className="text-sm text-gray-500 font-medium dark:text-gray-400 line-clamp-1 ">
                 developer              </p>
@@ -37,35 +82,54 @@ export const ChatBox: React.FC = () => {
 
 
       </div>
+      <div className="userList-modal md:hidden">
+        <MobileContactList />
+      </div>
       {/* chat header */}
+      <div className="p-3 md:hidden userlist">
+        <div className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-gray-700 cursor-pointer rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800">UserList</div>
+
+      </div>
+
+
 
       <div>
 
+
+
         <div className="p-3 min-h-[73vh] md:max-h-[59vh] md:min-h-[59vh]  overflow-auto">
+          {/* <div className="flex items-center flex-row justify-center"> */}
+          {/*   <div className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800 hover:cursor-pointer" onClick={() => { */}
+          {/**/}
+          {/*   }}>Load More</div> */}
+          {/**/}
+          {/* </div> */}
+          {
+            data.map(({ reciverName, senderName, body }) => {
+              // console.log(reciverName, senderName)
+              // console.log("chatData userName", chatData.username == reciverName, reciverName
+              if (senderName == userData.username) {
 
-          <div className="chat-message">
-            <div className="flex items-end justify-end">
-              <div className="order-1 mx-2 flex max-w-xs flex-col items-end space-y-2 text-xs">
-                <div><span className="inline-block rounded-lg font-medium tracking-tight leading-4 rounded-br-none bg-indigo-700 px-4 py-2 text-gray-400">yes, I have a mac. I never had issues with root permission as well, but this helped me to solve the problem</span></div>
-              </div>
-              <img src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" className="order-2 h-6 w-6 rounded-full" />
-            </div>
-          </div>
-
-          <div className="chat-message">
-            <div className="flex items-end">
-              <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
-                <div><span className="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-800 text-gray-400">Thanks for your message David. I thought I'm alone with this issue. Please, ? the issue to support it :)</span></div>
-              </div>
-              <img src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144" alt="My profile" className="w-6 h-6 rounded-full order-1" />
-            </div>
-          </div>
+                // console.log(reciverName)
+                return (<ChatSent username={senderName} message={body} />)
 
 
+              } else {
+                return <ChatReply username={senderName} message={body} />
+              }
 
 
-        </div>
 
+
+
+
+            })
+
+          }
+
+
+          <div ref={messagesEndRef} />
+        </div >
       </div>
       <MessageForm />
     </div>
