@@ -2,7 +2,7 @@
 
 import { PostType } from "@/lib/data"
 import Link from "next/link"
-import { Comment } from "../comment/comment"
+import { Comments } from "../comment/comments"
 
 const postData: PostType = {
   id: 0,
@@ -66,7 +66,8 @@ export const Post: React.FC<PostType> = ({ author = postData.author, title = pos
       </div>
     </article>
     <section>
-      <Comment />
+
+      <Comments />
     </section>
   </div>
 )
