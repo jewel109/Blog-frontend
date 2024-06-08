@@ -359,6 +359,32 @@ const sendMessageToUser = async (req, res, next) => {
   }
 }
 
+const getUsers = async (req, res, next) => {
+
+  try {
+    const { username } = req.body
+    if (!username) {
+      return next("username is not provided")
+    }
+    const page = parseInt(req.query?.page) || 1
+
+    const limit = parseInt(req.query?.limit) || 10
+    const skip = (page - 1) * limit
+
+    const users = await User.find({ username: { $ne: username } }, {
+      username: 1, _id: 0, email: 1
+    }).skip(skip).limit(limit)
+
+    console.log(users)
+    res.status(200).json({
+      users
+    })
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+}
+
 const totalPostedStory = async (req, res, next) => {
   try {
 
