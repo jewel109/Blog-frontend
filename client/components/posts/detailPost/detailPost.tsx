@@ -5,7 +5,7 @@ import { AuthorPage } from "../author/author"
 import { Post } from "./post"
 
 export const DetaitPost: React.FC = () => (
-  <div className="h-full  md:mr-2.5 md:grid md:grid-cols-12  md:ml-[210px] md:mt-[84px] overflow-x-hidden ">
+  <div className="h-full  md:mr-2.5 md:grid md:grid-cols-12 md:mt-[50px]  overflow-x-hidden ">
 
     <div className="md:col-span-8 ">
       <Post />
