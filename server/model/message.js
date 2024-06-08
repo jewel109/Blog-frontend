@@ -15,7 +15,9 @@ const messageSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "User",
     required: true
-  }
+  },
+  senderName: String,
+  reciverName: String
 
 }, { timestamps: true })
 
