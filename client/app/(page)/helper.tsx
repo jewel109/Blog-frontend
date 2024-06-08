@@ -1,6 +1,6 @@
+import { dateConvert } from "@/components/home/page";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { dateConvert } from "../page";
 
 export function PostComponet({ _id, author, slug, createdAt, title, detailPostHandler, }: { _id: string, slug: string, author: string, title: string, createdAt: string, detailPostHandler: (slug: string, author: string) => void }) {
   return (
