@@ -385,6 +385,60 @@ const getUsers = async (req, res, next) => {
   }
 }
 
+const getMessages = async (req, res, next) => {
+  try {
+    const { author, sendTo } = req.body
+    if (!author || !sendTo) {
+      return next("no author or sendTo is found")
+
+
+    }
+
+    const foundAuthor = await User.findOne({ username: author })
+    if (!foundAuthor) {
+
+      return next("no user found with named author")
+    }
+    const foundSendTo = await User.findOne({ username: sendTo }).catch()
+    if (!foundSendTo) {
+      return next("no sendTo found")
+    }
+
+    const page = parseInt(req.query?.page) || 1
+
+    const limit = parseInt(req.query?.limit) || 1000
+    const skip = (page - 1) * limit
+
+    const updatedMessages = await Message.updateMany({ author: foundAuthor._id, sendTo: foundSendTo._id }, { senderName: foundAuthor.username, reciverName: foundSendTo.username })
+
+    if (!updatedMessages) {
+      next("updatedMessages is not possible")
+    }
+
+    const messages = await Message.find({
+      $or: [
+        {
+          author: foundAuthor._id, sendTo: foundSendTo._id
+        }, {
+          author: foundSendTo._id, sendTo: foundAuthor._id
+
+        }
+      ]
+    }).skip(skip).limit(limit)
+      .sort({ $natural: -1 });
+
+    console.log(messages)
+
+    res.status(200).json({
+      messages
+    })
+
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+}
+
 const totalPostedStory = async (req, res, next) => {
   try {
 
@@ -443,5 +497,7 @@ module.exports = {
   followerOfUser,
   sendMessageToUser,
   showReadList,
-  showReadListStatus
+  showReadListStatus,
+  getUsers,
+  getMessages,
 }
