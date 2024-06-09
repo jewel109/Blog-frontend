@@ -117,14 +117,14 @@ export default function MainHeader() {
 
                     </PopoverTrigger>
                     <PopoverContent className='w-40' align='end'>
-                      <div className=' p-2 cursor-pointer hover:bg-indigo-100 rounded' >
+                      <div className=' p-2 cursor-pointer hover:bg-indigo-100 dark:hover:bg-gray-800 rounded' >
                         {userState.username}
                       </div>
-                      <div className=' p-2 cursor-pointer hover:bg-indigo-100 rounded' >
+                      <div className=' p-2 cursor-pointer dark:hover:bg-gray-800   hover:bg-indigo-100 rounded' >
                         Dashboard
                       </div>
 
-                      <div className='cursor-pointer hover:bg-indigo-100 p-2 rounded' onClick={() => logOutHandler()}  >
+                      <div className='cursor-pointer hover:bg-indigo-100 p-2 dark:hover:bg-gray-800  rounded' onClick={() => logOutHandler()}  >
                         Logout
                       </div>
                     </PopoverContent>
