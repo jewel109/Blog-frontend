@@ -81,7 +81,7 @@ export const CommentForm: React.FC = () => {
                 <FormItem>
 
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} {...form.register} className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none focus-visible:ring-offset-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800" />
+                    <Input placeholder="" {...field} {...form.register} className="px-0 w-full text-sm text-gray-900 border-0  focus:outline-none   dark:text-white dark:placeholder-gray-400 dark:bg-gray-800" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
