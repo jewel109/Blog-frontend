@@ -41,6 +41,7 @@ export const Posts: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && hasMore) {
+        console.log("yes here")
         loadMoreData();
       }
     };
