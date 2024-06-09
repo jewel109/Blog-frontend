@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { EachUserData } from "./eachUserData"
 import axiosInstance from "@/lib/axios"
 
@@ -19,6 +19,8 @@ export const ContactList: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const userData = useSelector((state: RootState) => state.userReducer)
+
+  const divRef = useRef<HTMLDivElement>(null)
   const loadMoreData = useCallback(async () => {
     if (loading) return;
     setLoading(true);
@@ -39,17 +41,21 @@ export const ContactList: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 400 && hasMore) {
-        console.log("yes here")
-        loadMoreData();
+      if (divRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = divRef.current;
+
+        console.log(scrollTop, scrollHeight, clientHeight)
+
+        if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore) {
+          loadMoreData()
+        }
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const divElem = divRef.current
+    divElem?.addEventListener('scroll', handleScroll);
+    return () => divElem?.removeEventListener('scroll', handleScroll);
   }, [loadMoreData, hasMore]);
-
-
   useEffect(() => {
     loadMoreData()
   }, [])
@@ -57,7 +63,7 @@ export const ContactList: React.FC = () => {
 
 
   return (
-    <div className="hidden md:flex md:flex-col min-w-2xl  p-4 py-6 bg-gray-50 dark:bg-gray-900 min-h-[75vh] max-h-[75vh] overflow-auto">
+    <div ref={divRef} className="hidden md:flex md:flex-col min-w-2xl  p-4 py-6 bg-gray-50 dark:bg-gray-900 min-h-[75vh] max-h-[75vh] overflow-auto">
       <div className="flex items-center justify-between mb-4 ">
         <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-gray-400">Latest Chats</h5>
         <Link href="#" className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
