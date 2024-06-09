@@ -19,7 +19,7 @@ import axiosError from "@/lib/axiosError"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
-import { registerUser, } from "@/lib/features/userSlice"
+import { accessUser, registerUser, } from "@/lib/features/userSlice"
 import { type RootState, useAppDispatch } from "@/lib/store/store"
 import { useSelector } from "react-redux"
 import { useEffect, useState } from "react"
@@ -65,9 +65,11 @@ export default function ProfileForm() {
       await dispatch(registerUser(values))
       // console.log(data)
 
+      await dispatch(accessUser())
       form.resetField("username")
       form.resetField("email")
       form.resetField("password")
+
       router.push("/")
     } catch (error) {
       console.log(error)
