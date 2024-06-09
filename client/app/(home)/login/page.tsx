@@ -47,6 +47,7 @@ export default function ProfileForm() {
     console.log(response)
     // dispatch(accessUser())
     router.push("/")
+    dispatch(accessUser())
   }
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
