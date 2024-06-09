@@ -1,7 +1,6 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import { EachUserData } from "./eachUserData"
 import axiosInstance from "@/lib/axios"
 
 import Link from "next/link"
