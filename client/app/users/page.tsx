@@ -1,16 +1,11 @@
 import { Button } from "@/components/ui/button";
+import { Users } from "@/components/users/users";
 import Link from "next/link";
 
 export default function Page() {
-  return (<>
+  return (
     <div>
-      list of users
+      <Users />
     </div>
-    <div>
-      <Button className='mx-2'>
-        <Link href={`/`}>Home</Link> </Button>
-
-    </div>
-  </>
   )
 }
