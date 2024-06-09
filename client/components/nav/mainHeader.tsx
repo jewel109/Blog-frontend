@@ -13,20 +13,20 @@ import { SwitchDemo } from './switch'
 import { type RootState, useAppDispatch } from '@/lib/store/store'
 import { toggleClick } from '@/lib/features/sidebarSlice'
 import { toast } from '../ui/use-toast'
+import Link from 'next/link'
 
 
 export default function MainHeader() {
   const userState = useSelector((state: RootState) => state.userReducer)
   const sideBarState = useSelector((state: RootState) => state.sidebarReducer)
   const pathName = usePathname()
+
+  const [userName, setUserName] = useState<String | null>("")
   // console.log(sideBarState)
   // console.log(userState)
   const dispatch = useAppDispatch()
   const router = useRouter()
-  const gotoregister = () => {
-    // console.log("clicked")
-    router.push("/register")
-  }
+
   const createAccountHandler = () => {
     router.push("/register")
   }
@@ -47,15 +47,16 @@ export default function MainHeader() {
     router.push("/post/addPost")
   }
   useEffect(() => {
+
+    setUserName(userState?.username)
+    console.log("called")
+
+  }, [userState.username])
+
+  useEffect(() => {
     // console.log("called")
     dispatch(accessUser())
     if (userState.username) {
-      toast({
-        description: "You are logged in",
-        variant: "success"
-      })
-      console.log(userState.username)
-
     } else {
       console.log("i am called")
       toast({
@@ -80,6 +81,12 @@ export default function MainHeader() {
     }
   }, [userState.error])
 
+  useEffect(() => {
+
+    setUserName(userState?.username)
+    console.log("called")
+
+  }, [userState.username])
 
   return (
     <>
@@ -104,7 +111,7 @@ export default function MainHeader() {
 
           <SwitchDemo />
           {
-            userState?.username ?
+            userName ?
               <div className='flex flex-row items-center gap-1'>
                 <Button variant="outline" onClick={() => handleclik()} className='text-muted bg-primary tracking-tighter font-bold hidden '>Create Post</Button>
                 <div className='hidden md:flex'>
@@ -112,7 +119,7 @@ export default function MainHeader() {
                     <PopoverTrigger asChild>
                       <Avatar className='cursor-pointer'>
                         <AvatarImage className='' src="https://github.com/shadcn.png" alt="jewel" />
-                        <AvatarFallback className="p-2">{userState.username}</AvatarFallback>
+                        <AvatarFallback className="p-2">{userName}</AvatarFallback>
                       </Avatar>
 
                     </PopoverTrigger>
@@ -139,8 +146,10 @@ export default function MainHeader() {
 
               :
               <div className='grid grid-flow-col gap-x-1'>
-                <Button variant="outline" onClick={() => createAccountHandler()}>Create Account</Button>
-                <Button onClick={() => loginHandler()}>Login</Button>
+                <div className="inline-flex items-center px-2 py-1 text-sm font-medium  cursor-pointer text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800" onClick={() => createAccountHandler()}>Create Account</div>
+                <div className=" inline-flex items-center py-1 px-3 ms-2 cursor-pointer text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" onClick={() => loginHandler()}>Login</div>
+
+
               </div>
           }
         </div>
