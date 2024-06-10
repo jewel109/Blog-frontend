@@ -12,8 +12,8 @@ const sideBarSlice = createSlice({
   name: "sidebar",
   initialState: sidebarState,
   reducers: {
-    toggleClick(state) {
-      state.clicked = !state.clicked
+    openSidebar(state) {
+      state.clicked = true
     }
     ,
     closeSidebar(state) {
@@ -24,7 +24,7 @@ const sideBarSlice = createSlice({
 
 
 
-export const { toggleClick, closeSidebar } = sideBarSlice.actions
+export const { openSidebar, closeSidebar } = sideBarSlice.actions
 
 export const sideBarSliceReducer = sideBarSlice.reducer
 
