@@ -3,30 +3,53 @@
 import { closeSidebar, toggleClick } from "@/lib/features/sidebarSlice"
 import { useAppDispatch, type RootState } from "@/lib/store/store"
 import Link from "next/link"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 
 export const SideBar: React.FC = () => {
   const SideBarState = useSelector((state: RootState) => state.sidebarReducer)
   const menuRef = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false)
+
+
 
   const dispatch = useAppDispatch()
 
   useEffect(() => {
+    // if (SideBarState.clicked) {
+    //   setMenuOpen(true)
+    // }
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      if (window.innerWidth <= 768 && SideBarState.clicked && menuRef.current && !menuRef.current.contains(event.target as Node)) {
 
+        console.log(SideBarState.clicked + " in handleClickOutside")
         dispatch(closeSidebar())
+        // console.log(menuRef.current)
         // Click occurred outside the menu, close the menu here
-        console.log('Clicked outside the menu');
+        // console.log('Clicked outside the menu');
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        document.addEventListener('mousedown', handleClickOutside);
+      } else {
+        document.removeEventListener('mousedown', handleClickOutside);
+      }
+    };
+
+    handleResize(); // Check initially if the screen size is mobile
+    window.addEventListener('resize', handleResize);
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('resize', handleResize);
     };
-  }, []);
+
+
+  }, [SideBarState.clicked, dispatch]);
+
+  console.log(SideBarState.clicked + "in sidebar")
 
   return (
     <aside id="default-sidebar" className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform duration-1000 ${SideBarState.clicked ? "translate-x-0" : "hidden"} md:flex `} aria-label="Sidebar" ref={menuRef}>
