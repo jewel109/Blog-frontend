@@ -100,7 +100,6 @@ export default function MainHeader() {
               router.push("/")
             }} className='text-muted font-semibold hidden md:flex '>Blog</Button>
           </div>
-          <SearchHeader />
           <CommandDialogDemo />
         </div>
         <div className='flex '>
