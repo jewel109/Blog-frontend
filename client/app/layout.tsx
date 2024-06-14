@@ -31,7 +31,7 @@ export default function RootLayout({
         <ThemeProvider defaultTheme='dark' attribute='class'>
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-              <ErrorBoundary errorComponent={ErrorPage}>
+              <ErrorBoundary fallback={ErrorPage}>
                 <MainHeader />
                 <SideBar />
                 <div className='md:ml-[200px] md:mt-[77px]'>
