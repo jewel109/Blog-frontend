@@ -9,6 +9,9 @@ interface AllComment {
   content: string,
   author: string
 }
+interface UiI {
+  scroll: boolean
+}
 interface Comment {
   content: string,
   author: string,
@@ -82,8 +85,6 @@ const commentSlice = createSlice({
   name: "comment",
   initialState: commentInitialState,
   reducers: {
-
-
   },
   extraReducers: (builder) => {
     builder
@@ -103,5 +104,28 @@ const commentSlice = createSlice({
   }
 })
 
+interface commentUiStatI {
+  scroll: boolean
+}
+
+const commentUiState: commentUiStatI = {
+  scroll: false
+}
+
+const commentUiSlice = createSlice({
+  "name": "commentUi", initialState: commentUiState, reducers: {
+    scrollToCommentsSection(state) {
+      state.scroll = !state.scroll
+    },
+    resetScrollToCommentsSection(state) {
+      state.scroll = false
+    }
+
+
+  }
+})
+
+export const { resetScrollToCommentsSection, scrollToCommentsSection } = commentUiSlice.actions
 
 export const commentReducer = commentSlice.reducer
+export const commentUiReducer = commentUiSlice.reducer
