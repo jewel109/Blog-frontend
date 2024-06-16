@@ -17,7 +17,7 @@ export const Comments: React.FC = () => {
 
   const dispatch = useAppDispatch()
 
-  console.log(commentData)
+  // console.log(commentData)
 
 
   useEffect(() => {

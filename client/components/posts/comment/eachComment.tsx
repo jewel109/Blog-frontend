@@ -14,7 +14,7 @@ export type CommentType = {
 }
 export const EachComment: React.FC<CommentType> = ({ id, content, date, author }) => {
 
-  console.log(id)
+  // console.log(id)
 
   return (
     <article className=" p-6 text-base bg-gray-50 rounded-lg dark:bg-gray-900">
