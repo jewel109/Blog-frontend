@@ -1,10 +1,10 @@
 "use client"
 
 import { EachComment } from "./eachComment"
-import { getAllCommentOfaStory } from "@/lib/features/commentSlice"
+import { getAllCommentOfaStory, resetScrollToCommentsSection } from "@/lib/features/commentSlice"
 import { useAppDispatch, type RootState } from "@/lib/store/store"
 import _default from "next/dist/shared/lib/runtime-config.external"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useSelector } from "react-redux"
 import { CommentForm } from "./commentForm"
 
@@ -15,9 +15,22 @@ export const Comments: React.FC = () => {
 
   const userData = useSelector((state: RootState) => state.userReducer)
 
+  const commentScroolref = useRef<HTMLDivElement>(null)
+
   const dispatch = useAppDispatch()
 
   // console.log(commentData)
+  const scrollToComments = useSelector((state: RootState) => state.commentUiReducer);
+
+  useEffect(() => {
+    if (scrollToComments) {
+      // Ensure ref is available before scrolling
+      if (commentScroolref.current) {
+        commentScroolref.current.scrollIntoView({ behavior: 'smooth' });
+        dispatch(resetScrollToCommentsSection());
+      }
+    }
+  }, [scrollToComments, dispatch]);
 
 
   useEffect(() => {
@@ -38,9 +51,12 @@ export const Comments: React.FC = () => {
         {
           Array.isArray(commentData.commentList) ? commentData.commentList.map(({ _id, content, author, date }) =>
           (<>
-            <EachComment key={_id} id={_id} date={date} author={author} content={content} />
+            <div ref={commentScroolref}>
+              <EachComment key={_id} id={_id} date={date} author={author} content={content} />
+            </div>
           </>
-          )) : <> <p>no comment found</p></>
+          ))
+            : <> <p>no comment found</p></>
         }
       </div>
     </div >
