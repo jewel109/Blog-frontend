@@ -52,7 +52,7 @@ export const SideBar: React.FC = () => {
   console.log(SideBarState.clicked + "in sidebar")
 
   return (
-    <aside id="default-sidebar" className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform duration-1000 ${SideBarState.clicked ? "translate-x-0" : "hidden"} md:flex `} aria-label="Sidebar" ref={menuRef}>
+    <aside id="default-sidebar" className={`fixed top-0 left-0 z-40 w-44 h-screen transition-transform duration-1000 ${SideBarState.clicked ? "translate-x-0" : "hidden"} md:flex `} aria-label="Sidebar" ref={menuRef}>
       <div className="h-full px-3 py-6 overflow-y-auto bg-gray-50 dark:bg-gray-800">
 
 
