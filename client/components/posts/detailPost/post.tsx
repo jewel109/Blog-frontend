@@ -3,6 +3,7 @@
 import { PostType } from "@/lib/data"
 import Link from "next/link"
 import { Comments } from "../comment/comments"
+import { timeAgo } from "@/lib/utils/dateConvert"
 
 const postData: PostType = {
   id: 0,
@@ -14,7 +15,7 @@ const postData: PostType = {
   title: "Progressive web framework"
 }
 
-export const Post: React.FC<PostType> = ({ author = postData.author, title = postData.title, content = postData.content, createdAt = postData.createdAt }) => (
+export const Post: React.FC<PostType> = ({ author, title, content, createdAt }) => (
   <div>
     <article className="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-900 dark:border-gray-700">
       <div className="flex justify-between items-center mb-5 text-gray-500">
@@ -25,7 +26,7 @@ export const Post: React.FC<PostType> = ({ author = postData.author, title = pos
             <span className="font-semibold tex-sm dark:text-gray-400 ">
               {author}
             </span>
-            <span className="text-sm  font-light dark:text-gray-500 ml-3">{createdAt} days ago</span>
+            <span className="text-sm  font-light dark:text-gray-500 ml-3">{timeAgo(createdAt)} </span>
           </span>
 
         </div>

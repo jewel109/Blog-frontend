@@ -33,7 +33,6 @@ export const FetchDetailPost: React.FC = () => {
       } } = await axiosInstance.post(`/story/${storyData.slug}`, {}, { headers: headers })
       // You have to give headers like this
 
-      // console.log()
 
       setDate(timeAgo(createdAt))
       setLoading(false)
@@ -52,13 +51,16 @@ export const FetchDetailPost: React.FC = () => {
     }
   }
   useEffect(() => {
+    console.log("fetchDetailStory ")
     fetchDetailStory()
   }, [])
+
+  console.log('title ', title)
   return (
     <>
       {
         loading ? <LoadingSpinnerAnother /> : <div>
-          <Post author={author} title={title} content={content} createdAt={date} />
+          <Post id="" author={author} title={title} content={content} createdAt={date} />
         </div>
 
       }
