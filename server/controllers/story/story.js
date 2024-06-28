@@ -248,18 +248,68 @@ const editStoryPage = async (req, res, next) => {
   }
 }
 
-const searchInStory = async (req, res, next) => {
+const search = async (req, res, next) => {
   try {
-    const { searchString } = req.body
+    const { searchString, filter } = req.body
     if (!searchString) {
       return next("you should give a searchString")
     }
 
-    const searchResult = await Story.find({
-      $text: {
-        $search: searchString
-      }
-    })
+    let searchResult = null
+
+    if (!filter || filter == "post") {
+      searchResult = await Story.find({
+        $or: [
+
+          {
+            $text: {
+              $search: searchString
+            }
+          },
+          {
+            // "content": { $regex: `^${searchString}`, $options: 'i' }
+            content: { $regex: searchString }
+          },
+        ]
+      })
+    } else if (filter == "user") {
+      searchResult = await User.find({
+        $or: [
+
+          {
+            $text: {
+              $search: searchString
+            }
+          },
+          {
+            // "content": { $regex: `^${searchString}`, $options: 'i' }
+            username: { $regex: searchString }
+          },
+        ]
+      })
+    } else if (filter == "comment") {
+      searchResult = await Comment.find({
+        $or: [
+
+          {
+            $text: {
+              $search: searchString
+            }
+          },
+          {
+            // "content": { $regex: `^${searchString}`, $options: 'i' }
+            content: { $regex: searchString }
+          },
+        ]
+      })
+
+    } else {
+      searchResult = " Nothing found"
+
+    }
+
+
+
     console.log(searchResult)
 
     res.status(200).json({
@@ -318,7 +368,7 @@ module.exports = {
   likeStory,
   editStoryPage,
   editStory,
-  searchInStory,
+  search,
   storyLikeStatus,
   commentStatusOfAStory,
   deleteStory

@@ -16,13 +16,15 @@ import {
 } from "redux-persist"
 import persistStore from 'redux-persist/lib/persistStore'
 import { chatReducer } from '../features/chatSlice'
+import { searchReducer } from '../features/searchSlice'
 const rootReducer = combineReducers({
   userReducer: userReducer,
   storyReducer: storyReducer,
   commentReducer: commentReducer,
   postUserDetailsReducer: postUserDetailsReducer,
   sidebarReducer: sideBarSliceReducer,
-  chatReducer: chatReducer
+  chatReducer: chatReducer,
+  searchReducer: searchReducer
 })
 const persistConfig = {
   key: "root",
