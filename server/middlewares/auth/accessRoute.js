@@ -36,7 +36,7 @@ const getAccessToRoute = asyncError(async (req, res, next) => {
         message: 'No user found',
       })
     }
-
+    // Todo:Blog how refactored
     req.user = user
     next()
   }

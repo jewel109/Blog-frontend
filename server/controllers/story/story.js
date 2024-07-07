@@ -53,6 +53,7 @@ const getAllStories = ErrorWrapper(async (req, res, next) => {
     const skip = (page - 1) * limit
     const query = await Story.aggregate([{ $match: {} }]).sort({ createdAt: -1 }).skip(skip).limit(limit)   // query.sort("createdAt")
     // query.limit(3)
+    console.log(query)
     return res.status(200).json({
       query
     })
