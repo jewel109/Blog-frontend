@@ -1,12 +1,12 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import * as React from 'react'
-import Page from '@/app/users/page'
+import Page from '@/app/(home)/register/page'
+import configureStore from 'redux-mock-store';
+import { Provider } from 'react-redux';
 import RootLayout from '@/app/layout'
-import { Model } from 'miragejs'
-import { createServer } from 'miragejs'
 import { document } from 'postcss'
-render(<Page />)
+import { store } from '@/lib/store/store';
 // describe("miragejs test", function() {
 //   it("server started", async () => {
 //
@@ -31,8 +31,21 @@ render(<Page />)
 
 
 // })
+jest.mock("next/navigation", () => ({
+  useRouter() {
+    return {
+      prefetch: () => null
+    };
+  }
+}));
 
+const mockStore = configureStore([]);
 describe("post method in miragejs", () => {
+
   it("post method ", async () => {
+
+    render(<Provider store={store}><Page /></Provider>)
+    const myElm = screen.getByText("hei")
+    expect(myElm).toBeInTheDocument()
   })
 })

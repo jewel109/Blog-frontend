@@ -7,5 +7,9 @@ export default function Home({
 }: {
   children: React.ReactNode
 }) {
-  return (<Provider store={store}><div>{children}</div></Provider>)
+  return (<html>
+    <body>
+      <Provider store={store}><div>{children}</div></Provider> </body>
+  </html>)
+
 }
