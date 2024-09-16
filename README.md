@@ -8,4 +8,10 @@ Table of Contents
     Available Scripts
     Technologies Used
 
-    
+Getting Started
+Prerequisites
+
+Before running the project, ensure you have the following installed on your machine:
+
+    Node.js (version 12 or higher)
+    npm or yarn
